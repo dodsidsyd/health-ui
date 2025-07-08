@@ -1,0 +1,17 @@
+export default defineEventHandler((event) => {
+    const { req } = event.node;
+    const url = req.url || "";
+
+    console.log('[REDIRECT MIDDLEWARE] URL:', url); // 모든 요청 로그
+
+    // 루트 경로만 /guide/PubList로 리다이렉트 (/common/home은 그대로 유지)
+    if (url === "/" || url === "") {
+        console.log("[REDIRECT] Redirecting to /guide/PubList from:", url);
+        return sendRedirect(event, "/guide/PubList", 301);
+    }
+
+    // /common/home은 리다이렉트하지 않음
+    if (url === "/common/home") {
+        console.log('[REDIRECT] /common/home - NO REDIRECT');
+    }
+});

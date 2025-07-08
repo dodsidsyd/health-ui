@@ -1,0 +1,7 @@
+@use '../fonts/pretendard' as pretendard; // Pretendard 폰트 설정
+@use '../fonts/jalnan2' as jalnan2; // Jalnan2 폰트 설정
+@use './reset' as reset; // 초기화
+@use './iconset' as icon; // 공통 icon 호출
+@use './utility' as utility; // 공통 class 호출
+@use './common' as common; // 공통 layout 및 간격
+@use './modal' as modal; // 모달

@@ -1,0 +1,51 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --open",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@lemonhc/fo-ui": "0.1.11",
+    "@pinia/nuxt": "^0.11.0",
+    "@stomp/stompjs": "^7.1.1",
+    "@tiptap/extension-image": "^2.14.1",
+    "@tiptap/starter-kit": "^2.14.1",
+    "@tiptap/vue-3": "^2.14.1",
+    "broadcast-channel": "^7.1.0",
+    "dayjs": "^1.11.9",
+    "dayjs-nuxt": "^2.1.11",
+    "license-checker": "^25.0.1",
+    "nuxt": "^3.17.4",
+    "nuxt-swiper": "^2.0.1",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "skeleton-elements": "^4.0.1",
+    "vue": "^3.5.14",
+    "vue-draggable-plus": "^0.6.0",
+    "vue-router": "^4.5.1",
+    "vue3-apexcharts": "^1.8.0",
+    "lottie-web": "^5.12.2"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.4.1",
+    "@nuxt/eslint-config": "^1.4.1",
+    "@nuxt/eslint-plugin": "^1.4.1",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-vue": "^10.1.0",
+    "prettier": "^3.5.3",
+    "sass-embedded": "^1.88.0",
+    "typescript": "^5.8.3",
+    "vite-plugin-eslint2": "^5.0.3"
+  }
+}

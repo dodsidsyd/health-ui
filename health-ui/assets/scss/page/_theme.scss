@@ -1,0 +1,363 @@
+﻿@use './../common/_variable' as vars;
+@use './../common/_mixin' as mixin;
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:list';
+
+// 청구의 신 clone
+.l-page {
+  &.mission,
+  &.family,
+  &.mental,
+  &.tip,
+  &.agent,
+  &.claim,
+  &.user,
+  &.common {
+    background-color: #eee;
+    .c-tabs {
+      --c-tabs-bar-color: #14161a;
+      width: 100%;
+      .c-tablist {
+        padding: 0 1rem;
+        background-color: rgb(var(--white));
+      }
+      .c-tab-btn {
+        padding: var(--c-tabs-padding-y) 0;
+      }
+      .c-tab-item.is-active {
+        color: #14161a;
+      }
+    }
+    .c-tab-panel {
+      padding: 1rem;
+    }
+    article {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: rgb(var(--white));
+    }
+    .title {
+      padding-bottom: 1rem;
+      font-size: var(--num-18);
+      &.deepgray {
+        color: var(--deepgray);
+      }
+      &.gray {
+        color: var(--gray);
+      }
+      em {
+        color: var(--gray);
+        &.black {
+          color: rgb(var(--black));
+        }
+      }
+    }
+    .page_title_area {
+      border-bottom: 1px solid var(--lightgray);
+    }
+  }
+  // 건강관리 > 건강미션
+  &.mission {
+    .ai_mission {
+      margin: 1rem 0;
+      padding: 1rem;
+      .c-card {
+        .c-card-body {
+          padding: 1rem;
+        }
+        + .img_txt_list {
+          padding-top: 1rem;
+        }
+      }
+    }
+    .page_title_area {
+      .title {
+        padding: 0 8px 1.5rem;
+      }
+      &:has(.group_head) {
+        .title {
+          padding: 0;
+        }
+      }
+      // .group_head{
+      //   .title{ padding: 0; }
+      //   .c-btn{
+      //     margin-left: 4px;
+      //     i{ font-size: 24px; color: rgb(var(--primary)); }
+      //   }
+      //   + .desc{
+      //     margin: 0.5rem 0 1.5rem;
+      //     font-size: var(--num-14); color: var(--gray);
+      //   }
+      // }
+    }
+    .info_area {
+      padding-top: 1rem;
+      .analysis_cont {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.25rem;
+        strong {
+          font-size: 28px;
+          font-weight: vars.$bold;
+          color: var(--error);
+        }
+        .c-btn {
+          margin-left: 4px;
+          i {
+            font-size: 24px;
+            color: rgb(var(--primary));
+          }
+        }
+      }
+      time {
+        font-size: var(--num-12);
+        color: var(--gray);
+      }
+    }
+    .rowgroup_table {
+      .rowgroup {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+    .no_gap {
+      article {
+        padding: 0 1rem;
+        border-radius: inherit;
+        border-bottom: 1px solid var(--lightgray);
+      }
+      .calendar_area {
+        + .c-card {
+          margin: 1rem 0;
+          .c-card-body {
+            padding: 1rem;
+          }
+          .item_txt {
+            + .text {
+              padding-right: 0;
+            }
+          }
+        }
+      }
+      .point_desc {
+        display: flex;
+        padding-bottom: 1rem;
+        i.bg-ligth-blue {
+          width: 20px;
+          height: 20px;
+          display: block;
+          margin-right: 8px;
+          background-color: #c8d6fc;
+          border-radius: 50%;
+          font-size: 20px;
+          color: rgb(var(--primary));
+        }
+        p {
+          word-break: break-all;
+          font-size: var(--num-14);
+          font-weight: vars.$bold;
+          color: rgb(var(--primary));
+        }
+      }
+    }
+    .count_area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1rem 0;
+      .c-btn {
+        .text {
+          margin-right: 0.25rem;
+        }
+      }
+    }
+  }
+  // 건강관리 > 패밀리케어
+  &.family {
+    article {
+      padding: 1rem 0 0.25rem;
+      ~ article {
+        padding: 0;
+      }
+    }
+    &:not(:has(.invite_content)) {
+      article {
+        padding: 0;
+      }
+    }
+    .invite_content {
+      padding: 1rem 1rem 1.5rem;
+      border-bottom: 1px solid var(--lightgray);
+      text-align: center;
+      .c-img {
+        width: 4.5rem;
+        height: 4.5rem;
+        margin: 0 auto;
+      }
+      strong {
+        display: block;
+        padding: 2rem 0 1rem;
+        em {
+          font-weight: vars.$regular;
+          color: var(--gray);
+        }
+        + p {
+          font-size: var(--num-14);
+          color: var(--deepgray);
+        }
+      }
+    }
+    .c-btn {
+      color: rgb(var(--primary));
+      font-weight: vars.$bold;
+      i {
+        margin-right: 0.25rem;
+      }
+    }
+    &:has(.card_list) {
+      .group_button {
+        justify-content: flex-end;
+        padding: 1rem 0;
+        .c-btn {
+          width: auto;
+          font-size: var(--num-14);
+          i {
+            margin-left: 0.25rem;
+            font-size: var(--num-16);
+          }
+        }
+      }
+    }
+  }
+  // 건강관리 > 마음건강
+  &.mental {
+    .main_txt {
+      padding-bottom: 1.5rem;
+      .title {
+        padding: 0 0.5rem 0.5rem;
+      }
+      p {
+        color: var(--gray);
+        font-size: var(--num-14);
+      }
+    }
+    .card_scroll {
+      padding-bottom: 1rem;
+    }
+    article {
+      margin-top: 1rem;
+      .title {
+        padding-bottom: 1.5rem;
+      }
+      p {
+        padding: 1rem 0.5rem 0;
+        color: var(--gray);
+        font-size: var(--num-14);
+      }
+    }
+  }
+  // 건강관리 > 맞춤건강 tip
+  &.tip {
+    .group_head {
+      justify-content: space-between;
+      .c-btn {
+        justify-content: space-between;
+        max-width: 60px;
+        max-height: 24px;
+        line-height: 24px;
+        padding: 2px 8px;
+        font-size: var(--num-13);
+        background-color: rgba(var(--primary), 0.1);
+        color: rgb(var(--primary));
+      }
+    }
+    .c-nav {
+      .c-nav-item {
+        background-color: var(--bg-gray);
+        color: var(--gray);
+        border-radius: 20px;
+        &:not(:last-child) {
+          margin-right: 0.5rem;
+        }
+        &.is-active {
+          background-color: rgb(var(--white));
+        }
+      }
+    }
+    .nav_content {
+      display: none;
+      &.is-show {
+        display: block;
+      }
+    }
+    .tip_content {
+      .title {
+        padding-bottom: 1.5rem;
+      }
+      .c-swiper {
+        .swiper-slide {
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .swiper-pagination {
+          height: auto;
+          padding-top: 1.5rem;
+          padding-bottom: 0.5rem;
+        }
+        .swiper-button-prev,
+        .swiper-button-next {
+          width: 26px;
+          height: 26px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          top: unset;
+          bottom: 0.375rem;
+          margin: 0;
+          font-size: var(--num-18);
+          color: rgb(var(--primary));
+          background-color: #dee0fc;
+          border-radius: 50%;
+          &[aria-disabled='true'] {
+            background-color: #ddd;
+          }
+        }
+        .swiper-button-prev {
+          left: 30%;
+        }
+        .swiper-button-next {
+          right: 30%;
+        }
+      }
+    }
+  }
+  // 대리접수
+  &.agent {
+    .main_section {
+      .group_button {
+        justify-content: center;
+        margin-top: 1rem;
+      }
+    }
+  }
+  // 마이페이지
+  &.user {
+    .my_info_area {
+      padding: 1rem 0;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      border-top: 1px solid var(--lightgray);
+      border-bottom: 1px solid var(--lightgray);
+    }
+  }
+  // 건강관리 > 맞춤건강Tip
+  &.tip,
+  &.claim {
+    .title {
+      em {
+        color: var(--gray);
+      }
+    }
+  }
+}

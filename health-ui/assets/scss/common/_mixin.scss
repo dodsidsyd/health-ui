@@ -1,0 +1,1051 @@
+@charset "UTF-8";
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:list';
+
+// Mixin to apply colors based on theme
+@mixin applyThemeColors($color-set) {
+  --primary: #{list.nth($color-set, 1)}, #{list.nth($color-set, 2)}, #{list.nth($color-set, 3)};
+  --secondary: #{list.nth($color-set, 4)}, #{list.nth($color-set, 5)}, #{list.nth($color-set, 6)};
+}
+@mixin rootDefaultColor {
+  --primary: 91, 103, 186; //#5B67BA - 변경 가능성 있음(검토중)
+  // --primary:255, 235, 96; //#FFEB60 - 변경 가능성 있음(검토중)
+  --secondary: 0, 159, 36; //#9653D9 - 변경 가능성 있음(검토중)
+}
+@mixin rootDefault {
+  color-scheme: only light;
+  /* font */
+  --font-family:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'droid sans fallback', 'Apple SD Gothic Neo', AppleGothic,
+    sans-serif, Dotum, Tahoma, Verdana, Arial;
+  --font-size: 16px;
+  // --font-size: 14px;
+
+  /* S: 기존 Color(전체 작업 후 삭제) */
+  --error-rgb-color: 235, 47, 0;
+  --success-rgb-color: 0, 159, 36;
+  --deepgray: #424242;
+  --deepgray-rgb: 66, 66, 66;
+  --dimgray: #696969;
+  --gray: #808080;
+  --gray2: #f0f0f0;
+  --silver: #c0c0c0;
+  --lightgray: #e1e1e1;
+  --red: #eb2f00;
+  --green: #009f24;
+  --blue: #3769f4;
+  --orange: #f16600;
+  --txt-yellow: #cb7809;
+  --bg-gray: #f7f7f7;
+  --bg-yellow: #ffb900;
+  --error: #eb2f00;
+  --success: #009f24;
+  --code-color: rgba(var(--white), 1);
+  /* E: 기존 Color(전체 작업 후 삭제) */
+
+  /* S: 건강의 신 디자인 Color System */
+  @include applyThemeColors((91, 103, 186, 150, 83, 217));
+
+  // Black & White
+  --black: 0, 0, 0; //공통 검정
+  --white: 255, 255, 255; //공통 흰색
+
+  // Gradient
+  --linear-gradient: linear-gradient(45deg, rgba(5, 222, 255, 1), rgba(255, 234, 5, 1));
+
+  // Gray Color Scale
+  --gray-17: #959595;
+  --gray-16: #2b2b2b;
+  --gray-15: #171717;
+  --gray-14: #242424;
+  --gray-13: #333333;
+  --gray-12: #3d3d3d;
+  --gray-11: #555555;
+  --gray-10: #6f6f6f;
+  --gray-09: #8b8b8b;
+  --gray-08: #a5a5a5;
+  --gray-07: #c1c1c1;
+  --gray-06: #dfdfdf;
+  --gray-05: #ececec;
+  --gray-04: #efefef;
+  --gray-03: #f5f4f3;
+  --gray-02: #f7f7f7;
+  --gray-01: #fbfbfb;
+
+  // Gray Scale
+  --gray-light: #eeeeee;
+
+  --blue-11: #014d88;
+  --blue-10: #01599d;
+  --blue-09: #0166b3;
+  --blue-08: #0073cb;
+  --blue-07: #2087d6;
+  --blue-06: #469fe3;
+  --blue-05: #6ab6f0;
+  --blue-04: #81bfef;
+  --blue-03: #98c9ef;
+  --blue-02: #b5d8f4;
+  --blue-01: #d2e7f8;
+  --blue-primary: #4c7ff7; // 기본 파란색
+
+  // Purple Scale
+  --purple-12: #442365;
+  --purple-11: #533670;
+  --purple-10: #654c7e;
+  --purple-09: #6e5784;
+  --purple-08: #8256ae;
+  --purple-07: #9653d9;
+  --purple-06: #a451f7;
+  --purple-05: #ab5ef9;
+  --purple-04: #b773fb;
+  --purple-03: #c084fc;
+  --purple-02: #d3aafd;
+  --purple-01: #e1c5fe;
+  // Yellow Scale
+  --yellow-12: #aa8525;
+  --yellow-11: #d09c16;
+  --yellow-10: #e7aa0e;
+  --yellow-09: #ffb904;
+  --yellow-08: #ffc71e;
+  --yellow-07: #ffd334;
+  --yellow-06: #ffe04b;
+  --yellow-05: #ffeb60;
+  --yellow-04: #ffef7b;
+  --yellow-03: #fef08c;
+  --yellow-02: #fff7bf;
+  --yellow-01: #fffbe1;
+  --yellow-primary: #fbc700; // 기본 노란색
+
+  // Red Scale
+  --red-12: #bc1a1a;
+  --red-11: #d21c1c;
+  --red-10: #df1d1d;
+  --red-09: #e7301d;
+  --red-08: #e9462b;
+  --red-07: #f5511d;
+  --red-06: #f05c2e;
+  --red-05: #eb683f;
+  --red-04: #f57046;
+  --red-03: #ff784d;
+  --red-02: #ff9d7e;
+  --red-01: #ffc2af;
+
+  // Gray transparent Scale
+  --gray-op-code: 176, 179, 188;
+  --gray-op-04: rgba(var(--gray-op-code), 0.7);
+  --gray-op-03: rgba(var(--gray-op-code), 0.5);
+  --gray-op-02: rgba(var(--gray-op-code), 0.3);
+  --gray-op-01: rgba(var(--gray-op-code), 0.1);
+
+  /* E: 건강의 신 디자인 Color System */
+
+  /* 사이즈 */
+  --num-04: 0.4rem;
+  --num-05: 0.5rem;
+  --num-06: 0.52rem;
+  --num-08: 0.8rem;
+  --num-10: 1rem;
+  --num-12: 1.2rem;
+  --num-13: 1.3rem;
+  --num-14: 1.4rem;
+  --num-15: 1.5rem;
+  --num-16: 1.6rem;
+  --num-17: 1.7rem;
+  --num-18: 1.8rem;
+  --num-19: 1.9rem;
+  --num-20: 2rem;
+  --num-22: 2.2rem;
+  --num-24: 2.4rem;
+  --num-26: 2.6rem;
+  --num-28: 2.8rem;
+  --num-30: 3rem;
+  --num-32: 3.2rem;
+  --num-36: 3.6rem;
+  --num-40: 4rem;
+  --num-44: 4.4rem;
+  --num-46: 4.6rem;
+  --num-48: 4.8rem;
+  --num-52: 5.2rem;
+  --num-56: 5.6rem;
+  --num-64: 6.4rem;
+
+  /* 음수 */
+  --num-04m: -0.4rem;
+  --num-05m: -0.5rem;
+  --num-06m: -0.52rem;
+  --num-08m: -0.8rem;
+  --num-10m: -1rem;
+  --num-12m: -1.2rem;
+  --num-13m: -1.3rem;
+  --num-14m: -1.4rem;
+  --num-16m: -1.6rem;
+  --num-18m: -1.8rem;
+  --num-20m: -2rem;
+  --num-24m: -2.4rem;
+  --num-26m: -2.6rem;
+  --num-28m: -2.8rem;
+  --num-30m: -3rem;
+  --num-32m: -3.2rem;
+  --num-36m: -3.6rem;
+  --num-40m: -4rem;
+  --num-44m: -4.4rem;
+  --num-46m: -4.6rem;
+  --num-48m: -4.8rem;
+  --num-52m: -5.2rem;
+  --num-56m: -5.6rem;
+  --num-64m: -6.4rem;
+
+  --bg-header: var(--white);
+
+  --disabled-border-color: transparent !important;
+  --disabled-bg: var(--lightgray) !important;
+  --disabled-color: var(--gray) !important;
+  --readonly-border-color: transparent !important;
+  --readonly-bg: light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
+  --readonly-color: var(--black) !important;
+  --space: 0.4rem;
+}
+/* ================== Start : Logo Size ========================= */
+@mixin logoSize($prefix) {
+  // 기본
+  @if $prefix == 'default' {
+    max-height: 1.1rem;
+  }
+}
+/* ================== End : Logo Size ========================= */
+
+// @include mixin.position(absolute, $top: 10px, $left: 50%);
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+@mixin textClip {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+// @include mixin.lineClamp($fontSize: 16, $lineNum: 2, $lineHeight: 1.5);
+@mixin lineClamp($fontSize: null, $lineNum: null, $lineHeight: null) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $lineNum;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  max-height: ($fontSize * $lineHeight * $lineNum) + px;
+  font-size: $fontSize + px;
+  line-height: $lineHeight;
+}
+
+@mixin tooltip($size: 5px, $dir: left, $bgcolor: #000) {
+  position: absolute;
+  z-index: 1;
+  background: $bgcolor;
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    // filter: drop-shadow(0px -1px 3px rgba(var(--black), 0.12));
+    border-style: solid;
+    @if (($dir == top) or ($dir == bottom)) {
+      left: 50%;
+      border-color: $bgcolor transparent;
+      margin-left: -$size;
+    } @else {
+      top: 50%;
+      margin-top: -$size;
+      border-color: transparent $bgcolor;
+    }
+    @if ($dir == top) {
+      top: -$size;
+      border-width: 0 $size $size $size;
+    }
+    @if ($dir == right) {
+      right: -$size + 1px;
+      border-width: $size 0 $size $size;
+    }
+    @if ($dir == bottom) {
+      bottom: -$size + 1px;
+      border-width: $size $size 0 $size;
+    }
+    @if ($dir == left) {
+      left: -$size + 1px;
+      border-width: $size $size $size 0;
+    }
+  }
+}
+
+@mixin remixIcon {
+  font-family: remixicon !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@mixin bodyScrollbar {
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 6px;
+    &-track {
+      border: 0 solid transparent;
+      border-radius: 0;
+      background-color: #fff;
+    }
+    &-thumb {
+      border: 0 solid transparent;
+      border-radius: 20px;
+      background-image: linear-gradient(180deg, #acb5c9 0%, #acb5c9 99%);
+      background-clip: content-box;
+      box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+      &:hover {
+        background-image: linear-gradient(180deg, #acb5c9 0%, #acb5c9 99%);
+      }
+    }
+  }
+}
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    &-track {
+      border: 0 solid transparent;
+      border-radius: 0;
+      background-color: #fff;
+    }
+    &-thumb {
+      border: 0 solid transparent;
+      border-radius: 20px;
+      background-image: linear-gradient(180deg, #acb5c9 0%, #acb5c9 99%);
+      background-clip: content-box;
+      box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+      &:hover {
+        background-image: linear-gradient(180deg, #acb5c9 0%, #acb5c9 99%);
+      }
+    }
+  }
+}
+@mixin rippleEffectPrimary {
+  overflow: hidden;
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgb(var(--primary)) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    opacity: 0;
+    transform: scale(10, 10);
+    transition:
+      transform 0.4s,
+      opacity 0.8s;
+    pointer-events: none;
+  }
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: 0.2;
+    transition: 0s;
+  }
+}
+@mixin rippleEffectWhite {
+  overflow: hidden;
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgb(var(--primary)) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    opacity: 0;
+    transform: scale(10, 10);
+    transition:
+      transform 0.4s,
+      opacity 0.8s;
+    pointer-events: none;
+  }
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: 0.2;
+    transition: 0s;
+  }
+}
+@mixin rippleEffectWhite {
+  overflow: hidden;
+  position: relative;
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    opacity: 0;
+    transform: scale(10, 10);
+    transition:
+      transform 0.3s,
+      opacity 0.3s;
+    pointer-events: none;
+  }
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: 0.5;
+    transition: 0s;
+  }
+}
+@mixin disabled {
+  border-color: var(--disabled-border-color);
+  background-color: var(--disabled-bg);
+  color: var(--disabled-color);
+  opacity: 1;
+  pointer-events: none;
+}
+@mixin readonly {
+  border-color: var(--readonly-border-color);
+  background-color: var(--readonly-bg);
+  color: var(--readonly-color);
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* 말줄임 */
+@mixin ellipsis {
+  flex: 1;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+/* New 아이콘 */
+@mixin newIcon {
+  position: relative;
+  &::before {
+    content: 'N';
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+    background-color: var(--red);
+    line-height: 1;
+    color: var(--white);
+    border-radius: 50%;
+    font-size: var(--num-10);
+    font-weight: 800;
+  }
+}
+
+@mixin media-max-width($size) {
+  @media (max-width:#{$size}px) {
+    @content;
+  }
+}
+
+@mixin media-min-height($size) {
+  @media (min-height:#{$size}px) {
+    @content;
+  }
+}
+
+@mixin media-min-width($size) {
+  @media (min-width:#{$size}px) {
+    @content;
+  }
+}
+
+@mixin media-max-height($size) {
+  @media (max-height:#{$size}px) {
+    @content;
+  }
+}
+
+@mixin animated($name, $duration: 0.5s, $timing: ease, $fill: both) {
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-timing-function: $timing;
+  animation-fill-mode: $fill;
+}
+
+.fade-in {
+  @include animated(fade-in);
+}
+.slide-up {
+  @include animated(slide-up, 0.7s, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+// @include flex-container(row wrap justify-center items-center);
+// @include inline-flex-container();
+
+// @include flex-container(row wrap justify-center items-center);
+// @include inline-flex-container();
+
+// 1. px 단위 값을 전달 받음 (계산에 사용되는 기준 값은 옵션으로 사용자에 의해 변경 가능)
+// 2. remove-unit() 유틸리티 함수를 실행해 단위를 제거한 후, 1em을 곱해 결과 값을 반환
+@function unitless-px($value) {
+  @return if(unitless($value), if($value != 0, $value * 1px, $value), $value);
+}
+
+// 1. 전달 받은 값의 유형이 숫자일 경우, unitless-px() 믹스인에 값을 전달 호출
+// 2. 전달 받은 값의 유형이 문자일 경우, 전달 받은 값을 그대로 반환
+@function get-number-or-string($value) {
+  @return if(type-of($value) == 'number', unitless-px($value), $value);
+}
+
+// 1. 전달 받은 2개의 리스트 안에 포함된 아이템을 비교
+// 2. 일치하는 값이 있을 경우, true 불리언(bool) 값 반환
+// 3. 일치하는 값이 없을 경우, false 불리언 값 반환
+@function is-include-items($list, $comparelist) {
+  $result-list: ();
+
+  @each $item in $list {
+    $result-list: append($result-list, is-valid-keywords($item, $comparelist));
+  }
+
+  @return type-of(index($result-list, true)) == 'number';
+}
+
+// 1. 전달 받은 키의 인덱스가 전달 받은 리스트의 몇 번째인지 검토
+// 2. 리스트 안에 키가 포함되어 있다면? 키의 다음 인덱스(+1) 값을 추출해 반환
+// 3. 리스트 안에 키가 포함되어 있지 않다면? null을 반환
+@function get-value-after-key($key-value-list, $key) {
+  $key-index: index($key-value-list, $key);
+  @return if($key-index, nth($key-value-list, $key-index + 1), null);
+}
+// 1. 전달 받은 값 리스트($values)와, 키 리스트($keys)를 분석
+// 2. 키 리스트를 순환하여 값($value)이 존재할 경우, 값 리스트에서 키의 다음에 위치한 값을 값으로 설정 (get-value-after-key() 믹스인 호출)
+// 3. 순환이 이루어지지 않은 경우, null을 반환
+@function get-match-value-of-keys($values, $keys) {
+  $value: null;
+
+  @each $key in $keys {
+    $value: if($value, $value, get-value-after-key($values, $key));
+  }
+  @return $value;
+}
+
+// 1. 전달 받은 컬러 이름($name)이  $colors 구성 변수에 등록된 이름인지 검사
+// 2. 컬러 이름이 컬러 구성표에 포함된 이름인 경우, true 반환
+// 3. 컬러 이름이 컬러 구성표에 포함되지 않은 이름인 경우, false 반환
+@function str-replace($string, $search, $replace: '') {
+  $index: string.index($string, $search);
+
+  @if $index {
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+// 1. 전달 받은 키워드 리스트를 순환하여 키워드와 전달 받은 데이터 값을 비교
+// 2. 값이 일치할 경우, true 불리언(bool) 값 반환
+// 3. 값이 일치하지 않을 경우, false 불리언 값 반환
+@function is-valid-keywords($data, $keywordlist) {
+  @each $valid-type in $keywordlist {
+    @if $data == $valid-type {
+      @return true;
+    }
+  }
+  @return false;
+}
+// 1. 전달 받은 2개의 리스트 안에 포함된 아이템을 비교
+// 2. 일치하는 값이 있을 경우, true 불리언(bool) 값 반환
+// 3. 일치하는 값이 없을 경우, false 불리언 값 반환
+@function is-include-items($list, $comparelist) {
+  $result-list: ();
+
+  @each $item in $list {
+    $result-list: append($result-list, is-valid-keywords($item, $comparelist));
+  }
+
+  @return type-of(index($result-list, true)) == 'number';
+}
+
+@mixin transform-translate($x, $y) {
+  transform: translate($x, $y);
+  -ms-transform: translate($x, $y);
+  -webkit-transform: translate($x, $y);
+  -moz-transform: translate($x, $y);
+  -o-transform: translate($x, $y);
+}
+
+@mixin transform-translate3d($x, $y, $z) {
+  transform: translate3d($x, $y, $z);
+  -ms-transform: translate3d($x, $y, $z);
+  -webkit-transform: translate3d($x, $y, $z);
+  -moz-transform: translate3d($x, $y, $z);
+  -o-transform: translate3d($x, $y, $z);
+}
+
+@mixin transform-rotate($angle) {
+  transform: rotate($angle);
+  -ms-transform: rotate($angle);
+  -webkit-transform: rotate($angle);
+  -moz-transform: rotate($angle);
+}
+
+@mixin transform-scale($x, $y) {
+  transform: scale($x, $y);
+  -ms-transform: scale($x, $y);
+  -webkit-transform: scale($x, $y);
+  -moz-transform: scale($x, $y);
+}
+
+@mixin ir {
+  margin: 0;
+  @include absolute();
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: polygon(0 0, 0 0, 0 0);
+  clip: rect(0 0 0 0);
+}
+
+@mixin ir-phark {
+  overflow: hidden;
+  text-indent: -999.9rem;
+  font-size: 0;
+  line-height: 0;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin multi-ellipsis($clamp: 2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal;
+  -webkit-line-clamp: $clamp;
+}
+
+// Position
+// 1. 전달 받은 인자 중, 포지션 타입 값을 position 속성 값으로 설정
+// 2. 전달 받은 인자 $args가 있을 경우, 리스트 분석 후 개별 속성 설정
+@mixin positions($position, $args: null) {
+  position: $position;
+
+  @if $args != null {
+    $top-value: get-match-value-of-keys($args, top t);
+    $right-value: get-match-value-of-keys($args, right r);
+    $bottom-value: get-match-value-of-keys($args, bottom b);
+    $left-value: get-match-value-of-keys($args, left l);
+
+    z-index: get-match-value-of-keys($args, z-index z);
+    top: if($top-value, $top-value, null);
+    right: if($right-value, $right-value, null);
+    bottom: if($bottom-value, $bottom-value, null);
+    left: if($left-value, $left-value, null);
+  }
+}
+
+// 1. 상대(relative) 위치 설정
+// 2. 전달 받은 인자 $args가 있을 경우, 리스트 분석 후 개별 속성 설정
+@mixin relative($args: null) {
+  @include positions(relative, $args);
+}
+
+// 1. 절대(absolute) 위치 설정
+// 2. 전달 받은 인자 $args가 있을 경우, 리스트 분석 후 개별 속성 설정
+@mixin absolute($args: null) {
+  @include positions(absolute, $args);
+}
+
+// 1. 고정(fixed) 위치 설정
+// 2. 전달 받은 인자 $args가 있을 경우, 리스트 분석 후 개별 속성 설정
+@mixin fixed($args: null) {
+  @include positions(fixed, $args);
+}
+
+// 1. 스티키(sticky) 위치 설정
+// 2. 전달 받은 인자 $args가 있을 경우, 리스트 분석 후 개별 속성 설정
+@mixin sticky($args: null) {
+  @include positions(sticky, $args);
+}
+
+// 1. 포지션 설정 해제 (static) 설정
+@mixin static {
+  @include positions(static, null);
+}
+
+// border-radius
+@mixin radius($args) {
+  border-radius: $args;
+}
+
+// flexbox
+// 1. $mode 매개변수에 값이 전달되지 않을 경우, 기본 값인 flex로 표시(display) 모드 설정
+// 2. $args 매개변수로 리스트 값이 전달되면 flex-container-append() 믹스인에 전달
+@mixin flex-container($args: null, $mode: flex) {
+  display: if($mode == flex, flex, inline-flex);
+  @if $args != null {
+    @include flex-container-append($args);
+  }
+}
+// flex-c() 믹스인은 flex-container() 믹스인 래퍼로 축약형
+@mixin flex-c($args, $mode: flex) {
+  @include flex-container($args, $mode);
+}
+
+// 1. $mode 매개변수에 값이 전달되지 않을 경우, 기본 값인 flex로 표시(display) 모드 설정
+// 2. $args 매개변수로 리스트 값이 전달되면 flex-container-append() 믹스인에 전달
+@mixin flex-container-append($args) {
+  // flex-direction
+  @if list.index($args, column) {
+    flex-direction: column;
+  } @else if list.index($args, row) {
+    flex-direction: row;
+  }
+
+  // justify-content
+  @if list.index($args, justify-center) {
+    justify-content: center;
+  } @else if list.index($args, justify-between) {
+    justify-content: space-between;
+  } @else if list.index($args, justify-around) {
+    justify-content: space-around;
+  }
+
+  // align-items
+  @if list.index($args, items-center) {
+    align-items: center;
+  } @else if list.index($args, items-start) {
+    align-items: flex-start;
+  } @else if list.index($args, items-end) {
+    align-items: flex-end;
+  }
+}
+// 축약형
+@mixin flex-c-a($args) {
+  @include flex-container-append($args);
+}
+
+@mixin justify-content($value, $mode: grid) {
+  @if $value == 'start' {
+    justify-content: if($mode == grid, start, flex-start);
+  }
+  @if $value == 'end' {
+    justify-content: if($mode == grid, end, flex-end);
+  }
+  @if $value == 'center' {
+    justify-content: center;
+  }
+  @if $value == 'left' {
+    justify-content: left;
+  }
+  @if $value == 'right' {
+    justify-content: right;
+  }
+
+  @if $value == 'normal' {
+    justify-content: normal;
+  }
+
+  @if $value == 'between' {
+    justify-content: space-between;
+  }
+  @if $value == 'around' {
+    justify-content: space-around;
+  }
+  @if $value == 'evenly' {
+    justify-content: space-evenly;
+  }
+  @if $value == 'stretch' {
+    justify-content: stretch;
+  }
+
+  @if $value == 'safe' {
+    justify-content: safe center;
+  }
+  @if $value == 'unsafe' {
+    justify-content: unsafe center;
+  }
+
+  @if $value == 'inherit' {
+    justify-content: inherit;
+  }
+  @if $value == 'initial' {
+    justify-content: initial;
+  }
+  @if $value == 'unset' {
+    justify-content: unset;
+  }
+}
+
+@mixin align-items($value, $mode: grid) {
+  @if $value == 'normal' {
+    align-items: normal;
+  }
+  @if $value == 'stretch' {
+    align-items: stretch;
+  }
+
+  @if $value == 'start' {
+    align-items: if($mode == grid, start, flex-start);
+  }
+  @if $value == 'end' {
+    align-items: if($mode == grid, end, flex-end);
+  }
+  @if $value == 'center' {
+    align-items: center;
+  }
+
+  @if $value == 'baseline' {
+    align-items: baseline;
+  }
+  @if $value == 'first-baseline' {
+    align-items: first baseline;
+  }
+  @if $value == 'last-baseline' {
+    align-items: last baseline;
+  }
+  @if $value == 'safe' {
+    align-items: safe center;
+  }
+  @if $value == 'unsafe' {
+    align-items: unsafe center;
+  }
+
+  @if $value == 'inherit' {
+    align-items: inherit;
+  }
+  @if $value == 'initial' {
+    align-items: initial;
+  }
+  @if $value == 'unset' {
+    align-items: unset;
+  }
+}
+
+@mixin align-content($value, $mode: grid) {
+  @if $value == 'start' {
+    align-content: if($mode == grid, start, flex-start);
+  }
+  @if $value == 'end' {
+    align-content: if($mode == grid, end, flex-end);
+  }
+  @if $value == 'center' {
+    align-content: center;
+  }
+  @if $value == 'left' {
+    align-content: start;
+  }
+  @if $value == 'right' {
+    align-content: end;
+  }
+
+  @if $value == 'normal' {
+    align-content: normal;
+  }
+
+  @if $value == 'baseline' {
+    align-content: baseline;
+  }
+  @if $value == 'first-baseline' {
+    align-content: first baseline;
+  }
+  @if $value == 'last-baseline' {
+    align-content: last baseline;
+  }
+
+  @if $value == 'between' {
+    align-content: space-between;
+  }
+  @if $value == 'around' {
+    align-content: space-around;
+  }
+  @if $value == 'evenly' {
+    align-content: space-evenly;
+  }
+  @if $value == 'stretch' {
+    align-content: stretch;
+  }
+
+  @if $value == 'safe' {
+    align-content: safe center;
+  }
+  @if $value == 'unsafe' {
+    align-content: unsafe center;
+  }
+
+  @if $value == 'inherit' {
+    align-content: inherit;
+  }
+  @if $value == 'initial' {
+    align-content: initial;
+  }
+  @if $value == 'unset' {
+    align-content: unset;
+  }
+}
+
+// 1. 전달 받은 인자가 없을 경우, 오류 메시지 출력
+// 2. 전달 받은 인자가 있을 경우, 인자의 타입을 확인
+// 3. 타입이 숫자 또는 문자인 경우, get-number-or-string() 믹스인 처리
+// 4. 타입이 리스트인 경우, 전달 인자의 키워드를 분석하여 개별 속성 처리
+@mixin margin($args...) {
+  @if length($args) == 0 {
+    @error 'margin() 믹스인은 margin 속성의 설정 방향 top, right, bottom, left와 값을 연이어 전달 받을 수 있습니다. 뿐만 아니라 x, y 방향으로 속성을 일괄 설정 가능합니다.';
+  }
+
+  @each $value in $args {
+    $type: type-of($value);
+
+    @if $type == 'number' or $type == 'string' {
+      margin: get-number-or-string($value);
+    }
+
+    @if $type == 'list' {
+      @if is-include-items($value, top t) {
+        margin-top: get-number-or-string(get-match-value-of-keys($value, top t));
+      }
+      @if is-include-items($value, right r) {
+        margin-right: get-number-or-string(get-match-value-of-keys($value, right r));
+      }
+      @if is-include-items($value, bottom b) {
+        margin-bottom: get-number-or-string(get-match-value-of-keys($value, bottom b));
+      }
+      @if is-include-items($value, left l) {
+        margin-left: get-number-or-string(get-match-value-of-keys($value, left l));
+      }
+      @if is-include-items($value, x) {
+        $x-value: get-value-after-key($value, x);
+        margin-left: get-number-or-string($x-value);
+        margin-right: get-number-or-string($x-value);
+      }
+      @if is-include-items($value, y) {
+        $y-value: get-value-after-key($value, y);
+        margin-top: get-number-or-string($y-value);
+        margin-bottom: get-number-or-string($y-value);
+      }
+    }
+  }
+}
+
+// 1. 전달 받은 인자가 없을 경우, 오류 메시지 출력
+// 2. 전달 받은 인자가 있을 경우, margin() 믹스인 호출
+@mixin m($args: null) {
+  @if not $args {
+    @error 'm() 믹스인은 margin 속성의 설정 방향 top, right, bottom, left와 값을 연이어 전달 받을 수 있습니다. 뿐만 아니라 x, y 방향으로 속성을 일괄 설정 가능합니다.';
+  }
+  @include margin($args);
+}
+
+// 1. 전달 받은 인자의 아이템 개수(length) 확인
+// 2. 개수가 1개인 경우, m() 믹스인의 인자 값으로 좌(l), 우(r) 값 설정 호출
+// 3. 개수가 2개인 경우, m() 믹스인의 인자 값으로 좌(l), 우(r) 값 개별 설정 호출
+@mixin mx($value) {
+  $value_length: length($value);
+  @if $value_length == 1 {
+    @include m(l $value r $value);
+  }
+  @if $value_length == 2 {
+    @include m(l first($value) r last($value));
+  }
+}
+@mixin my($value) {
+  $value_length: length($value);
+  @if $value_length == 1 {
+    @include m(t $value b $value);
+  }
+  @if $value_length == 2 {
+    @include m(t first($value) b last($value));
+  }
+}
+
+// padding
+@mixin padding($args...) {
+  @if length($args) == 0 {
+    @error 'padding() 믹스인은 padding 속성의 설정 방향 top, right, bottom, left와 값을 연이어 전달 받을 수 있습니다. 뿐만 아니라 x, y 방향으로 속성을 일괄 설정 가능합니다.';
+  }
+
+  @each $value in $args {
+    $type: type-of($value);
+
+    @if $type == 'number' or $type == 'string' {
+      padding: get-number-or-string($value);
+    }
+
+    @if $type == 'list' {
+      @if is-include-items($value, top t) {
+        padding-top: get-number-or-string(get-match-value-of-keys($value, top t));
+      }
+      @if is-include-items($value, right r) {
+        padding-right: get-number-or-string(get-match-value-of-keys($value, right r));
+      }
+      @if is-include-items($value, bottom b) {
+        padding-bottom: get-number-or-string(get-match-value-of-keys($value, bottom b));
+      }
+      @if is-include-items($value, left l) {
+        padding-left: get-number-or-string(get-match-value-of-keys($value, left l));
+      }
+      @if is-include-items($value, x) {
+        $x-value: get-value-after-key($value, x);
+        padding-left: get-number-or-string($x-value);
+        padding-right: get-number-or-string($x-value);
+      }
+      @if is-include-items($value, y) {
+        $y-value: get-value-after-key($value, y);
+        padding-top: get-number-or-string($y-value);
+        padding-bottom: get-number-or-string($y-value);
+      }
+    }
+  }
+}
+@mixin p($args: null) {
+  @if not $args {
+    @error 'p() 믹스인은 padding 속성의 설정 방향 top, right, bottom, left와 값을 연이어 전달 받을 수 있습니다. 뿐만 아니라 x, y 방향으로 속성을 일괄 설정 가능합니다.';
+  }
+  @include padding($args);
+}
+@mixin px($value) {
+  $value_length: length($value);
+  @if $value_length == 1 {
+    @include p(l $value r $value);
+  }
+  @if $value_length == 2 {
+    @include p(l first($value) r last($value));
+  }
+}
+@mixin py($value) {
+  $value_length: length($value);
+  @if $value_length == 1 {
+    @include p(t $value b $value);
+  }
+  @if $value_length == 2 {
+    @include p(t first($value) b last($value));
+  }
+}
+
+// first, last 함수 추가
+@function first($list) {
+  @return nth($list, 1);
+}
+
+@function last($list) {
+  @return nth($list, length($list));
+}

@@ -1,0 +1,147 @@
+/* 폰트 로딩 최적화 유틸리티 */
+
+/* 폰트 로딩 상태별 클래스 */
+.font-loading {
+  font-family: var(--font-fallback-primary);
+  /* 웹폰트 로딩 중에는 fallback 폰트 사용 */
+}
+
+.font-loaded {
+  font-family: var(--font-primary);
+  /* 웹폰트 로딩 완료 후 Pretendard 사용 */
+}
+
+/* 운영체제별 최적화 클래스 */
+.font-mac {
+  font-family: var(--font-apple-fallback);
+}
+
+.font-windows {
+  font-family: var(--font-malgun-fallback);
+}
+
+/* 폰트 표시 최적화 */
+.font-display-swap {
+  font-display: swap;
+}
+
+.font-display-fallback {
+  font-display: fallback;
+}
+
+.font-display-optional {
+  font-display: optional;
+}
+
+/* 텍스트 렌더링 최적화 */
+.text-optimize {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.text-optimize-quality {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 폰트 사이즈 조정 유틸리티 */
+.font-size-adjust-none {
+  font-size-adjust: none;
+}
+
+.font-size-adjust-from-font {
+  font-size-adjust: from-font;
+}
+
+/* 라인 하이트 정규화 */
+.line-height-normalize {
+  line-height: 1.6;
+  /* override 설정에 맞춘 최적화된 라인 높이 */
+}
+
+/* 폰트 override 테스트 및 비교 클래스 */
+.font-original {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+}
+
+.font-pretendard-basic {
+  font-family: 'Pretendard', sans-serif;
+}
+
+.font-pretendard-optimized {
+  font-family: var(--font-optimized);
+}
+
+.font-pretendard-test {
+  font-family: var(--font-test);
+}
+
+/* 브라우저 지원 상태 표시 */
+.font-support-indicator::before {
+  content: '❌ 브라우저가 font override를 지원하지 않습니다';
+  display: block;
+  color: #dc3545;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+@supports (ascent-override: 85%) {
+  .font-support-indicator::before {
+    content: '✅ 브라우저가 font override를 지원합니다';
+    color: #28a745;
+  }
+}
+.font-light {
+  font-weight: 300;
+  font-family: var(--font-primary);
+}
+
+.font-regular {
+  font-weight: 400;
+  font-family: var(--font-primary);
+}
+
+.font-medium {
+  font-weight: 500;
+  font-family: var(--font-primary);
+}
+
+.font-semibold {
+  font-weight: 600;
+  font-family: var(--font-primary);
+}
+
+.font-bold {
+  font-weight: 700;
+  font-family: var(--font-primary);
+}
+
+.font-extrabold {
+  font-weight: 800;
+  font-family: var(--font-primary);
+}
+
+/* 반응형 폰트 최적화 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    font-display: swap;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .text-optimize,
+  .text-optimize-quality {
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* 고해상도 화면 최적화 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .text-optimize,
+  .text-optimize-quality {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

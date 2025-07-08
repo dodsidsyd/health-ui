@@ -1,0 +1,299 @@
+@charset "UTF-8";
+@use './_mixin' as mixin;
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:list';
+
+// @use '../core/core' as core;
+
+// Hiux 퍼블팀 변경
+// HTML 기본 폰트 크기를 62.5%로 설정 (1rem = 10px)
+// 이 설정은 별도의 base 또는 reset CSS에서 html { font-size: 62.5%; }로 적용 필요
+
+// url
+//$imgPath: core.$imgPath !default;
+// 폰트 스택 설정 - override 적용
+:root {
+  --font-primary:
+    'Pretendard', 'Pretendard-fallback', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif;
+  --font-optimized:
+    'Pretendard-Optimized', 'Pretendard-fallback', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+  --font-test:
+    'Pretendard-Test', 'Pretendard-fallback', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+  --font-fallback-primary: 'Pretendard-fallback', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+  --font-apple-fallback: 'Pretendard-apple-fallback', 'Apple SD Gothic Neo', sans-serif;
+  --font-malgun-fallback: 'Pretendard-malgun-fallback', 'Malgun Gothic', '맑은 고딕', sans-serif;
+}
+
+// SCSS 변수
+$font-primary: var(--font-primary);
+$font-optimized: var(--font-optimized);
+$font-test: var(--font-test);
+$font-fallback-primary: var(--font-fallback-primary);
+$font-apple-fallback: var(--font-apple-fallback);
+$font-malgun-fallback: var(--font-malgun-fallback);
+
+// font-family
+$font-family:
+  'Pretendard',
+  'Roboto',
+  'Noto Sans KR',
+  -apple-system,
+  BlinkMacSystemFont,
+  'droid sans fallback',
+  'Apple SD Gothic Neo',
+  AppleGothic,
+  sans-serif,
+  Dotum,
+  Tahoma,
+  Verdana,
+  Arial !default;
+$font-noto:
+  'Roboto',
+  'Noto Sans KR',
+  -apple-system,
+  BlinkMacSystemFont,
+  'droid sans fallback',
+  'Apple SD Gothic Neo',
+  AppleGothic,
+  sans-serif,
+  Dotum,
+  Tahoma,
+  Verdana,
+  Arial !default;
+
+// 기본 폰트 크기 (1rem = 10px 기준)
+$font-size-base: 16px !default; // 16px equivalent
+
+// 폰트 굵기
+$light: 300 !default;
+$regular: 400 !default;
+$medium: 500 !default;
+$semibold: 600 !default;
+$bold: 700 !default;
+$extra: 800 !default;
+
+// 폰트 크기 변수 (1rem = 10px 기준으로 재계산)
+$font-sizes: (
+  0: 0,
+  10: 1rem,
+  // 10px
+  11: 1.1rem,
+  // 11px
+  12: 1.2rem,
+  // 12px
+  13: 1.3rem,
+  // 13px
+  14: 1.4rem,
+  // 14px
+  15: 1.5rem,
+  // 15px
+  16: 1.6rem,
+  // 16px
+  17: 1.7rem,
+  // 17px
+  18: 1.8rem,
+  // 18px
+  19: 1.9rem,
+  // 19px
+  20: 2rem,
+  // 20px
+  21: 2.1rem,
+  // 21px
+  22: 2.2rem,
+  // 22px
+  23: 2.3rem,
+  // 23px
+  24: 2.4rem,
+  // 24px
+  25: 2.5rem,
+  // 25px
+  26: 2.6rem,
+  // 26px
+  27: 2.7rem,
+  // 27px
+  28: 2.8rem,
+  // 28px
+  29: 2.9rem,
+  // 29px
+  30: 3rem,
+  // 30px
+  31: 3.1rem,
+  // 31px
+  32: 3.2rem,
+  // 32px
+  33: 3.3rem,
+  // 33px
+  34: 3.4rem,
+  // 34px
+  35: 3.5rem,
+  // 35px
+  36: 3.6rem,
+  // 36px
+  48: 4.8rem,
+  // 48px
+  56: 5.6rem // 56px
+) !default;
+
+// 개별 폰트 크기 변수 (1rem = 10px 기준)
+$fs10: 1rem !default; // 10px
+$fs11: 1.1rem !default; // 11px
+$fs12: 1.2rem !default; // 12px
+$fs13: 1.3rem !default; // 13px
+$fs14: 1.4rem !default; // 14px
+$fs15: 1.5rem !default; // 15px
+$fs16: 1.6rem !default; // 16px (기본 크기)
+$fs17: 1.7rem !default; // 17px
+$fs18: 1.8rem !default; // 18px
+$fs19: 1.9rem !default; // 19px
+$fs20: 2rem !default; // 20px
+$fs21: 2.1rem !default; // 21px
+$fs22: 2.2rem !default; // 22px
+$fs23: 2.3rem !default; // 23px
+$fs24: 2.4rem !default; // 24px
+$fs25: 2.5rem !default; // 25px
+$fs26: 2.6rem !default; // 26px
+$fs27: 2.7rem !default; // 27px
+$fs28: 2.8rem !default; // 28px
+$fs29: 2.9rem !default; // 29px
+$fs30: 3rem !default; // 30px
+$fs31: 3.1rem !default; // 31px
+$fs32: 3.2rem !default; // 32px
+$fs33: 3.3rem !default; // 33px
+$fs34: 3.4rem !default; // 34px
+$fs35: 3.5rem !default; // 35px
+$fs36: 3.6rem !default; // 36px
+$fs48: 4.8rem !default; // 48px
+$fs56: 5.6rem !default; // 56px
+
+// 기존 색상 - 전체 작업 후 삭제
+$tertiary: rgb(var(--tertiary)) !default;
+$primary-opacity-40: var(--primary-op4) !default;
+$primary-opacity-80: var(--primary-op8) !default;
+$primary-op4: var(--primary-op4) !default;
+$primary-op8: var(--primary-op8) !default;
+$gray: var(--gray);
+
+// 건강의 신 색상
+$primary: rgb(var(--primary)) !default;
+$secondary: rgb(var(--secondary)) !default;
+// 고정 색상
+$black: rgb(var(--black));
+$white: rgb(var(--white));
+
+// Gray transparent color
+$gray-op04: var(--gray-op-04);
+$gray-op03: var(--gray-op-03);
+$gray-op02: var(--gray-op-02);
+$gray-op01: var(--gray-op-01);
+
+// Gray color
+$gray-15: var(--gray-15);
+$gray-14: var(--gray-14);
+$gray-13: var(--gray-13);
+$gray-12: var(--gray-12);
+$gray-11: var(--gray-11);
+$gray-10: var(--gray-10);
+$gray-09: var(--gray-09);
+$gray-08: var(--gray-08);
+$gray-07: var(--gray-07);
+$gray-06: var(--gray-06);
+$gray-05: var(--gray-05);
+$gray-04: var(--gray-04);
+$gray-03: var(--gray-03);
+$gray-02: var(--gray-02);
+$gray-01: var(--gray-01);
+$gray-light: var(--gray-light); // 연한 회색
+
+$blue-15: var(--blue-15);
+$blue-14: var(--blue-14);
+$blue-13: var(--blue-13);
+$blue-12: var(--blue-12);
+$blue-11: var(--blue-11);
+$blue-10: var(--blue-10);
+$blue-09: var(--blue-09);
+$blue-08: var(--blue-08);
+$blue-07: var(--blue-07);
+$blue-06: var(--blue-06);
+$blue-05: var(--blue-05);
+$blue-04: var(--blue-04);
+$blue-03: var(--blue-03);
+$blue-02: var(--blue-02);
+$blue-01: var(--blue-01);
+$blue-primary: var(--blue-primary); // 기본 파란색
+
+// Purple color
+$purple-15: var(--purple-15);
+$purple-14: var(--purple-14);
+$purple-13: var(--purple-13);
+$purple-12: var(--purple-12);
+$purple-11: var(--purple-11);
+$purple-10: var(--purple-10);
+$purple-09: var(--purple-09);
+$purple-08: var(--purple-08);
+$purple-07: var(--purple-07);
+$purple-06: var(--purple-06);
+$purple-05: var(--purple-05);
+$purple-04: var(--purple-04);
+$purple-03: var(--purple-03);
+$purple-02: var(--purple-02);
+$purple-01: var(--purple-01);
+
+// Yellow color
+$yellow-15: var(--yellow-15);
+$yellow-14: var(--yellow-14);
+$yellow-13: var(--yellow-13);
+$yellow-12: var(--yellow-12);
+$yellow-11: var(--yellow-11);
+$yellow-10: var(--yellow-10);
+$yellow-09: var(--yellow-09);
+$yellow-08: var(--yellow-08);
+$yellow-07: var(--yellow-07);
+$yellow-06: var(--yellow-06);
+$yellow-05: var(--yellow-05);
+$yellow-04: var(--yellow-04);
+$yellow-03: var(--yellow-03);
+$yellow-02: var(--yellow-02);
+$yellow-01: var(--yellow-01);
+$yellow-primary: var(--yellow-primary); // 기본 노란색
+
+// Red color
+$red-15: var(--red-15);
+$red-14: var(--red-14);
+$red-13: var(--red-13);
+$red-12: var(--red-12);
+$red-11: var(--red-11);
+$red-10: var(--red-10);
+$red-09: var(--red-09);
+$red-08: var(--red-08);
+$red-07: var(--red-07);
+$red-06: var(--red-06);
+$red-05: var(--red-05);
+$red-04: var(--red-04);
+$red-03: var(--red-03);
+$red-02: var(--red-02);
+$red-01: var(--red-01);
+
+// 둥근 모서리 설정 (1rem = 10px 기준으로 재계산)
+$radius: 0.75rem !default; // 7.5px
+$radius16: 1.6rem !default; // 16px
+$radius-default: 0.75rem !default; // 7.5px
+$radius-lg: 1.6rem !default; // 16px
+$radius-circle: 50% !default;
+$radius-square: 0.375rem !default; // 3.75px
+
+// 레이아웃 (1rem = 10px 기준으로 재계산)
+$header-height: 5.6rem !default; // 56px (기존 3.5rem = 56px)
+$main-padding-bottom: 6.4rem !default; // 64px (기존 4rem = 64px)
+$btm-group-height: 5.6rem !default; // 56px (기존 3.5rem = 56px)
+
+// 여백 및 패딩 (1rem = 10px 기준으로 재계산)
+$margin-negative: 0 !default;
+$padding-base: 1.6rem !default; // 16px (기존 1rem = 16px)
+
+// Define a map of theme colors
+$themes: (
+  //기본 #5B67BA, #9653D9
+  // default: (255, 235, 96, 150, 83, 217),
+  default: (91, 103, 186, 150, 83, 217)
+);

@@ -1,0 +1,13 @@
+# Prettier 무시할 파일들
+layouts/**
+pages/**
+components/**
+
+# 또는 모든 Vue 파일 무시
+*.vue
+
+# node_modules는 기본적으로 무시됨
+node_modules/
+dist/
+.nuxt/
+.output/

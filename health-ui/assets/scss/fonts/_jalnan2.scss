@@ -1,0 +1,13 @@
+/* Pretendard 폰트 Override 설정 - 강화된 버전 */
+@use '../core/core' as core;
+$fontPath: core.$fontPath;
+
+@font-face {
+  font-family: 'Jalnan2';
+  src:
+    local('Jalnan2'),
+    url('#{$fontPath}/Jalnan2/Jalnan2.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
