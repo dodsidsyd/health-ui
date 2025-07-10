@@ -1,5 +1,5 @@
 <template>
-  <BaseBody :show-back-button="true" background-type="trans" page-title="레몬포인트 존">
+  <BaseBody :show-back-button="true" :is-transparent="true" page-title="레몬포인트 존">
     <FlexColDiv class="gap-16">
       <PointZoneBanner />
       <DailyMissionSection />

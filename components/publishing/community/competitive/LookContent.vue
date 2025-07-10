@@ -1,17 +1,17 @@
 <template>
   <div>
     <RealRankingSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-24 mb-32 ml-n20 mr-n20" />
     <ObjectSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-10 ml-n20 mr-n20" />
     <MonthRankSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-24 mb-10 ml-n20 mr-n20" />
     <WeCommSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-10 ml-n20 mr-n20" />
     <FamousSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-10 ml-n20 mr-n20" />
     <NewsSection />
-    <hr class="hr-section mb-10 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-10 ml-n20 mr-n20" />
     <BestSection />
   </div>
 </template>

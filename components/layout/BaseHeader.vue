@@ -92,6 +92,13 @@
           </nuxt-link>
         </div>
 
+        <!-- 공유 버튼 -->
+        <div v-if="hasShare" class="c-header-share">
+          <button type="button" class="c-btn c-icon" aria-label="공유하기">
+            <i class="icon ico-share" aria-hidden="true"></i>
+          </button>
+        </div>
+
         <!-- 일반 텍스트 -->
         <div v-if="hasAddText" class="c-header-text">
           <button type="button" class="add-text-btn" @click="handleAddTextClick">
@@ -119,13 +126,6 @@
           <nuxt-link to="/setting" title="설정페이지로 이동">
             <i class="icon ico-setting" aria-label="설정"></i>
           </nuxt-link>
-        </div>
-
-        <!-- 공유 버튼 -->
-        <div v-if="hasShare" class="c-header-share">
-          <button type="button" class="c-btn c-icon" aria-label="공유하기">
-            <i class="icon ico-share" aria-hidden="true"></i>
-          </button>
         </div>
 
         <!-- 공유 버튼 -->
@@ -470,6 +470,13 @@ onUnmounted(() => {
           height: 2.4rem;
           pointer-events: none;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10L12.0008 14.58L17 10' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        }
+        .ico-menu {
+          width: 2.4rem;
+          height: 2.4rem;
+          pointer-events: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='24' viewBox='0 0 25 24' fill='none'%3E%3Ccircle cx='13.2285' cy='5.5' r='1.5' fill='%232B2B2B'/%3E%3Ccircle cx='13.2285' cy='12.5' r='1.5' fill='%232B2B2B'/%3E%3Ccircle cx='13.2285' cy='19.5' r='1.5' fill='%232B2B2B'/%3E%3C/svg%3E");
+          font-size: 0;
         }
       }
     }

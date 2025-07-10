@@ -26,7 +26,7 @@
         />
       </div>
       <div class="wrap-check-icon">
-        <div class="c-checktype-btn">
+        <label for="check1" class="c-checktype-btn">
           <input 
             id="check1" 
             name="check1" 
@@ -35,7 +35,7 @@
             v-model="hospitalSelections[0]"
             @change="updateAllSelection"
           />
-          <label for="check1" class="c-checktype-label">
+          <div class="c-checktype-label">
             <img src="/assets/images/insu/logo_KUMedicine.svg" alt="고려대학교 안암병원" class="hospital-logo" />
             <div class="wrap-hospital-desc">
               <div class="wrap-desc">
@@ -48,9 +48,9 @@
               </div>
             </div>
             <i class="icon"></i>
-          </label>
-        </div>
-        <div class="c-checktype-btn">
+          </div>
+        </label>
+        <label for="check2" class="c-checktype-btn">
           <input 
             id="check2" 
             name="check2" 
@@ -59,7 +59,7 @@
             v-model="hospitalSelections[1]"
             @change="updateAllSelection"
           />
-          <label for="check2" class="c-checktype-label">
+          <div class="c-checktype-label">
             <img src="/assets/images/insu/logo_KUMedicine.svg" alt="고려대학교 안암병원" class="hospital-logo" />
             <div class="wrap-hospital-desc">
               <div class="wrap-desc">
@@ -72,9 +72,9 @@
               </div>
             </div>
             <i class="icon"></i>
-          </label>
-        </div>
-        <div class="c-checktype-btn">
+          </div>
+        </label>
+        <label for="check3" class="c-checktype-btn">
           <input 
             id="check3" 
             name="check3" 
@@ -83,7 +83,7 @@
             v-model="hospitalSelections[2]"
             @change="updateAllSelection"
           />
-          <label for="check3" class="c-checktype-label">
+          <div class="c-checktype-label">
             <img src="/assets/images/insu/logo_KUMedicine.svg" alt="고려대학교 안암병원" class="hospital-logo" />
             <div class="wrap-hospital-desc">
               <div class="wrap-desc">
@@ -96,8 +96,8 @@
               </div>
             </div>
             <i class="icon"></i>
-          </label>
-        </div>
+          </div>
+        </label>
       </div>
     </FlexSection>
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->

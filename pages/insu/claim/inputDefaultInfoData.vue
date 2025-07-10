@@ -6,7 +6,7 @@
     :has-notification="true"
     :has-reward="false"
     :has-add-text-left="true"
-    class="pb-36"
+    class="pb-60"
   >
     <div class="flex flex-col gap-16 mt-24">
       <h1 class="c-tit">
@@ -111,6 +111,7 @@ const clickNext = () => {
   flex-direction: column;
   gap: 0.6rem;
   .input-tit {
+    margin-bottom: 0.6rem;
     font-size: 1.2rem;
     font-weight: 400;
     line-height: 1.3;

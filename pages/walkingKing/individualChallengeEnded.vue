@@ -1,11 +1,13 @@
 <template>
   <BaseBody
     :has-share="true"
-    :has-menu="true"
     page-title="걷기왕 챌린지"
     :show-back-button="true"
     style="background-color: #fefefe"
     :is-transparent="true"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    add-text="<span class='icon ico-menu'>메뉴 아이콘</span>"
   >
     <!-- 메인 배너 -->
     <RecruitmentindividualChallengeBox :end="true" />
@@ -135,6 +137,26 @@
       </div>
     </template>
   </UsingItemModal>
+  <!-- 챌린지 메뉴 모달 -->
+  <BottomModal
+    :is-visible="isShowChallengeMenuModal"
+    v-bind="ChallengeMenuModalProps"
+    @close="toggleChallengeMenuModal"
+  >
+    <template #content>
+      <ul>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">응원하기</p></NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">참가 취소하기</p> </NuxtLink>
+        </li>
+        <li v-if="challengeProgressing">
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">챌린지 상세보기</p> </NuxtLink>
+        </li>
+      </ul>
+    </template>
+  </BottomModal>
 </template>
 
 <script setup lang="ts">
@@ -159,6 +181,15 @@ import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import RoundTabs, { type RoundTab } from '~/components/tabbar/RoundTabs.vue'
 import { BottomModal } from '@lemonhc/fo-ui/components/modal'
+// 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
+const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
+// 컴포넌트 마운트 시 addTextClick 핸들러 등록
+onMounted(() => {
+  if (setAddTextClickHandler) {
+    setAddTextClickHandler(clickChallengeMenuModal)
+  }
+})
+
 // RoundTabs 상태 관리
 const activeRoundTab = ref('option2')
 // RoundTabs 데이터
@@ -220,7 +251,27 @@ const toggleStepHistoryModal = () => {
 const clickStepHistoryModal = () => {
   isShowStepHistoryModal.value = true
 }
-
+// 챌린지 진행 중 상태
+const challengeProgressing = false
+// 챌린지 메뉴 ref
+const isShowChallengeMenuModal = ref(false)
+// 챌린지 메뉴 props
+const ChallengeMenuModalProps = ref({
+  title: '챌린지 메뉴',
+  isShowCloseButton: true,
+  isShowCancelButton: false,
+  isShowConfirmButton: false,
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+// 챌린지 메뉴 모달 토글
+const toggleChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = !isShowChallengeMenuModal.value
+}
+// 챌린지 메뉴 클릭
+const clickChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = true
+}
 // --- 자식 컴포넌트에서 'show-modal' 이벤트 발생 시 호출될 함수 ---
 const handleShowModal = () => {
   isShowchallengeModal.value = true // 챌린지 미션 모달 열림

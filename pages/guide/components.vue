@@ -85,6 +85,7 @@
         ]"
       />
       <InputSearch />
+      <InputAddress label="지역선택" :is-valid="false" class="require" placeholder="주소를 검색해주세요" />
     </div>
     <div>
       <p>Sticky</p>
@@ -267,12 +268,11 @@
         <span></span>
       </Button>
       <!-- 서류첨부 -->
-      <div style="margin-top: 1rem">
-        <label for="file-upload">
-          서류첨부
-          <input id="file-upload" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
-        </label>
-      </div>
+      <label class="btn-attach" for="file-upload">
+        <input id="file-upload" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+        <img src="/assets/images/insu/icon-attach.svg" alt="첨부파일" />
+        <span class="text">첨부서류</span>
+      </label>
     </div>
   </BaseBody>
 </template>
@@ -296,6 +296,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import Checkbox from '~/components/publishing/input/check.vue'
 import Radio from '~/components/publishing/input/radio.vue'
 import RadioImg from '~/components/publishing/input/radioImg.vue'
+import InputAddress from '~/components/publishing/input/InputAddress.vue'
 
 // 체크박스 상태 관리
 const checkbox13 = ref(false)
@@ -317,4 +318,19 @@ const checkbox27 = ref(false)
 
 <style lang="scss" scoped>
 // 기본적인 스타일만 유지
+.btn-attach {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 1.8rem;
+  border-radius: 0.8rem;
+  background-color:#F9F9F9;
+  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #E2E2E2);
+  [type='file'] {
+    display: none;
+  }
+}
 </style>

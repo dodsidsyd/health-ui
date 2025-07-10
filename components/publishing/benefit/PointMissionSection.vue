@@ -22,8 +22,10 @@ import Button from '~/components/publishing/button/Button.vue'
 <style scoped lang="scss">
 .pointmission-section {
   gap: 2.4rem;
+  overflow: hidden;
   padding: 2rem;
-  box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.04);
+  border-radius: 1.2rem;
+  box-shadow: 0.4rem 0.4rem 1.2rem 0 rgba(0, 0, 0, 0.04);
   .pointmission-title-box {
     display: flex;
     align-items: center;

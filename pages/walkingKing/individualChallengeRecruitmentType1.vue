@@ -1,10 +1,12 @@
 <template>
   <BaseBody
     :has-share="true"
-    :has-menu="true"
     page-title="걷기왕 챌린지"
     :show-back-button="true"
     style="background-color: #fefefe"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    add-text="<span class='icon ico-menu'>메뉴 아이콘</span>"
   >
     <RecruitmentindividualChallengeCard />
     <FlexColDiv class="gap-20 mt-24 mb-32">
@@ -143,6 +145,7 @@
     v-bind="bottomModalProps"
     @close="toggleBottomModal"
     @confirm="handleConfirm"
+    @cancel="handleCancle"
   >
     <template #content> <JoinChallengeModal /></template>
   </BottomModal>
@@ -150,6 +153,57 @@
   <BottomToastSlot v-model="showToast" type="success" :duration="3000">
     <p>참가신청이 완료되었습니다.</p></BottomToastSlot
   >
+  <!-- 챌린지 메뉴 모달 -->
+  <BottomModal
+    :is-visible="isShowChallengeMenuModal"
+    v-bind="ChallengeMenuModalProps"
+    @close="toggleChallengeMenuModal"
+  >
+    <template #content>
+      <ul>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">응원하기</p></NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">참가 취소하기</p> </NuxtLink>
+        </li>
+        <li v-if="challengeProgressing">
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">챌린지 상세보기</p> </NuxtLink>
+        </li>
+      </ul>
+    </template>
+  </BottomModal>
+
+  <!-- 무료참가 선택 시 -->
+  <BaseModal
+    :is-visible="isShowAttendFreeModal"
+    v-bind="AttendFreeModalProps"
+    @close="toggleAttendFreeModal"
+    @cancel="toggleAttendFreeModal"
+    @confirm="onAttendFreeConfirm"
+  >
+    <template #content>
+      <ChallengeAttendConfirm
+        :title="'무료참가의 경우 챌린지 최종순위의 혜택은 받을 수 없습니다.'"
+        :subtit="'무료로 참가 신청하시겠습니까?'"
+      />
+    </template>
+  </BaseModal>
+  <!-- 유료참가 선택 시 -->
+  <BaseModal
+    :is-visible="isShowAttendPaidModal"
+    v-bind="AttendPaidModalProps"
+    @close="toggleAttendPaidModal"
+    @cancel="toggleAttendPaidModal"
+    @confirm="onAttendPaidConfirm"
+  >
+    <template #content>
+      <ChallengeAttendConfirm
+        :title="'챌린지 참가를 위해서 5,000P가 필요합니다.'"
+        :subtit="'유료로 참가 신청하시겠습니까?'"
+      />
+    </template>
+  </BaseModal>
 </template>
 
 <script setup lang="ts">
@@ -162,6 +216,7 @@ import RewardGoodsSmallWrap from '~/components/publishing/walkking/RewardGoodsSm
 import LotteryRewardWrap from '~/components/publishing/walkking/LotteryRewardWrap.vue'
 import LotteryRewardBox from '~/components/publishing/walkking/LotteryRewardBox.vue'
 import ChallengeBoosterMission from '~/components/publishing/walkking/ChallengeBoosterMission.vue'
+import ChallengeAttendConfirm from '~/components/publishing/walkking/ChallengeAttendConfirm.vue'
 import JoinChallengeModal from '~/components/publishing/walkking/JoinChallengeModal.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
@@ -171,20 +226,32 @@ import TableWrap from '~/components/common/tableWrap.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
-import { BottomModal } from '@lemonhc/fo-ui/components/modal'
+import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
 import BottomToastSlot from '~/components/common/bottomToastSlot.vue'
+
+// 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
+const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
+// 컴포넌트 마운트 시 addTextClick 핸들러 등록
+onMounted(() => {
+  if (setAddTextClickHandler) {
+    setAddTextClickHandler(clickChallengeMenuModal)
+  }
+})
 
 const showToast = ref(false) // 토스트 표시 상태
 const isShowBottomModal = ref(false) // 챌린지 참가 모달 표시 상태
 const buttonAriaLabel = ref('챌린지 참가하기')
 const isButtonDisabled = ref(false)
 
-// 참가 버튼 클릭 시 (모달의 '확인' 버튼 클릭 시)
-const handleConfirm = () => {
-  showToast.value = true
-  toggleBottomModal()
-  buttonAriaLabel.value = '123번째 참가신청 완료'
-  isButtonDisabled.value = true
+// 유료 참가 버튼 클릭 시
+const handleConfirm = async () => {
+  await handleAttendPaid()
+  isShowBottomModal.value = false
+}
+// 무료 참가 버튼 클릭 시
+const handleCancle = async () => {
+  await handleAttendFree()
+  isShowBottomModal.value = false
 }
 // 챌린지 참가하기 버튼 클릭(바텀 모달 호출)
 const toggleBottomModal = () => {
@@ -236,6 +303,77 @@ const tableData = {
     [{ text: '스타벅스 카페라떼', colspan: 2 }],
     [{ text: '투썸플레이스 조각케익', colspan: 2 }]
   ]
+}
+// 챌린지 진행 중 상태
+const challengeProgressing = false
+// 챌린지 메뉴 ref
+const isShowChallengeMenuModal = ref(false)
+// 챌린지 메뉴 props
+const ChallengeMenuModalProps = ref({
+  title: '챌린지 메뉴',
+  isShowCloseButton: true,
+  isShowCancelButton: false,
+  isShowConfirmButton: false,
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+// 챌린지 메뉴 모달 토글
+const toggleChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = !isShowChallengeMenuModal.value
+}
+// 챌린지 메뉴 클릭
+const clickChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = true
+}
+
+// 무료참가 확인 모달 ref
+const isShowAttendFreeModal = ref(false)
+// 무료참가 확인 모달 Props
+const AttendFreeModalProps = ref({
+  isShowCloseButton: true,
+  isShowCancelButton: true,
+  isShowConfirmButton: true,
+  confirmButtonText: '신청',
+  cancelButtonText: '아니오',
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+const handleAttendFree = () => {
+  isShowAttendFreeModal.value = true
+}
+const toggleAttendFreeModal = () => {
+  isShowAttendFreeModal.value = !isShowAttendFreeModal.value
+}
+const onAttendFreeConfirm = () => {
+  showToast.value = true
+  isShowAttendFreeModal.value = false
+  buttonAriaLabel.value = '123번째 참가신청 완료'
+  isButtonDisabled.value = true
+}
+
+// 유료참가 확인 모달 ref
+const isShowAttendPaidModal = ref(false)
+// 유료참가 확인 모달 Props
+const AttendPaidModalProps = ref({
+  isShowCloseButton: true,
+  isShowCancelButton: true,
+  isShowConfirmButton: true,
+  confirmButtonText: '신청',
+  cancelButtonText: '아니오',
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+const handleAttendPaid = () => {
+  isShowAttendPaidModal.value = true
+}
+const toggleAttendPaidModal = () => {
+  isShowAttendPaidModal.value = !isShowAttendPaidModal.value
+}
+const onAttendPaidConfirm = () => {
+  showToast.value = true
+  isShowAttendPaidModal.value = false
+  buttonAriaLabel.value = '123번째 참가신청 완료'
+  isButtonDisabled.value = true
 }
 </script>
 

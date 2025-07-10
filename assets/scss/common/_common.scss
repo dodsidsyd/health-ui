@@ -883,6 +883,13 @@ article {
   }
 }
 
+.l-page[data-page='Benefit'] {
+  background: #f9f9f9;
+  .cbody {
+    background: #f9f9f9;
+  }
+}
+
 @media (min-width: 500px) {
   .l-page[data-page='notfound'] {
     .desc {

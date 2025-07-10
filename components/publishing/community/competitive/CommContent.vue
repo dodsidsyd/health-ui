@@ -57,6 +57,7 @@ const commList = [
     viewNum: 234,
     replyNum: 5,
     dateNum: '3시간',
+    src: 'community/img-community-01.png',
     length: 3,
     type: ''
   },

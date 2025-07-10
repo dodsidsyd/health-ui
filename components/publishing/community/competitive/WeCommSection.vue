@@ -10,7 +10,7 @@
         class="mb-20"
       />
     </StickyTabsContainer>
-    <WeCommSlideCard :slides="slideList" />
+    <WeCommSlideCard />
   </div>
 </template>
 <script setup lang="ts">

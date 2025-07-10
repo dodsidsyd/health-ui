@@ -260,7 +260,7 @@ const pageListData: PageItemData[] = [
     path: '/common/benefit',
     category: '혜택',
     section: 'common',
-    status: 'ing'
+    status: ''
   },
   {
     title: '혜택',
@@ -350,6 +350,54 @@ const pageListData: PageItemData[] = [
     category: '보험청구',
     section: 'insu',
     status: ''
+  },
+  {
+    title: '주소검색',
+    description: '주소찾기 공통',
+    path: '/insu/claim/searchAddress',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(질병)',
+    description: '사고(질병) 내용 입력',
+    path: '/insu/claim/accidentDetailsDisease',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(상해)',
+    description: '사고(내원) 내용 입력',
+    path: '/insu/claim/accidentDetailsInjured1',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고(상해)가 일어난 주소',
+    description: '사고(상해)가 일어난 주소입력',
+    path: '/insu/claim/accidentDetailsInjured2',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '진료내역 선택',
+    description: '진료내역 선택(통원/입원)',
+    path: '/insu/claim/medicalHistory',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서류첨부',
+    description: '서류첨부',
+    path: '/insu/claim/attachMedicalCertificate',
+    category: '보험청구',
+    section: 'insu',
+    status: 'ing'
   },
 
   // 걷기왕 섹션

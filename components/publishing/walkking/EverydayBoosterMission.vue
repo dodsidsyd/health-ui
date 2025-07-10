@@ -18,6 +18,14 @@
       </div>
     </div>
     <button :class="['booster-box', { visible: isVisible }]" @click="hideBooster">
+      <LottieAnimation
+        src="/animations/booster.json"
+        width="100%"
+        height="100%"
+        :speed="1.5"
+        :loop="true"
+        class="booster-icon"
+      />
       <p class="booster-tit">부스터 ON!!</p>
       <span class="booster-time">59:47</span>
     </button>
@@ -182,13 +190,11 @@ const hideBooster = () => {
       visibility: visible;
     }
   }
-  &::before {
-    content: '';
+  .booster-icon {
     display: block;
     flex-shrink: 0;
     width: 4.4rem;
     height: 4.4rem;
-    background: url(~/assets/images/walkingking/ico-booster.gif) center / 4.4rem no-repeat;
   }
   .booster-tit {
     flex-shrink: 0;

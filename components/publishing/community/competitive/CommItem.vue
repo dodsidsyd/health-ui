@@ -1,53 +1,51 @@
 <template>
   <NuxtLink to="#" class="community-box" v-if="!item.isBlind">
     <FlexColDiv class="gap-8">
-      <template v-if="Array.isArray(item.badge)">
-        <div class="flex flex-row gap-4">
-          <span v-for="(b, i) in item.badge" :key="'badge-' + i" :class="['badge', { 'cate-blue': type === 'blue' }]">
-            {{ b }}
-          </span>
-        </div>
-      </template>
-
-      <!-- badge: 문자열일 때 -->
-      <span v-else-if="item.badge" :class="['badge', { 'cate-blue': type === 'blue' }]">
-        {{ item.badge }}
-      </span>
-
-      <!-- cate: badge가 있든 없든 항상 추가로 출력 -->
-      <span v-if="item.cate" :class="['cate', { 'cate-blue': type === 'blue' }]">
-        {{ item.cate }}
-      </span>
+      <div v-if="item.badge?.length" class="flex flex-row gap-8">
+        <span v-for="(b, i) in item.badge" :key="'badge-' + i" :class="['badge', { 'badge-blue': b.type === 'blue' }]">
+          {{ b.label }}
+        </span>
+      </div>
+      <div v-if="item.cate?.length" class="flex flex-row gap-8">
+        <span v-for="(c, i) in item.cate" :key="'cate-' + i" :class="['cate', { 'cate-blue': c.type === 'blue' }]">
+          {{ c.label }}
+        </span>
+      </div>
       <FlexRowDiv class="info-box">
         <FlexColDiv class="info">
           <strong class="tit">{{ item.tit }}</strong>
           <span class="text">{{ item.text }}</span>
         </FlexColDiv>
-        <div class="img-wrap">
-          <i v-if="item.length && item.length > 1" class="img-length">+ {{ item.length ?? 0 }}</i>
-          <img src="~/assets/images/community/img-community-01.png" alt="" />
+        <div class="img-wrap" v-if="item.src && !imageError">
+          <i v-if="item.length && item.length > 1" class="img-length">+{{ item.length }}</i>
+          <img :src="imageUrl" alt="게시글 이미지" @error="handleImageError" />
         </div>
       </FlexRowDiv>
-      <div class="detail-info type1" v-if="typeFormat === 'type1'">
-        <span class="like-num">{{ item.likeNum ?? 0 }}</span>
-        <span class="view-num">조회 {{ item.viewNum ?? 0 }}</span>
-        <span class="reply-num">댓글 {{ item.replyNum ?? 0 }}</span>
-        <span class="date-num">{{ item.dateNum ?? 0 }} 전</span>
-      </div>
-      <div class="detail-info type2" v-if="typeFormat === 'type2'">
-        <div class="profile-img"><img class="" :src="item.profileImg" alt="사용자 프로필" /></div>
-        <span class="nickname">{{ item.nickname || '??' }}</span>
-        <span class="star">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M7.66339 1.80937C7.8011 1.53034 8.19899 1.53034 8.3367 1.80937L10.1194 5.42145C10.1741 5.53226 10.2798 5.60906 10.402 5.62682L14.3882 6.20605C14.6961 6.25079 14.8191 6.62921 14.5963 6.8464L11.7119 9.65802C11.6234 9.74427 11.583 9.86853 11.6039 9.99032L12.2848 13.9604C12.3374 14.2671 12.0155 14.5009 11.7401 14.3561L8.17475 12.4817C8.06538 12.4242 7.93472 12.4242 7.82535 12.4817L4.26001 14.3561C3.98459 14.5009 3.66269 14.2671 3.71529 13.9604L4.39621 9.99032C4.4171 9.86853 4.37672 9.74427 4.28824 9.65802L1.40382 6.8464C1.181 6.62921 1.30396 6.25079 1.61189 6.20605L5.59806 5.62682C5.72033 5.60906 5.82604 5.53226 5.88073 5.42145L7.66339 1.80937Z"
-              fill="#FCD233"
-              stroke="#FBC700"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span class="score">{{ item.rating ?? '0.0' }}</span>
-        </span>
+      <div class="detail-info" :class="typeFormat">
+        <template v-if="typeFormat === 'type1'">
+          <span class="like-num">{{ item.likeNum ?? 0 }}</span>
+          <span class="view-num">조회 {{ item.viewNum ?? 0 }}</span>
+          <span class="reply-num">댓글 {{ item.replyNum ?? 0 }}</span>
+          <span class="date-num">{{ item.dateNum }} 전</span>
+        </template>
+        <template v-else-if="typeFormat === 'type2'">
+          <div class="profile-img">
+            <img :src="profileImageUrl" alt="프로필" />
+          </div>
+          <span class="nickname">{{ item.nickname || '??' }}</span>
+          <span class="star">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M7.66339 1.80937C7.8011 1.53034 8.19899 1.53034 8.3367 1.80937L10.1194 5.42145C10.1741 5.53226 10.2798 5.60906 10.402 5.62682L14.3882 6.20605C14.6961 6.25079 14.8191 6.62921 14.5963 6.8464L11.7119 9.65802C11.6234 9.74427 11.583 9.86853 11.6039 9.99032L12.2848 13.9604C12.3374 14.2671 12.0155 14.5009 11.7401 14.3561L8.17475 12.4817C8.06538 12.4242 7.93472 12.4242 7.82535 12.4817L4.26001 14.3561C3.98459 14.5009 3.66269 14.2671 3.71529 13.9604L4.39621 9.99032C4.4171 9.86853 4.37672 9.74427 4.28824 9.65802L1.40382 6.8464C1.181 6.62921 1.30396 6.25079 1.61189 6.20605L5.59806 5.62682C5.72033 5.60906 5.82604 5.53226 5.88073 5.42145L7.66339 1.80937Z"
+                fill="#FCD233"
+                stroke="#FBC700"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="score">{{ item.rating ?? '0.0' }}</span>
+          </span>
+          <span class="date-num">{{ item.dateNum }} 전</span>
+        </template>
       </div>
     </FlexColDiv>
   </NuxtLink>
@@ -58,40 +56,48 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 
+interface LabelItem {
+  label: string
+  type?: 'blue' | ''
+}
+
 interface CommItem {
   id: number
-  cate: string
-  badge?: string[]
+  cate?: LabelItem[]
+  badge?: LabelItem[]
   tit: string
   text: string
-  likeNum: number
-  viewNum: number
-  replyNum: number
-  dateNum: string
+  src?: string
+  likeNum?: number
+  viewNum?: number
+  replyNum?: number
+  dateNum?: string
   length?: number
   type?: '' | 'blue'
   isBlind?: boolean
   nickname?: string
-  profileImg?: string
+  profileImageUrl?: string
   rating?: number
 }
 
 const props = withDefaults(
   defineProps<{
     item: CommItem
-    type?: 'blue' | ''
-    isLength?: boolean
     typeFormat?: 'type1' | 'type2'
   }>(),
-  {
-    type: '',
-    isLength: false,
-    typeFormat: 'type1'
-  }
+  { typeFormat: 'type1' }
 )
+
+const imageError = ref(false)
+const imageUrl = computed(() => (props.item.src ? `/_nuxt/assets/images/${props.item.src}` : ''))
+const profileImageUrl = computed(() =>
+  props.item.profileImageUrl ? `/_nuxt/assets/images/${props.item.profileImageUrl}` : ''
+)
+const handleImageError = () => (imageError.value = true)
 </script>
 <style scoped lang="scss">
 .community-box {
@@ -106,6 +112,9 @@ const props = withDefaults(
     font-weight: 600;
     text-align: left;
     color: #777f92;
+    &.cate-blue {
+      color: #4c7ff7;
+    }
   }
   .info-box {
     gap: 2rem;
@@ -144,6 +153,14 @@ const props = withDefaults(
   .text {
     color: #555;
     font-weight: 400;
+    flex: 1;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
     &.text-blind {
       display: block;
       margin-top: 0.4rem;

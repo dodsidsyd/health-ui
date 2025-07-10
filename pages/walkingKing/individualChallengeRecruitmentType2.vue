@@ -1,10 +1,12 @@
 <template>
   <BaseBody
     :has-share="true"
-    :has-menu="true"
     page-title="걷기왕 챌린지"
     :show-back-button="true"
     style="background-color: #fefefe"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    add-text="<span class='icon ico-menu'>메뉴 아이콘</span>"
   >
     <RecruitmentindividualChallengeCard />
     <FlexColDiv class="gap-20 mt-24 mb-32">
@@ -143,6 +145,7 @@
     v-bind="bottomModalProps"
     @close="toggleBottomModal"
     @confirm="handleConfirm"
+    @cancel="handleCancle"
   >
     <template #content> <JoinChallengeModal /></template>
   </BottomModal>
@@ -150,6 +153,54 @@
   <BottomToastSlot v-model="showToast" type="success" :duration="3000">
     <p>참가신청이 완료되었습니다.</p></BottomToastSlot
   >
+  <!-- 챌린지 메뉴 모달 -->
+  <BottomModal
+    :is-visible="isShowChallengeMenuModal"
+    v-bind="ChallengeMenuModalProps"
+    @close="toggleChallengeMenuModal"
+  >
+    <template #content>
+      <ul>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">응원하기</p></NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">참가 취소하기</p> </NuxtLink>
+        </li>
+        <li v-if="challengeProgressing">
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">챌린지 상세보기</p> </NuxtLink>
+        </li>
+      </ul>
+    </template>
+  </BottomModal>
+
+  <!-- 챌린지 참가 취소 -->
+  <BaseModal
+    :is-visible="isShowCancelAttendModal"
+    v-bind="CancelAttendModalProps"
+    @close="toggleCancelAttendModal"
+    @cancel="toggleCancelAttendModal"
+    @confirm="onCancelAttendConfirm"
+  >
+    <template #content>
+      <ChallengeAttendConfirm
+        :title="'챌린지 참가를 취소하시겠습니까?'"
+        :subtit="'유료참가인 경우 포인트환불은 불가합니다.'"
+      />
+    </template>
+  </BaseModal>
+  <!-- 유료참가 포인트 부족 시 -->
+  <BaseModal
+    :is-visible="isShowLackOfPointModal"
+    v-bind="LackOfPointProps"
+    @close="toggleLackOfPointModal"
+    @cancel="toggleLackOfPointModal"
+    @confirm="onLackOfPointConfirm"
+  >
+    <template #content>
+      <ChallengeAttendConfirm :title="'포인트가 부족합니다'" :subtit="'포인트를 충전하시겠습니까?'" />
+    </template>
+  </BaseModal>
 </template>
 
 <script setup lang="ts">
@@ -162,6 +213,7 @@ import RewardGoodsSmallWrap from '~/components/publishing/walkking/RewardGoodsSm
 import LotteryRewardWrap from '~/components/publishing/walkking/LotteryRewardWrap.vue'
 import LotteryRewardBox from '~/components/publishing/walkking/LotteryRewardBox.vue'
 import ChallengeBoosterMission from '~/components/publishing/walkking/ChallengeBoosterMission.vue'
+import ChallengeAttendConfirm from '~/components/publishing/walkking/ChallengeAttendConfirm.vue'
 import JoinChallengeModal from '~/components/publishing/walkking/JoinChallengeModal.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
@@ -171,20 +223,32 @@ import TableWrap from '~/components/common/tableWrap.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
-import { BottomModal } from '@lemonhc/fo-ui/components/modal'
+import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
 import BottomToastSlot from '~/components/common/bottomToastSlot.vue'
+
+// 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
+const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
+// 컴포넌트 마운트 시 addTextClick 핸들러 등록
+onMounted(() => {
+  if (setAddTextClickHandler) {
+    setAddTextClickHandler(clickChallengeMenuModal)
+  }
+})
 
 const showToast = ref(false) // 토스트 표시 상태
 const isShowBottomModal = ref(false) // 챌린지 참가 모달 표시 상태
 const buttonAriaLabel = ref('챌린지 참가하기')
 const isButtonDisabled = ref(false)
 
-// 참가 버튼 클릭 시 (모달의 '확인' 버튼 클릭 시)
-const handleConfirm = () => {
-  showToast.value = true
-  toggleBottomModal()
-  buttonAriaLabel.value = '123번째 참가신청 완료'
-  isButtonDisabled.value = true
+// 유료 참가 버튼 클릭 시
+const handleConfirm = async () => {
+  await handleLackOfPoint()
+  isShowBottomModal.value = false
+}
+// 무료 참가 버튼 클릭 시
+const handleCancle = async () => {
+  await handleCancelAttend()
+  isShowBottomModal.value = false
 }
 // 챌린지 참가하기 버튼 클릭(바텀 모달 호출)
 const toggleBottomModal = () => {
@@ -236,6 +300,78 @@ const tableData = {
     [{ text: '스타벅스 카페라떼', colspan: 2 }],
     [{ text: '투썸플레이스 조각케익', colspan: 2 }]
   ]
+}
+
+// 챌린지 진행 중 상태
+const challengeProgressing = false
+// 챌린지 메뉴 ref
+const isShowChallengeMenuModal = ref(false)
+// 챌린지 메뉴 props
+const ChallengeMenuModalProps = ref({
+  title: '챌린지 메뉴',
+  isShowCloseButton: true,
+  isShowCancelButton: false,
+  isShowConfirmButton: false,
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+// 챌린지 메뉴 모달 토글
+const toggleChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = !isShowChallengeMenuModal.value
+}
+// 챌린지 메뉴 클릭
+const clickChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = true
+}
+
+// 참가 취소 모달 ref
+const isShowCancelAttendModal = ref(false)
+// 참가 취소 모달 Props
+const CancelAttendModalProps = ref({
+  isShowCloseButton: true,
+  isShowCancelButton: true,
+  isShowConfirmButton: true,
+  confirmButtonText: '참가취소',
+  cancelButtonText: '아니오',
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+const handleCancelAttend = () => {
+  isShowCancelAttendModal.value = true
+}
+const toggleCancelAttendModal = () => {
+  isShowCancelAttendModal.value = !isShowCancelAttendModal.value
+}
+const onCancelAttendConfirm = () => {
+  // showToast.value = true
+  isShowCancelAttendModal.value = false
+  // buttonAriaLabel.value = '123번째 참가신청 완료'
+  // isButtonDisabled.value = true
+}
+
+// 포인트 부족 모달 ref
+const isShowLackOfPointModal = ref(false)
+// 포인트 부족 모달 Props
+const LackOfPointProps = ref({
+  isShowCloseButton: true,
+  isShowCancelButton: true,
+  isShowConfirmButton: true,
+  confirmButtonText: '충전',
+  cancelButtonText: '아니오',
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+const handleLackOfPoint = () => {
+  isShowLackOfPointModal.value = true
+}
+const toggleLackOfPointModal = () => {
+  isShowLackOfPointModal.value = !isShowLackOfPointModal.value
+}
+const onLackOfPointConfirm = () => {
+  // showToast.value = true
+  isShowLackOfPointModal.value = false
+  // buttonAriaLabel.value = '123번째 참가신청 완료'
+  // isButtonDisabled.value = true
 }
 </script>
 

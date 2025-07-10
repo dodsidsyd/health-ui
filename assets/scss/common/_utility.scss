@@ -192,6 +192,12 @@ $title-prefix: 'title';
   }
 }
 
+@for $i from 0 through 1000 {
+  .br-#{$i} {
+    border-radius: $i * 0.1rem !important;
+  }
+}
+
 .require {
   .c-label {
     &:after {

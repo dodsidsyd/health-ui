@@ -20,6 +20,7 @@
         <LookContent />
       </div>
     </section>
+    <FloatingWriteButton />
   </DevOnly>
 </template>
 
@@ -30,6 +31,7 @@ import NoticeSection from '~/components/publishing/community/competitive/NoticeS
 import Button from '~/components/publishing/button/Button.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
+import FloatingWriteButton from '~/components/common/floating/FloatingWriteButton.vue'
 
 import CommContent from '~/components/publishing/community/competitive/CommContent.vue'
 import LookContent from '~/components/publishing/community/competitive/LookContent.vue'

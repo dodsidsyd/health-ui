@@ -1,11 +1,13 @@
 <template>
   <BaseBody
     :has-share="true"
-    :has-menu="true"
     page-title="걷기왕 챌린지"
     :show-back-button="true"
     style="background-color: #fefefe"
     :is-transparent="true"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    add-text="<span class='icon ico-menu'>메뉴 아이콘</span>"
   >
     <!-- 메인 배너 -->
     <RecruitmentindividualChallengeBox />
@@ -119,16 +121,34 @@
     </template>
   </BottomModal>
   <!-- 아이템 사용 확인 모달 -->
-  <UsingItemModal :is-visible="isShowUsingItemModal" v-bind="UsingItemModalProps" @close="toggleUsingItemModal">
+  <BaseModal
+    :is-visible="isShowUsingItemModal"
+    v-bind="UsingItemModalProps"
+    @close="toggleUsingItemModal"
+    @cancel="toggleUsingItemModal"
+  >
+    <UsingItemConfirm />
+  </BaseModal>
+  <!-- 챌린지 메뉴 모달 -->
+  <BottomModal
+    :is-visible="isShowChallengeMenuModal"
+    v-bind="ChallengeMenuModalProps"
+    @close="toggleChallengeMenuModal"
+  >
     <template #content>
-      <div v-if="selectedBoosterItem" class="flex flex-col align-center gap-32 mb-n12">
-        <div style="width: 8rem; height: 8rem">
-          <img :src="`${IMAGE_BASE_PATH_MODAL}${selectedBoosterItem.src}`" alt="선택된 아이템 이미지" />
-        </div>
-        <p style="font-size: 1.8rem; font-weight: 500">{{ selectedBoosterItem.name }} 부스터를<br />사용하시겠어요?</p>
-      </div>
+      <ul>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">응원하기</p></NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">참가 취소하기</p> </NuxtLink>
+        </li>
+        <li v-if="challengeProgressing">
+          <NuxtLink to="#"><p class="pd-19y fz-16 text-left">챌린지 상세보기</p> </NuxtLink>
+        </li>
+      </ul>
     </template>
-  </UsingItemModal>
+  </BottomModal>
 </template>
 
 <script setup lang="ts">
@@ -144,13 +164,22 @@ import UsedBoosterItemSummary from '~/components/publishing/walkking/UsedBooster
 import UsingItemWrap from '~/components/publishing/walkking/UsingItemWrap.vue'
 import BoosterItem from '~/components/publishing/walkking/BoosterItem.vue'
 import EverydayBoosterMission from '~/components/publishing/walkking/EverydayBoosterMission.vue'
-import UsingItemModal from '~/components/publishing/walkking/UsingItemModal.vue'
+import UsingItemConfirm from '~/components/publishing/walkking/UsingItemConfirm.vue'
 import StepsHistoryItem from '~/components/publishing/walkking/StepsHistoryItem.vue'
 import StickyProfileSection from '~/components/publishing/walkking/StickyProfileSection.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import RoundTabs, { type RoundTab } from '~/components/tabbar/RoundTabs.vue'
-import { BottomModal } from '@lemonhc/fo-ui/components/modal'
+import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
+// 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
+const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
+// 컴포넌트 마운트 시 addTextClick 핸들러 등록
+onMounted(() => {
+  if (setAddTextClickHandler) {
+    setAddTextClickHandler(clickChallengeMenuModal)
+  }
+})
+
 // RoundTabs 상태 관리
 const activeRoundTab = ref('option1')
 // RoundTabs 데이터
@@ -212,6 +241,27 @@ const toggleStepHistoryModal = () => {
 const clickStepHistoryModal = () => {
   isShowStepHistoryModal.value = true
 }
+// 챌린지 진행 중 상태
+const challengeProgressing = true
+// 챌린지 메뉴 ref
+const isShowChallengeMenuModal = ref(false)
+// 챌린지 메뉴 props
+const ChallengeMenuModalProps = ref({
+  title: '챌린지 메뉴',
+  isShowCloseButton: true,
+  isShowCancelButton: false,
+  isShowConfirmButton: false,
+  disabledCancelButton: false,
+  disabledConfirmButton: false
+})
+// 챌린지 메뉴 모달 토글
+const toggleChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = !isShowChallengeMenuModal.value
+}
+// 챌린지 메뉴 클릭
+const clickChallengeMenuModal = () => {
+  isShowChallengeMenuModal.value = true
+}
 
 // --- 자식 컴포넌트에서 'show-modal' 이벤트 발생 시 호출될 함수 ---
 const handleShowModal = () => {
@@ -228,7 +278,7 @@ const selectedBoosterItem = ref<{ name: string; src: string; count: string } | n
 // 아이템 확인 모달 Props
 const UsingItemModalProps = ref({
   isShowCloseButton: false,
-  isShowCancelButton: true,
+  isShowCancelButton: false,
   isShowConfirmButton: true,
   confirmButtonText: '사용하기',
   cancelButtonText: '취소',
@@ -247,8 +297,6 @@ const toggleUsingItemModal = () => {
     selectedBoosterItem.value = null
   }
 }
-// 아이템 사용 확인 모달 이미지 경로
-const IMAGE_BASE_PATH_MODAL = '/_nuxt/assets/images/'
 </script>
 
 <style scoped lang="scss"></style>
