@@ -1,9 +1,6 @@
 <template>
   <div>
-    <span class="c-label"
-      >문의내용
-      <span class="required-mark">*</span>
-    </span>
+    <span class="c-label">첨부파일 </span>
     <div class="file-upload-container">
       <input ref="fileInput" type="file" :id="inputId" style="display: none" aria-label="파일 선택" />
       <label :for="inputId" class="file-upload-button">

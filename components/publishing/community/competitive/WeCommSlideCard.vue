@@ -7,10 +7,12 @@
       :space-between="12"
       :navigation="false"
       :pagination="false"
+      :loop="true"
       :scrollbar="false"
       :show-slide-info="false"
       :show-slide-length="false"
       :show-play-pause-button="false"
+      class="full-width-swiper"
     >
       <template #default="{ slide }">
         <div class="we-comm-slide">
@@ -39,28 +41,36 @@ const slideList = [
   { id: 2, tit: '연령', text: '30대가 가장 많아요', chartComponent: AgeChart },
   { id: 3, tit: '성별', text: '여성이 더 많아요', chartComponent: GenderChart }
 ]
-onMounted(() => {
-  requestAnimationFrame(() => {
-    const swiperEl = document.querySelector('swiper-container')
-    const shadowRoot = swiperEl?.shadowRoot
-
-    const swiper = shadowRoot?.querySelector('.swiper')
-    swiper?.style.setProperty('overflow', 'visible', 'important')
-
-    const wrapper = shadowRoot?.querySelector('.swiper-wrapper')
-    wrapper?.style.setProperty('overflow', 'visible', 'important')
-  })
-})
 </script>
 <style scoped lang="scss">
+.full-width-swiper {
+  width: calc(100% + 4rem);
+  margin: 0 -2rem;
+}
+swiper-slide.swiper-slide-active {
+  padding-left: 2rem;
+}
 .we-comm-slide {
-  overflow: auto;
+  overflow: hidden;
   width: 100%;
-  padding: 2rem 2rem 3.2rem;
+  padding: 2.1rem 2rem 3.2rem;
   border-radius: 2rem;
   border: 1px solid #eee;
   background: #fff;
-  box-shadow: 0px 0px 2.3rem 0px rgba(0, 0, 0, 0.06);
+  max-height: 33.2rem;
+  .tit {
+    font-weight: 500;
+    line-height: 2.2rem;
+    color: #555;
+    & + .text {
+      margin-top: 0.8rem;
+    }
+  }
+  .text {
+    display: inline-block;
+    font-size: 2rem;
+    line-height: 2.6rem;
+  }
 }
 .we-comm-swiper {
   ::v-deep(.swiper),
@@ -71,6 +81,11 @@ onMounted(() => {
   .custom-swiper {
     .swiper {
       overflow: visible;
+    }
+  }
+  ::v-deep(swiper-slide) {
+    &.swiper-slide-active {
+      padding-left: 2rem;
     }
   }
 }

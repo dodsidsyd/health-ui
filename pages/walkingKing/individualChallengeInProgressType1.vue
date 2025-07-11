@@ -127,7 +127,9 @@
     @close="toggleUsingItemModal"
     @cancel="toggleUsingItemModal"
   >
-    <UsingItemConfirm />
+    <template #content>
+      <UsingItemConfirm />
+    </template>
   </BaseModal>
   <!-- 챌린지 메뉴 모달 -->
   <BottomModal
@@ -273,8 +275,7 @@ const handleHideModal = () => {
 }
 // 아이템 확인 모달 ref
 const isShowUsingItemModal = ref(false)
-// 선택된 BoosterItem 데이터를 저장할 ref 추가
-const selectedBoosterItem = ref<{ name: string; src: string; count: string } | null>(null)
+
 // 아이템 확인 모달 Props
 const UsingItemModalProps = ref({
   isShowCloseButton: false,
@@ -287,15 +288,11 @@ const UsingItemModalProps = ref({
 })
 
 // BoosterItem 클릭 시
-const clickUsingItemModal = (itemData: { name: string; src: string; count: string }) => {
-  selectedBoosterItem.value = itemData
-  isShowUsingItemModal.value = true // UsingItemModal 열기
+const clickUsingItemModal = () => {
+  isShowUsingItemModal.value = true
 }
 const toggleUsingItemModal = () => {
   isShowUsingItemModal.value = !isShowUsingItemModal.value
-  if (!isShowUsingItemModal.value) {
-    selectedBoosterItem.value = null
-  }
 }
 </script>
 

@@ -1,7 +1,17 @@
 <template>
   <div :class="['c-input', { 'search-bar': inpType === 'search', transparent: transparent }]">
     <div class="c-inpType">
-      <label v-if="label" class="c-label">{{ label }}</label>
+      <label v-if="label" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">
+        <template v-if="hasRequiredMark">
+          <span v-for="(part, index) in labelParts" :key="index">
+            <span v-if="part === '*'" class="required-mark">*</span>
+            <span v-else>{{ part }}</span>
+          </span>
+        </template>
+        <template v-else>
+          {{ label }}
+        </template>
+      </label>
       <div class="c-inp-el">
         <div class="custom-select custom" @click="openBottomModal">
           <div :class="['select-display', { 'placeholder-selected': !selectedLabel }]">
@@ -51,6 +61,8 @@ interface OptionType {
 
 const props = defineProps({
   label: { type: String, default: '' },
+  labelSize: { type: String, default: '1.2rem' }, // 라벨 폰트 크기
+  labelClass: { type: String, default: '' }, // 라벨 추가 CSS 클래스
   selectPlaceholder: { type: String, default: '선택하세요' },
   modalTitle: { type: String, default: '' },
   modelValue: { type: String, default: '' },
@@ -74,7 +86,16 @@ const selectedLabel = computed(() => {
   const selectedOption = props.customOpts.find(option => option.value === selected.value)
   return selectedOption?.label || ''
 })
+// 라벨에 * 표시가 있는지 확인
+const hasRequiredMark = computed(() => {
+  return props.label.includes('*')
+})
 
+// 라벨을 * 기준으로 분리
+const labelParts = computed(() => {
+  if (!hasRequiredMark.value) return []
+  return props.label.split(/([*])/).filter(part => part !== '')
+})
 // v-model 양방향 바인딩
 watch(
   () => props.modelValue,
@@ -203,6 +224,12 @@ const cancelSelection = () => {
   color: #555;
   & + .c-inp-el {
     margin-left: 0;
+  }
+  .required-mark {
+    color: #f14960; // 빨간색으로 * 표시
+    font-weight: 400;
+    display: inline-block;
+    margin-left: 0.4rem;
   }
 }
 

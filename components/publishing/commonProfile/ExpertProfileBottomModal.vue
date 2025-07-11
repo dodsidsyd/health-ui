@@ -24,6 +24,14 @@
       <div class="c-modal-body overflow-initial">
         <slot name="content"></slot>
       </div>
+      <div class="c-modal-footer sticky">
+        <button type="button" class="c-modal-btn cancel">
+          <span class="text">전화하기</span>
+        </button>
+        <button type="button" class="c-modal-btn confirm">
+          <span class="text">메세지 보내기</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>

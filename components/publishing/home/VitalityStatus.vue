@@ -443,7 +443,7 @@ onUnmounted(() => {
     margin-top: 1.2rem;
     gap: 0 0.8rem;
     cursor: grab;
-    user-select: none;
+    // user-select: none;
     touch-action: pan-y; // 세로 스크롤만 허용
     will-change: transform; // GPU 가속
     backface-visibility: hidden; // 애니메이션 최적화

@@ -121,16 +121,16 @@
     </template>
   </BottomModal>
   <!-- 아이템 사용 확인 모달 -->
-  <UsingItemModal :is-visible="isShowUsingItemModal" v-bind="UsingItemModalProps" @close="toggleUsingItemModal">
+  <BaseModal
+    :is-visible="isShowUsingItemModal"
+    v-bind="UsingItemModalProps"
+    @close="toggleUsingItemModal"
+    @cancel="toggleUsingItemModal"
+  >
     <template #content>
-      <div v-if="selectedBoosterItem" class="flex flex-col align-center gap-32 mb-n12">
-        <div style="width: 8rem; height: 8rem">
-          <img :src="`${IMAGE_BASE_PATH_MODAL}${selectedBoosterItem.src}`" alt="선택된 아이템 이미지" />
-        </div>
-        <p style="font-size: 1.8rem; font-weight: 500">{{ selectedBoosterItem.name }} 부스터를<br />사용하시겠어요?</p>
-      </div>
+      <UsingItemConfirm />
     </template>
-  </UsingItemModal>
+  </BaseModal>
   <!-- 챌린지 메뉴 모달 -->
   <BottomModal
     :is-visible="isShowChallengeMenuModal"
@@ -166,13 +166,13 @@ import UsedBoosterItemSummary from '~/components/publishing/walkking/UsedBooster
 import UsingItemWrap from '~/components/publishing/walkking/UsingItemWrap.vue'
 import BoosterItem from '~/components/publishing/walkking/BoosterItem.vue'
 import EverydayBoosterMission from '~/components/publishing/walkking/EverydayBoosterMission.vue'
-import UsingItemModal from '~/components/publishing/walkking/UsingItemModal.vue'
+import UsingItemConfirm from '~/components/publishing/walkking/UsingItemConfirm.vue'
 import StepsHistoryItem from '~/components/publishing/walkking/StepsHistoryItem.vue'
 import StickyProfileSection from '~/components/publishing/walkking/StickyProfileSection.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import RoundTabs, { type RoundTab } from '~/components/tabbar/RoundTabs.vue'
-import { BottomModal } from '@lemonhc/fo-ui/components/modal'
+import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
 // 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
 const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
 // 컴포넌트 마운트 시 addTextClick 핸들러 등록
@@ -275,12 +275,11 @@ const handleHideModal = () => {
 }
 // 아이템 확인 모달 ref
 const isShowUsingItemModal = ref(false)
-// 선택된 BoosterItem 데이터를 저장할 ref 추가
-const selectedBoosterItem = ref<{ name: string; src: string; count: string } | null>(null)
+
 // 아이템 확인 모달 Props
 const UsingItemModalProps = ref({
   isShowCloseButton: false,
-  isShowCancelButton: true,
+  isShowCancelButton: false,
   isShowConfirmButton: true,
   confirmButtonText: '사용하기',
   cancelButtonText: '취소',
@@ -289,18 +288,12 @@ const UsingItemModalProps = ref({
 })
 
 // BoosterItem 클릭 시
-const clickUsingItemModal = (itemData: { name: string; src: string; count: string }) => {
-  selectedBoosterItem.value = itemData
-  isShowUsingItemModal.value = true // UsingItemModal 열기
+const clickUsingItemModal = () => {
+  isShowUsingItemModal.value = true
 }
 const toggleUsingItemModal = () => {
   isShowUsingItemModal.value = !isShowUsingItemModal.value
-  if (!isShowUsingItemModal.value) {
-    selectedBoosterItem.value = null
-  }
 }
-// 아이템 사용 확인 모달 이미지 경로
-const IMAGE_BASE_PATH_MODAL = '/_nuxt/assets/images/'
 </script>
 
 <style scoped lang="scss"></style>

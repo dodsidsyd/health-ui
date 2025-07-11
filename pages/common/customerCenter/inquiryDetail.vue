@@ -26,10 +26,16 @@
         감사합니다.</template
       >
     </InquiryAnswer>
+    <ButtonGroup asymmetric class="is-fixed">
+      <Button btn-type="secondary" element-type="button" aria-label="삭제" class="lg btn-sticky" />
+      <Button btn-type="primary" element-type="button" aria-label="수정하기" class="lg btn-sticky" />
+    </ButtonGroup>
   </BaseBody>
 </template>
 
 <script setup lang="ts">
+import Button from '~/components/publishing/button/Button.vue'
+import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import CustomerCenterTit from '~/components/publishing/common/customerCenter/CustomerCenterTit.vue'
 import CustomerCenterContents from '~/components/publishing/common/customerCenter/CustomerCenterContents.vue'

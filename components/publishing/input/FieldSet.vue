@@ -129,4 +129,21 @@ function onInput(e: Event) {
     background: #f9f8f7;
   }
 }
+.c-label {
+  // SCSS 변수 테스트: vars.$fs12 변수를 사용
+  font-size: vars.$fs12; // 1.2rem과 동일
+  font-weight: vars.$regular; // 400과 동일
+  line-height: 1.6rem;
+  color: #555;
+  & + .c-inp-el {
+    margin-left: 0;
+  }
+
+  .required-mark {
+    color: #f14960; // 빨간색으로 * 표시
+    font-weight: 400;
+    display: inline-block;
+    margin-left: 0.4rem;
+  }
+}
 </style>

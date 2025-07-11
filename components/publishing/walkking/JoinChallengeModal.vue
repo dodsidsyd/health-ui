@@ -51,8 +51,10 @@ const props = defineProps({
   text-align: center;
 }
 .gift-slide-wrap {
-  height: 11.2rem;
   margin: 4rem -2rem 3.2rem -7.6rem;
+  :deep(swiper-slide img) {
+    max-height: 11.2rem;
+  }
 }
 .info-box {
   display: flex;

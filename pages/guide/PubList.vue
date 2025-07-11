@@ -158,7 +158,7 @@ const pageListData: PageItemData[] = [
     path: '/common/home',
     category: '메인',
     section: 'common',
-    status: 'ing'
+    status: ''
   },
 
   {
@@ -415,7 +415,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeHomeType1',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: 'MY 챌린지 - 개인',
@@ -423,7 +423,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeHomeType1',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 모집(참가전) - 개인',
@@ -431,7 +431,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeRecruitmentType1',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 모집(참가전) - 개인',
@@ -439,7 +439,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeRecruitmentType2',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 자세히보기 - 개인',
@@ -447,7 +447,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeDetail',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 진행중(TOP30) - 개인',
@@ -455,7 +455,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeInProgressType1',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 진행중(MY랭킹) - 개인',
@@ -463,7 +463,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeInProgressType2',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 진행중(친구) - 개인',
@@ -471,7 +471,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeInProgressType3',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 진행중(게임배너) - 개인',
@@ -479,7 +479,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeInProgressType4',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 진행중(친구X) - 개인',
@@ -487,7 +487,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeInProgressType5',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 종료 - 개인',
@@ -495,7 +495,7 @@ const pageListData: PageItemData[] = [
     path: '/walkingKing/individualChallengeEnded',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
 
   // login

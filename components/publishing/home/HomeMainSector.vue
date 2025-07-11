@@ -38,16 +38,17 @@
             : 1
         }"
       ></div>
-      <div
-        class="charactor"
-        @touchstart="handleTouchStart"
-        @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd"
-        @mousedown="handleMouseDown"
-        @mousemove="handleMouseMove"
-        @mouseup="handleMouseUp"
-        @mouseleave="handleMouseUp"
-      >
+      <div class="charactor">
+        <span
+          class="sector-swiper-area"
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
+          @mousedown="handleMouseDown"
+          @mousemove="handleMouseMove"
+          @mouseup="handleMouseUp"
+          @mouseleave="handleMouseUp"
+        ></span>
         <span class="charctor-txt" v-html="characterText"></span>
         <LottieAnimation
           :src="animationSrc"
@@ -59,24 +60,24 @@
         />
         <i class="charactor-shadow" aria-hidden="true"></i>
 
-        <div class="charctor-option" v-if="currentStatus === 'walking-status'">
+        <div v-if="currentStatus === 'walking-status'" class="charctor-option">
           <button type="button" class="cbtn btn-white">걷기통계</button>
           <button type="button" class="cbtn btn-white">친구랭킹</button>
         </div>
 
-        <div class="charctor-option" v-if="currentStatus === 'health-status'">
-          <button type="button" v-if="healthCondition !== 'noProfileSet'" class="cbtn btn-white">자세히보기</button>
-          <div class="info-text" v-if="healthCondition === 'noProfileSet'">
+        <div v-if="currentStatus === 'health-status'" class="charctor-option">
+          <button v-if="healthCondition !== 'noProfileSet'" type="button" class="cbtn btn-white">자세히보기</button>
+          <div v-if="healthCondition === 'noProfileSet'" class="info-text">
             건강 프로필 정보 AI분석을 통해<br />
             레몬건강지수가 산정됩니다.
           </div>
         </div>
 
-        <div class="charctor-option" v-if="currentStatus === 'vitality-status'">
-          <button type="button" v-if="vitalityCondition !== 'noSmartRingConnect'" class="cbtn btn-white">
+        <div v-if="currentStatus === 'vitality-status'" class="charctor-option">
+          <button v-if="vitalityCondition !== 'noSmartRingConnect'" type="button" class="cbtn btn-white">
             자세히보기
           </button>
-          <div class="info-text" v-if="vitalityCondition === 'noSmartRingConnect'">
+          <div v-if="vitalityCondition === 'noSmartRingConnect'" class="info-text">
             생체데이터를 종합적으로 분석하여<br />
             Aura Vival Score를 제공합니다.
           </div>
@@ -90,7 +91,7 @@
       <VitalityStatus v-if="currentStatus === 'vitality-status' && vitalityCondition !== 'noSmartRingConnect'" />
 
       <!-- 건강 상태 프로필 없을 때 배너 -->
-      <div class="banner-box health" v-if="currentStatus === 'health-status' && healthCondition === 'noProfileSet'">
+      <div v-if="currentStatus === 'health-status' && healthCondition === 'noProfileSet'" class="banner-box health">
         <nuxt-link to="javascript:void(0)" class="box-content">
           <strong
             >내 건강 프로필 맞춤 AI 건강미션 매일 완료하고 포인트 받으세요!
@@ -101,7 +102,7 @@
       </div>
 
       <!-- 활력 상태 스마트링 없을 때 배너 -->
-      <div class="banner-box" v-if="currentStatus === 'vitality-status' && vitalityCondition === 'noSmartRingConnect'">
+      <div v-if="currentStatus === 'vitality-status' && vitalityCondition === 'noSmartRingConnect'" class="banner-box">
         <nuxt-link to="javascript:void(0)" class="box-content">
           <strong class="blue-txt"
             >실시간 건강데이터 모니터링으로 구체적인 목표를 제시합니다.<span class="arrow-txt"
@@ -221,7 +222,7 @@ const isTransitioning = ref(false) // 전환 중 상태
 // 조건부 상태 전역 상태 관리
 // health 상태: 'good', 'careful', 'warning', 'noProfileSet'
 // vitality 상태: 'good', 'careful', 'warning', 'noSmartRingConnect'
-const vitalityCondition = ref('noSmartRingConnect') // 기본값을 noSmartRingConnect로 설정
+const vitalityCondition = ref('good') // 기본값을 noSmartRingConnect로 설정
 const healthCondition = ref('noProfileSet') // 기본값을 noProfileSet로 설정
 
 // 터치 이벤트 핸들러
@@ -414,7 +415,7 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .main-sector {
   height: 58.7rem;
-  margin: -5.6rem -2rem 0;
+  margin: -5.6rem -2rem 3.2rem;
   overflow: hidden;
   display: flex;
   flex-direction: row;
@@ -521,10 +522,21 @@ onUnmounted(() => {
       top: 50%;
       margin-top: -2rem;
       transform: translate(-50%, -50%);
-      cursor: grab; // 스와이프 가능 영역 표시
-      user-select: none;
-      touch-action: pan-x; // 가로 스와이프만 허용
-      z-index: 10; // 다른 요소보다 위에 배치
+
+      // 메인 좌우 섹터 스와이프 영역
+      .sector-swiper-area {
+        position: absolute;
+        cursor: grab; // 스와이프 가능 영역 표시
+        user-select: none;
+        touch-action: pan-x; // 가로 스와이프만 허용
+        z-index: 10; // 다른 요소보다 위에 배치
+        height: 10rem;
+        width: calc(100% - 10rem);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
       background: radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
       .charactor-shadow {
         position: absolute;
@@ -678,6 +690,20 @@ onUnmounted(() => {
           top: 1.5rem;
           padding: 1.1rem;
           margin-right: 0;
+        }
+      }
+      .banner-box {
+        .box-content {
+          padding: 1.6rem;
+          padding-right: 8rem;
+          strong {
+            font-size: 1.4rem;
+          }
+          img {
+            width: 8rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
         }
       }
     }

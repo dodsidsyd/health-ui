@@ -183,7 +183,7 @@ const circumference = computed(() => 1.75 * Math.PI * 35) // 모든 차트 동�
 
 // 둘레 값 반환 함수
 const getCircumference = (index: number) => {
-  console.log(`getCircumference 호출 - index: ${index}, 둘레값: ${circumference.value}`)
+  // console.log(`getCircumference 호출 - index: ${index}, 둘레값: ${circumference.value}`)
   return circumference.value
 }
 
@@ -202,7 +202,7 @@ const getCenterChartValue = () => {
   }
   // vitality-status이고 smart ring이 연결되지 않은 경우 '?' 표시
   if (props.currentStatus === 'vitality-status' && !props.isSmartRingConnect) {
-    return '?'
+    return '-'
   }
   return computedChartData.value[displayOrder.value[1]].value
 }
@@ -211,17 +211,17 @@ const getCenterChartValue = () => {
 const getChartValue = (chartIndex: number) => {
   const dataIndex = displayOrder.value[chartIndex]
   const currentData = computedChartData.value[dataIndex]
-  
+
   // health-status이고 profile이 설정되지 않은 경우 모든 차트 '?' 표시
   if (props.currentStatus === 'health-status' && !props.isProfileSet) {
     return '?'
   }
-  
+
   // vitality-status이고 smart ring이 연결되지 않은 경우 모든 차트 '?' 표시
   if (props.currentStatus === 'vitality-status' && !props.isSmartRingConnect) {
     return '?'
   }
-  
+
   return currentData.value
 }
 
@@ -241,17 +241,17 @@ const shouldShowCenterProgress = () => {
 // 모든 차트의 진행률 호 표시 여부
 const shouldShowProgress = (chartIndex: number) => {
   const dataIndex = displayOrder.value[chartIndex]
-  
+
   // health-status이고 profile이 설정되지 않은 경우 모든 차트 진행률 호 숨김
   if (props.currentStatus === 'health-status' && !props.isProfileSet) {
     return false
   }
-  
+
   // vitality-status이고 smart ring이 연결되지 않은 경우 모든 차트 진행률 호 숨김
   if (props.currentStatus === 'vitality-status' && !props.isSmartRingConnect) {
     return false
   }
-  
+
   return true
 }
 
@@ -280,8 +280,6 @@ const chart3 = ref<HTMLElement>()
 
 // 차트 애니메이션 업데이트 함수
 const updateChartAnimations = () => {
-  console.log('updateChartAnimations called') // 디버그용
-
   nextTick(() => {
     const charts = [chart1.value, chart2.value, chart3.value]
 

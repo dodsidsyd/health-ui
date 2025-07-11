@@ -45,6 +45,11 @@
     margin: 0;
     .c-modal-header {
       text-align: left;
+      &.sticky {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
     }
     .c-modal-inner {
       width: 100%;
@@ -509,6 +514,10 @@
     position: absolute;
     top: 0;
     padding: 0 1rem;
+  }
+  &.sticky {
+    position: sticky;
+    bottom: 0;
   }
 }
 // 모달 하단 버튼

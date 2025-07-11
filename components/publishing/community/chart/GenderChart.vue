@@ -1,9 +1,21 @@
 <template>
-  <svg width="100" height="40">
-    <circle cx="20" cy="20" r="10" fill="#FCD233" />
-    <!-- 예시용 SVG 그래프 -->
-  </svg>
+  <pie-chart :data="gender" :size="200" :view-box="'0 0 200 200'" class="gender-chart" />
 </template>
-<script setup lang="ts">
-// 간단한 정적 SVG, 필요시 D3, Chart.js, ApexCharts 등 연결 가능
+
+<script setup>
+import PieChart from '~/components/chart/pieChart.vue'
+
+const gender = [
+  { label: '남자', value: 7000, color: '#D7E1F7' },
+  { label: '여자', value: 20000, color: '#243E8E' }
+]
 </script>
+<style lang="scss" scoped>
+::v-deep(.chart-wrap) {
+  &.gender-chart {
+    .legend {
+      justify-content: center;
+    }
+  }
+}
+</style>
