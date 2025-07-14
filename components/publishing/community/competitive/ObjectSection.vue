@@ -9,7 +9,7 @@
         <i class="icon"></i>
       </div>
 
-      <AverageCurve />
+      <AverageCurve :heart-rate-data="heartRateData" />
     </ShadowCard>
 
     <ShadowCard card-class="oxygen-card">
@@ -130,12 +130,41 @@
   </FlexRowDiv>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import VueApexCharts from 'vue3-apexcharts'
 import AverageCurve from '~/components/publishing/community//competitive/AverageCurve.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
-import FlexColDiv from '~/components/page/FlexColDiv.vue'
+
 import ShadowCard from '~/components/publishing/card/ShadowCard.vue'
+
+const heartRateData = ref([
+  { value: 78, timestamp: new Date('2024-01-01 09:00') },
+  { value: 82, timestamp: new Date('2024-01-01 10:00') },
+  { value: 64, timestamp: new Date('2024-01-01 11:00') },
+  { value: 96, timestamp: new Date('2024-01-01 12:00') },
+  { value: 80, timestamp: new Date('2024-01-01 15:00') }
+])
+
+// 심박수 범위 설정
+const maxHeartRate = ref(100)
+const minHeartRate = ref(60)
+
+// 평균 심박수 계산
+const averageHeartRate = computed(() => {
+  if (!heartRateData.value || heartRateData.value.length === 0) return 0
+  const sum = heartRateData.value.reduce((acc, data) => acc + data.value, 0)
+  return Math.round(sum / heartRateData.value.length)
+})
+
+// 실시간 데이터 업데이트 함수 (필요시 사용)
+function updateHeartRateData(newData) {
+  heartRateData.value = newData
+}
+
+// 외부에서 사용할 수 있도록 expose
+defineExpose({
+  updateHeartRateData,
+  heartRateData,
+  averageHeartRate
+})
 </script>
 <style scoped lang="scss">
 .object-section {

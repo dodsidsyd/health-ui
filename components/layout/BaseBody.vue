@@ -22,6 +22,7 @@ interface Props {
   hasSetting?: boolean
   hasSearch?: boolean
   hasChat?: boolean
+  hasScrap?: boolean
   hasShare?: boolean
   hasMenu?: boolean
   notificationCount?: number
@@ -38,8 +39,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-
 
 // 헤더 설정
 const { setHeaderConfig } = useHeader()
@@ -71,6 +70,7 @@ const updateHeader = async () => {
   if (props.hasSetting !== undefined) headerConfig.hasSetting = props.hasSetting
   if (props.hasSearch !== undefined) headerConfig.hasSearch = props.hasSearch
   if (props.hasChat !== undefined) headerConfig.hasChat = props.hasChat
+  if (props.hasScrap !== undefined) headerConfig.hasScrap = props.hasScrap
   if (props.hasShare !== undefined) headerConfig.hasShare = props.hasShare
   if (props.hasMenu !== undefined) headerConfig.hasMenu = props.hasMenu
   if (props.notificationCount !== undefined) headerConfig.notificationCount = props.notificationCount
@@ -91,8 +91,6 @@ const updateHeader = async () => {
 
   console.log('headerConfig:', headerConfig)
 }
-
-
 
 // 즉시 실행 + 지연 실행 조합
 watchEffect(updateHeader, { flush: 'sync' })

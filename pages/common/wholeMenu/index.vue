@@ -184,7 +184,7 @@
           slide-type="image"
           :slides-per-view="1"
           :space-between="20"
-          :navigation="true"
+          :navigation="false"
           :pagination="{ clickable: true }"
           :autoplay="true"
           :scrollbar="false"

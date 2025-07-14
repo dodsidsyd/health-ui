@@ -1,5 +1,5 @@
 <template>
-  <div class="ranking-wrap">
+  <div :class="['ranking-wrap', { me: type === 'me' }]">
     <div class="ranking-box">
       <span
         class="rangking"
@@ -58,6 +58,7 @@ const props = withDefaults(
     userLocation?: string
     totalClass?: string
     totalNum?: string
+    type?: boolean
   }>(),
   {
     src: 'img-profile.svg',
@@ -68,7 +69,8 @@ const props = withDefaults(
     userName: '',
     userLocation: '',
     totalClass: '',
-    totalNum: ''
+    totalNum: '',
+    type: false
   }
 )
 

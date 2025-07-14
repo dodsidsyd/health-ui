@@ -1,6 +1,10 @@
 <template>
   <NuxtLink to="#" class="community-box" v-if="!item.isBlind">
     <FlexColDiv class="gap-8">
+      <FlexRowDiv v-if="item.writer" class="writer-box">
+        <div class="img"><img class="img" :src="writerImageUrl" alt="작성자 이미지" @error="handleImageError" /></div>
+        <span class="name">{{ item.writer }}</span>
+      </FlexRowDiv>
       <div v-if="item.badge?.length" class="flex flex-row gap-8">
         <span v-for="(b, i) in item.badge" :key="'badge-' + i" :class="['badge', { 'badge-blue': b.type === 'blue' }]">
           {{ b.label }}
@@ -69,6 +73,8 @@ interface CommItem {
   id: number
   cate?: LabelItem[]
   badge?: LabelItem[]
+  writer: string
+  writerImageUrl?: string
   tit: string
   text: string
   src?: string
@@ -97,6 +103,9 @@ const imageUrl = computed(() => (props.item.src ? `/_nuxt/assets/images/${props.
 const profileImageUrl = computed(() =>
   props.item.profileImageUrl ? `/_nuxt/assets/images/${props.item.profileImageUrl}` : ''
 )
+const writerImageUrl = computed(() =>
+  props.item.writerImageUrl ? `/_nuxt/assets/images/${props.item.writerImageUrl}` : ''
+)
 const handleImageError = () => (imageError.value = true)
 </script>
 <style scoped lang="scss">
@@ -115,6 +124,29 @@ const handleImageError = () => (imageError.value = true)
     &.cate-blue {
       color: #4c7ff7;
     }
+  }
+  .writer-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    .img {
+      overflow: hidden;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .name {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 2rem;
+    color: #555;
   }
   .info-box {
     gap: 2rem;

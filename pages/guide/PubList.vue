@@ -96,6 +96,7 @@ interface PageItemData {
     | 'community'
     | 'common'
     | 'dashboard'
+    | 'payment'
     | 'guide'
     | 'lottery'
   status?: 'completed' | 'ing' | 'pending' | '' | undefined // status를 optional로 만들고 빈 문자열 및 undefined 허용
@@ -125,6 +126,7 @@ const sectionTabs = [
   { title: '커뮤니티', key: 'community' },
   { title: '공통', key: 'common' },
   { title: '대시보드', key: 'dashboard' },
+  { title: '결제', key: 'payment' },
   { title: '가이드', key: 'guide' },
   { title: '리워드보관함', key: 'lottery' }
 ]
@@ -242,6 +244,24 @@ const pageListData: PageItemData[] = [
     path: '/common/dashboard/friendsRank',
     category: '대시보드',
     section: 'dashboard',
+    status: ''
+  },
+
+  // 결제내역
+  {
+    title: '결제내역',
+    description: '결제내역 리스트',
+    path: '/common/payment',
+    category: '결제내역',
+    section: 'payment',
+    status: ''
+  },
+  {
+    title: '결제 상세내역',
+    description: '결제 상세내역 페이지',
+    path: '/common/payment/[id]',
+    category: '결제내역',
+    section: 'payment',
     status: ''
   },
 
@@ -442,6 +462,22 @@ const pageListData: PageItemData[] = [
     status: ''
   },
   {
+    title: '걷기왕챌린지_BS참가하기',
+    description: '챌린지 참가하기',
+    path: '/walkingKing/individualChallengeBSJoin',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕챌린지_참가신청완료_Toast',
+    description: '참가신청 완료',
+    path: '/walkingKing/individualChallengeParticipantCompletion',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
     title: '챌린지 자세히보기 - 개인',
     description: '챌린지 자세히보기',
     path: '/walkingKing/individualChallengeDetail',
@@ -497,7 +533,87 @@ const pageListData: PageItemData[] = [
     section: 'walkingKing',
     status: ''
   },
-
+  {
+    title: '걷기왕챌린지_진행중_미션',
+    description: '챌린지 미션',
+    path: '/walkingKing/individualChallengeInProgressMission',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕챌린지_진행중_일일걸음수내역',
+    description: '일일걸음수내역',
+    path: '/walkingKing/individualChallengeInProgressDailyWalkingCountList',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-참가자프로필',
+    description: '참가자프로필',
+    path: '/walkingKing/individualChallengeParticipantProfile',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  // 걷기왕 챌린지 - 팀전
+  {
+    title: '걷기왕-챌린지-참가전-팀전',
+    description: '챌린지 팀전',
+    path: '/walkingKing/teamChallengeRecruitment',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지(팀전)-대회개요-친구초대하기',
+    description: '친구 초대하기',
+    path: '/walkingKing/teamChallengeInviteFriends',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-참가전-팀전-초대랜딩',
+    description: '초대랜딩',
+    path: '/walkingKing/teamChallengeInviteLanding',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-팀정보등록',
+    description: '팀정보등록',
+    path: '/walkingKing/teamChallengeTeamRegistration',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-팀정보변경',
+    description: '팀정보변경',
+    path: '/walkingKing/teamChallengeTeamModification',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-팀프로필',
+    description: '팀정보변경',
+    path: '/walkingKing/teamChallengeTeamProfile',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕-챌린지-참가자프로필',
+    description: '팀정보변경',
+    path: '/walkingKing/teamChallengeParticipantProfile',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
   // login
   {
     title: '랜딩 페이지',

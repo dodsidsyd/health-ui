@@ -66,16 +66,16 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
   width: 19.2rem;
   min-height: 15.2rem;
   height: 50vh;
-  @media (max-width: 375px) {
-    height: 30vh;
-    width: 15rem;
-  }
   display: flex;
   align-content: center;
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  @media (max-width: 375px) {
+    height: 30vh;
+    width: 15rem;
   }
 }
 </style>

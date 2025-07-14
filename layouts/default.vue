@@ -24,6 +24,7 @@
         :has-setting="headerOptions.hasSetting"
         :has-search="headerOptions.hasSearch"
         :has-chat="headerOptions.hasChat"
+        :has-scrap="headerOptions.hasScrap"
         :has-share="headerOptions.hasShare"
         :has-menu="headerOptions.hasMenu"
         :notification-count="headerOptions.notificationCount"
@@ -100,6 +101,7 @@ const headerOptions = ref({
   hasSetting: false,
   hasSearch: false,
   hasChat: false,
+  hasScrap: false, // 스크랩 버튼 표시 여부
   hasShare: false,
   hasMenu: false,
 
@@ -118,7 +120,7 @@ const headerOptions = ref({
 
   // 전체화면 모달 옵션
   hasCloseBtn: false,
-  
+
   // 투명 배경 옵션
   isTransparent: false
 })

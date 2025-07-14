@@ -262,6 +262,7 @@ function onSearchClick() {
       font-size: 1.6rem;
       font-weight: 500;
       background-color: transparent;
+      min-width: 0;
       &::placeholder {
         color: #959595;
       }
@@ -282,6 +283,7 @@ function onSearchClick() {
 
     .input-unit {
       width: fit-content;
+      flex: 0 0 auto;
       &.left {
         margin-right: 0.2rem;
       }

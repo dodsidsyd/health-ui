@@ -194,6 +194,12 @@ const btnevtClick = (event: MouseEvent) => {
   &.btn-gray {
     background-color: var(--gray2);
   }
+  &.btn-darkgray {
+    background-color: #4f5561;
+    .text {
+      color: #fff;
+    }
+  }
   &.btn-trans {
     background: transparent;
   }

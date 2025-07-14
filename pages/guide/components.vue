@@ -73,8 +73,11 @@
           { value: 'naver.com', label: 'naver.com' }
         ]"
       />
+      <DatePicker />
+
       <InputCalendar />
-      <InputCalendars />
+
+      <InputCalendarFromTo />
       <InputTimer />
       <InputText inp-type="search" />
       <Select
@@ -287,7 +290,7 @@ import InputMail from '~/components/publishing/input/InputMail.vue'
 import InputID from '~/components/publishing/input/InputID.vue'
 import Select from '~/components/publishing/input/Select.vue'
 import InputCalendar from '~/components/publishing/input/InputCalendar.vue'
-import InputCalendars from '~/components/publishing/input/InputCalendars.vue'
+import InputCalendarFromTo from '~/components/publishing/input/InputCalendarFromTo.vue'
 import InputTimer from '~/components/publishing/input/InputTimer.vue'
 import InputNum from '~/components/publishing/input/InputNum.vue'
 import InputSearch from '~/components/publishing/input/InputSearch.vue'
@@ -297,6 +300,8 @@ import Checkbox from '~/components/publishing/input/check.vue'
 import Radio from '~/components/publishing/input/radio.vue'
 import RadioImg from '~/components/publishing/input/radioImg.vue'
 import InputAddress from '~/components/publishing/input/InputAddress.vue'
+
+import DatePicker from '~/components/publishing/input/DatePicker.vue'
 
 // 체크박스 상태 관리
 const checkbox13 = ref(false)
@@ -327,8 +332,8 @@ const checkbox27 = ref(false)
   width: 100%;
   padding: 1.8rem;
   border-radius: 0.8rem;
-  background-color:#F9F9F9;
-  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #E2E2E2);
+  background-color: #f9f9f9;
+  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #e2e2e2);
   [type='file'] {
     display: none;
   }

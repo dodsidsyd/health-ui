@@ -150,10 +150,10 @@ onMounted(() => {
             transform: translateX(-50%);
             background: #4f5561;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 500;
-            padding: 0.6rem 1rem;
-            border-radius: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1.2rem;
             white-space: nowrap;
             opacity: 0;
             animation: fadeInTooltip 0.3s ease-in-out 0.8s forwards;
@@ -161,11 +161,16 @@ onMounted(() => {
             &::after {
               content: '';
               position: absolute;
-              top: 100%;
+              top: calc(100% - 1.2rem);
               left: 50%;
+              width: 0.7rem;
+              height: 2.4rem;
               transform: translateX(-50%);
-              border: 0.6rem solid transparent;
-              border-top-color: #4f5561;
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='24' viewBox='0 0 4 24' fill='none'%3E%3Cpath d='M0.99992 13.2676C-0.333254 12.4977 -0.33336 10.5735 0.99992 9.80371L3.99992 8.07129L3.99992 15L0.99992 13.2676Z' fill='%234F5561'/%3E%3C/svg%3E");
+              background-repeat: no-repeat;
+              background-size: 100%;
+              background-position: 100%;
+              transform: translateX(-0.35rem) rotate(-90deg);
             }
           }
         }

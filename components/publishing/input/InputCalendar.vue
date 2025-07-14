@@ -7,23 +7,32 @@
           :name="name"
           :id="inputId"
           :placeholder="placeholder"
-          :value="modelValue"
+          :value="internalValue"
           :readonly="readonly"
           :disabled="disabled"
           :class="['c-inp', $attrs.class, { 'is-invalid': isInvalid }]"
           @input="onInput"
+          @click="clickDatePickerModal"
         />
-        <button class="customCalendar"></button>
+        <button class="customCalendar" @click="clickDatePickerModal"></button>
       </div>
       <p v-if="isInvalid" class="feedback error">
         <span class="text">메세지를 입력하세요</span>
       </p>
     </div>
+    <DatePickerModal
+      :is-visible="isShowDatePickerModal"
+      v-bind="datepickerProps"
+      @cancel="clickDatePickerCancel"
+      @confirm="clickDatePickerConfirm"
+      @close="toggleDatePickerModal"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
+import DatePickerModal from '~/components/common/modal/DatePickerModal.vue'
 interface OptionType {
   value: string
   label: string
@@ -38,23 +47,109 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false }
 })
-const inputId = props.name
-const inputValue = ref(props.modelValue || '')
 
 const emit = defineEmits(['update:modelValue'])
 
-function onInput(e: Event) {
-  inputValue.value = (e.target as HTMLInputElement).value
+const inputId = props.name
+
+// 내부 상태로 날짜 관리
+const internalValue = ref(props.modelValue)
+
+const isShowDatePickerModal = ref(false)
+
+// Props 변경 감지하여 내부 상태 동기화
+watch(() => props.modelValue, (newValue) => {
+  internalValue.value = newValue
+}, { immediate: true })
+
+// 날짜 형식 파싱 (YYYY.MM.DD 또는 YYYY-MM-DD)
+const parseDate = (dateStr: string): Date | null => {
+  if (!dateStr) return null
+  
+  // YYYY.MM.DD 또는 YYYY-MM-DD 형식 지원
+  const cleanedDate = dateStr.replace(/\./g, '-')
+  const date = new Date(cleanedDate)
+  
+  return isNaN(date.getTime()) ? null : date
 }
 
-function clearInput() {
-  inputValue.value = ''
-  emit('update:modelValue', '')
+// 날짜를 YYYY.MM.DD 형식으로 포맷
+const formatDate = (date: Date): string => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}.${month}.${day}`
 }
 
-function onButtonClick() {
-  inputValue.value = ''
-  emit('update:modelValue', '')
+const datepickerProps = computed(() => ({
+  title: '일자선택',
+  isShowCloseButton: true,
+  isShowCancelButton: true,
+  isShowConfirmButton: true,
+  confirmButtonText: '확인',
+  cancelButtonText: '취소',
+  disabledCancelButton: false,
+  disabledConfirmButton: false,
+  autoClose: false,
+  initialDate: getInitialDate()
+}))
+
+// 모달에 전달할 초기 날짜 가져오기
+const getInitialDate = (): Date | null => {
+  return internalValue.value ? parseDate(internalValue.value) : null
+}
+
+// 내부 상태 업데이트 및 외부로 emit
+const updateValue = (value: string) => {
+  internalValue.value = value
+  emit('update:modelValue', value)
+}
+
+// 입력 필드 이벤트 핸들러
+const onInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const value = target.value
+  updateValue(value)
+}
+
+const toggleDatePickerModal = () => {
+  isShowDatePickerModal.value = !isShowDatePickerModal.value
+}
+
+const clickDatePickerModal = () => {
+  if (props.disabled || props.readonly) return
+  toggleDatePickerModal()
+}
+
+const clickDatePickerCancel = () => {
+  isShowDatePickerModal.value = false
+}
+
+const clickDatePickerConfirm = async (selectedDate: Date | null) => {
+  if (!selectedDate) {
+    console.log('❌ 날짜가 선택되지 않았습니다')
+    return
+  }
+  
+  const formattedDate = formatDate(selectedDate)
+  
+  // 날짜 업데이트 (내부 상태 + emit)
+  updateValue(formattedDate)
+  
+  isShowDatePickerModal.value = false
+  
+  // DOM 업데이트 대기 후 input 요소에 값이 제대로 반영되었는지 확인
+  await nextTick()
+  
+  console.log(`📅 날짜 선택: ${formattedDate}`)
+  console.log('📅 Date 객체:', selectedDate)
+  console.log('📅 내부 상태:', internalValue.value)
+  
+  // input 요소의 실제 값 확인
+  const inputElement = document.getElementById(inputId) as HTMLInputElement
+  if (inputElement) {
+    console.log(`📅 Input 요소 값: ${inputElement.value}`)
+  }
 }
 </script>
 

@@ -14,7 +14,13 @@
       <RecruitmentGuidelines :type="'method'" :title="'진행방식'" :detail="'팀전(4인)/무조건 많이 걷기'" />
       <RecruitmentGuidelines :title="'참가방식'" :detail="'12,000P 유료참가 / FREE 무료참가'" />
     </FlexColDiv>
-    <ParticipantTeamChallenge />
+    <ParticipantTeamChallengeWrap>
+      <AddParticipant />
+      <ParticipantMyProfile :name="'김친구'" :src="'walkingking/img-participant-profile.png'" />
+      <ParticipantProfile :name="'김친구'" :src="'walkingking/img-participant-profile.png'" />
+      <ParticipantProfile :name="'김친구'" :src="'walkingking/img-participant-profile.png'" />
+      <ParticipantProfile :name="'김친구'" :wating="true" :src="'walkingking/img-participant-profile.png'" />
+    </ParticipantTeamChallengeWrap>
     <hr class="hr-section mt-0 mb-8 ml-n20 mr-n20" />
     <LineTabs :tabs="lineTabs" :active-key="activeLineTab" @tab-change="onLineTabChange" />
     <div v-if="activeLineTab === 'info'">
@@ -213,7 +219,10 @@ import LotteryRewardBox from '~/components/publishing/walkking/LotteryRewardBox.
 import ChallengeBoosterMission from '~/components/publishing/walkking/ChallengeBoosterMission.vue'
 import ChallengeAttendConfirm from '~/components/publishing/walkking/ChallengeAttendConfirm.vue'
 import JoinChallengeModal from '~/components/publishing/walkking/JoinChallengeModal.vue'
-import ParticipantTeamChallenge from '~/components/publishing/walkking/ParticipantTeamChallenge.vue'
+import ParticipantTeamChallengeWrap from '~/components/publishing/walkking/ParticipantTeamChallengeWrap.vue'
+import ParticipantMyProfile from '~/components/publishing/walkking/ParticipantMyProfile.vue'
+import ParticipantProfile from '~/components/publishing/walkking/ParticipantProfile.vue'
+import AddParticipant from '~/components/publishing/walkking/AddParticipant.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'

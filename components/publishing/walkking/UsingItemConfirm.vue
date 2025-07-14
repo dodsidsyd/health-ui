@@ -7,24 +7,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    id: string
-    name?: string
-    disabled?: boolean
-    modelValue: boolean
-    friendsSteps?: number
-    targetSteps?: number
-  }>(),
-  {
-    name: 'chkBox',
-    disabled: false,
-    friendsSteps: 3000,
-    targetSteps: 10000
-  }
-)
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .challenge-attend-wrap {

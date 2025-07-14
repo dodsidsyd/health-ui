@@ -119,4 +119,13 @@ const tabStyle = computed(() => {
     }
   }
 }
+@media (max-width: 375px) {
+  .segmented-tabs {
+    .tabs-container {
+      .tab-link {
+        padding: 1.2rem 0.8rem;
+      }
+    }
+  }
+}
 </style>

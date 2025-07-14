@@ -12,7 +12,7 @@
               <span class="name">김건강</span>
             </div>
           </div>
-          <div><NuxtLink to="#">내 정보 수정하기</NuxtLink></div>
+          <div class="flex-00"><NuxtLink to="#">내 정보 수정하기</NuxtLink></div>
         </div>
         <div class="">
           <div class="flex space-between align-center">
@@ -209,9 +209,14 @@ hr ~ hr {
   width: 8.3rem;
   height: 8.3rem;
   margin-right: 1rem;
+  @media (max-width: 375px) {
+    width: 7rem;
+    height: 7rem;
+  }
   img {
-    width: 7.2rem;
-    height: 7.2rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 50%;
     overflow: hidden;
   }
@@ -221,6 +226,7 @@ hr ~ hr {
   strong,
   span {
     display: inline-block;
+    word-break: break-all;
   }
 
   .nickname {
@@ -351,7 +357,9 @@ hr ~ hr {
     position: relative;
     padding-left: 3rem;
     line-height: 2.4rem;
-
+    @media (max-width: 375px) {
+      font-size: 1.4rem;
+    }
     .icon {
       display: block;
       position: absolute;

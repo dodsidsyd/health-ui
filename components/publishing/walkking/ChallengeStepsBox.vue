@@ -33,6 +33,7 @@ const emit = defineEmits(['click'])
   border-radius: 0.8rem;
   background: #f4f4f4;
   & > div {
+    text-align: left;
     line-height: 1.6rem;
   }
   &.total {

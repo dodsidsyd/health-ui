@@ -45,6 +45,7 @@ const averageRating = computed(() => {
 .star-rating-wrap {
   display: flex;
   gap: 4rem;
+  margin-bottom: 2rem;
   .average {
     display: flex;
     gap: 0.4rem;

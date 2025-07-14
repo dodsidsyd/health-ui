@@ -18,7 +18,7 @@
         <div class="we-comm-slide">
           <p class="tit">{{ slide.tit }}</p>
           <strong class="text">{{ slide.text }}</strong>
-          <div class="chart"><component :is="slide.chartComponent" /></div>
+          <component :is="slide.chartComponent" />
         </div>
       </template>
     </CommonSwiper>
@@ -51,13 +51,18 @@ swiper-slide.swiper-slide-active {
   padding-left: 2rem;
 }
 .we-comm-slide {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   width: 100%;
   padding: 2.1rem 2rem 3.2rem;
   border-radius: 2rem;
   border: 1px solid #eee;
   background: #fff;
-  max-height: 33.2rem;
+  height: 33.2rem;
+  &:has(.chart-wrap) {
+    padding-bottom: 2.6rem;
+  }
   .tit {
     font-weight: 500;
     line-height: 2.2rem;
@@ -88,10 +93,5 @@ swiper-slide.swiper-slide-active {
       padding-left: 2rem;
     }
   }
-}
-::v-deep(.swiper),
-::v-deep(swiper-slide),
-::v-deep(swiper-container) {
-  overflow: visible;
 }
 </style>

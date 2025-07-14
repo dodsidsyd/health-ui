@@ -72,7 +72,7 @@
         ]"
       />
       <InputCalendar />
-      <InputCalendars />
+      <InputCalendarFromTo />
       <InputTimer />
       <InputText inp-type="search" />
       <Select
@@ -282,7 +282,7 @@ import InputMail from '~/components/publishing/input/InputMail.vue'
 import InputID from '~/components/publishing/input/InputID.vue'
 import Select from '~/components/publishing/input/Select.vue'
 import InputCalendar from '~/components/publishing/input/InputCalendar.vue'
-import InputCalendars from '~/components/publishing/input/InputCalendars.vue'
+import InputCalendarFromTo from '~/components/publishing/input/InputCalendarFromTo.vue'
 import InputTimer from '~/components/publishing/input/InputTimer.vue'
 import InputNum from '~/components/publishing/input/InputNum.vue'
 import InputSearch from '~/components/publishing/input/InputSearch.vue'

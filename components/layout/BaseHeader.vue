@@ -72,7 +72,17 @@
       </div>
 
       <div
-        v-if="hasNotification || hasReward || hasSetting || hasSearch || hasChat || hasAddText || hasShare || hasMenu"
+        v-if="
+          hasNotification ||
+          hasReward ||
+          hasSetting ||
+          hasSearch ||
+          hasChat ||
+          hasAddText ||
+          hasShare ||
+          hasMenu ||
+          hasScrap
+        "
         class="c-header-util"
       >
         <!-- 검색 버튼 -->
@@ -90,6 +100,13 @@
               notificationCount > 99 ? '99+' : notificationCount
             }}</span>
           </nuxt-link>
+        </div>
+
+        <!-- 스크랩 버튼 -->
+        <div v-if="hasScrap" class="c-header-scrap">
+          <button type="button" class="c-btn c-icon" aria-label="스크랩하기" @click="handleScrap">
+            <i class="icon ico-scrap" :class="{ scraped: isScraped }" aria-hidden="true"></i>
+          </button>
         </div>
 
         <!-- 공유 버튼 -->
@@ -168,6 +185,8 @@ const props = defineProps({
   hasReward: { type: Boolean, default: false }, // 리워드 버튼표시 여부
   hasRewardDot: { type: Boolean, default: false }, // 리워드 갯수 여부
 
+  hasScrap: { type: Boolean, default: false }, // 스크랩 버튼 표시 여부
+  isScrapedInitial: { type: Boolean, default: false }, // 스크랩 초기 상태
   hasSetting: { type: Boolean, default: false }, // 설정 버튼 표시 여부
   hasSearch: { type: Boolean, default: false }, // 검색 버튼 표시 여부
   hasChat: { type: Boolean, default: false }, // 채팅 버튼 표시 여부
@@ -190,7 +209,7 @@ const props = defineProps({
 
 // console.log('BaseHeader props received:', props)
 
-const emit = defineEmits(['toggleSidebar', 'goBack', 'close', 'search', 'addTextClick'])
+const emit = defineEmits(['toggleSidebar', 'goBack', 'close', 'search', 'addTextClick', 'scrap'])
 
 const searchQuery = ref('')
 const isSticky = ref(false)
@@ -213,6 +232,14 @@ const clearInput = () => {
 const handleAddTextClick = () => {
   console.log('BaseHeader: handleAddTextClick called')
   emit('addTextClick')
+}
+//스크랩 상태 관리
+const isScraped = ref(props.isScrapedInitial)
+// 스크랩 버튼 클릭 처리 함수
+const handleScrap = () => {
+  console.log('BaseHeader: handleScrap called')
+  isScraped.value = !isScraped.value
+  emit('scrap', isScraped.value)
 }
 
 // 뒤로가기 버튼 상태에 따라 logoType 결정
@@ -380,6 +407,7 @@ onUnmounted(() => {
     .c-header-setting,
     .c-header-search,
     .c-header-chat,
+    .c-header-scrap,
     .c-header-share,
     .c-header-menu {
       font-size: 0;
@@ -441,12 +469,20 @@ onUnmounted(() => {
         color: inherit;
         font-weight: inherit;
 
-        &:hover {
-          opacity: 0.7;
-        }
+        // &:hover {
+        //   opacity: 0.7;
+        // }
 
         &:active {
           transform: scale(0.98);
+        }
+        .icon {
+          display: inline-block;
+          width: 2rem;
+          height: 2rem;
+          background-position: center;
+          background-size: contain;
+          background-repeat: no-repeat;
         }
       }
 

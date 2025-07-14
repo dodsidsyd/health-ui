@@ -146,6 +146,7 @@ function onButtonClick() {
       background-repeat: no-repeat;
       background-size: 2.4rem;
       font-size: 0;
+      flex: 0 0 auto;
       @include mixin.rippleEffectPrimary;
 
       &.minus {

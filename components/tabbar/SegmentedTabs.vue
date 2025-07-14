@@ -174,7 +174,7 @@ const updateTabStyles = () => {
     position: relative;
     width: 100%;
     border-radius: 0.6rem;
-    padding: 0.3rem;
+    padding: 0.3rem 0;
     gap: 0;
     .tab-link {
       display: inline-flex;
@@ -195,7 +195,7 @@ const updateTabStyles = () => {
       border-right-width: 0;
       border-collapse: collapse;
       color: #555;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: border 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       // % 비율 설정 (동적으로 JavaScript에서 설정)
       flex: 1;
@@ -221,6 +221,15 @@ const updateTabStyles = () => {
         background-color: vars.$white;
         color: #2b2b2b;
         border-color: #555;
+      }
+    }
+  }
+}
+@media (max-width: 375px) {
+  .segmented-tabs {
+    .tabs-container {
+      .tab-link {
+        padding: 1.2rem 0.8rem;
       }
     }
   }

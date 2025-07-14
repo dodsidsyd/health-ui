@@ -16,6 +16,7 @@ const props = withDefaults(
 </script>
 <style lang="scss" scoped>
 .shadow-card {
+  overflow: hidden;
   padding: 2rem;
   border-radius: 2rem;
   border: 1px solid #eee;
