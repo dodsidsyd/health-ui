@@ -1,5 +1,5 @@
 <template>
-  <<BaseBody >
+  <BaseBody>
     <h1>포인트환전신청탭</h1>
   </BaseBody>
 </template>

@@ -17,7 +17,7 @@ import TitleBox from '~/components/common/TitleBox.vue'
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
 import Button from '~/components/publishing/Button/Button.vue'
-import CommItem from '~/components/publishing/community/competitive/CommItem.vue'
+import CommItem from '~/components/publishing/community/common/CommItem.vue'
 
 const router = useRouter()
 

@@ -12,29 +12,20 @@
       <InputText label="문의제목*" placeholder="제목을 입력해주세요." />
     </div>
     <div class="mt-12">
-      <FieldSet label="문의내용*" placeholder="문의 내용을 입력해주세요." :countArea="false"></FieldSet>
+      <FieldSet label="문의내용*" placeholder="문의 내용을 입력해주세요." :count-area="false" />
     </div>
     <div class="mt-12">
       <AttachedFile />
     </div>
     <!-- 25-07-11 pb-48 추가 -->
     <div class="mt-8 pb-48">
-      <AttachedWrap>
-        <CustomerCenterAttached file-name="문의사항 정리본.pdf" file-size="33.5MB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="54564.8MB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
-        <CustomerCenterAttached file-name="screenshot_202501051248.gif" file-size="132.8KB" />
+      <AttachedWrap :current-count="currentFileCount" :max-count="maxFileCount">
+        <CustomerCenterAttached
+          v-for="(file, index) in files"
+          :key="index"
+          :file-name="file.name"
+          :file-size="file.size"
+        />
       </AttachedWrap>
     </div>
   </BaseBody>
@@ -45,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import Select from '~/components/publishing/input/Select.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
@@ -54,4 +46,15 @@ import BaseBody from '~/components/layout/BaseBody.vue'
 import CustomerCenterAttached from '~/components/publishing/common/customerCenter/CustomerCenterAttached.vue'
 import AttachedWrap from '~/components/publishing/common/customerCenter/AttachedWrap.vue'
 import AttachedFile from '~/components/publishing/common/customerCenter/AttachedFile.vue'
+
+const files = ref([
+  { name: '문의사항 정리본.pdf', size: '33.5MB' },
+  { name: 'screenshot_202501051248.gif', size: '54564.8MB' },
+  { name: 'screenshot_202501051248.gif', size: '132.8KB' },
+  { name: 'screenshot_202501051248.gif', size: '132.8KB' }
+])
+// 현재 파일 개수
+const currentFileCount = computed(() => files.value.length)
+// 최대 파일 개수
+const maxFileCount = ref(5)
 </script>

@@ -47,6 +47,7 @@ const selectedPeriod = computed({
 .c-count-box {
   display: flex;
   flex-direction: row;
+  padding: 2rem 0;
   .select-option {
     display: flex;
     flex-direction: row;

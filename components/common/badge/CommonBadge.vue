@@ -9,7 +9,7 @@ import { computed } from 'vue'
 
 // Props 정의
 interface Props {
-  color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown'
+  color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown' | 'gray' | 'deepRed'
   variant?: 'solid' | 'outline' | 'soft'
 }
 
@@ -50,6 +50,7 @@ const badgeClasses = computed(() => {
   padding: 0.3rem 0.6rem;
   box-sizing: border-box;
   // 기본 스타일 (default)
+  flex-shrink: 0;
   color: #555;
   background-color: #eee;
 
@@ -62,7 +63,14 @@ const badgeClasses = computed(() => {
       background: #ca2828;
     }
   }
-
+  &.badge-deepRed {
+    color: #c82626;
+    background: #ffe7e7;
+    &.badge-solid {
+      color: white;
+      background: #c82626;
+    }
+  }
   &.badge-orange {
     color: #e75126;
     background: #ffecdb;
@@ -120,6 +128,14 @@ const badgeClasses = computed(() => {
     &.badge-solid {
       color: white;
       background: #c36f00;
+    }
+  }
+  &.badge-gray {
+    color: #919191;
+    background: #e7e3ff;
+    &.badge-solid {
+      color: white;
+      background: #919191;
     }
   }
 }

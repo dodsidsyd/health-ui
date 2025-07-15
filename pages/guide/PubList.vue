@@ -162,11 +162,18 @@ const pageListData: PageItemData[] = [
     section: 'common',
     status: ''
   },
-
   {
     title: '공지사항 목록',
     description: '공지사항 목록 화면',
     path: '/common/customerCenter/noticeIndex',
+    category: '고객센터',
+    section: 'common',
+    status: ''
+  },
+  {
+    title: '공지사항 목록 없음',
+    description: '공지사항 없는 목록 화면',
+    path: '/common/customerCenter/emptyNoticeIndex',
     category: '고객센터',
     section: 'common',
     status: ''

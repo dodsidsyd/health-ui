@@ -13,7 +13,7 @@
 import CommonBadge from '~/components/common/badge/CommonBadge.vue'
 // Props 정의
 interface Props {
-  color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown'
+  color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown' | 'gray' | 'deepRed'
   variant?: 'solid' | 'outline' | 'soft'
   badgeText: string
   titleText: string

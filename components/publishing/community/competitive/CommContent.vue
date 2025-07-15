@@ -36,20 +36,19 @@ import TotalCountSelectType from '~/components/publishing/common/temp/TotalCount
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 
 import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
-
 import FlexSection from '~/components/page/FlexSection.vue'
-import CommItem from '~/components/publishing/community/competitive/CommItem.vue'
 import ScrollableContents from '~/components/common/ScrollableContents.vue'
 
 import StarRating from '~/components/publishing/community/competitive/StarRating.vue'
+import CommItem from '~/components/publishing/community/common/CommItem.vue'
+import commNoPermission from '~/components/publishing/community/common/commNoPermission.vue'
+import commNoItem from '~/components/publishing/community/common/commNoItem.vue'
 
-import commNoPermission from '/components/publishing/community/competitive/commNoPermission.vue'
-import commNoItem from '/components/publishing/community/competitive/commNoItem.vue'
 const activeBoxTab = ref('all')
 const selectedPeriod = ref('new')
 
 // 권한 및 데이터 상태
-const hasPermission = ref(false) // 권한 상태
+const hasPermission = ref(true) // 권한 상태
 
 const boxTabs = ref<BoxTab[]>([
   { title: '전체', key: 'all' },

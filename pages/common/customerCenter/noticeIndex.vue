@@ -6,14 +6,14 @@
     <!-- 스크롤 가능한 알림 목록 영역 -->
     <hr />
     <div class="scrollable-content">
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
-      <NoticeIndexItem type="안내" color="brown" @click="goToNotice" />
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
-      <NoticeIndexItem type="안내" color="brown" @click="goToNotice" />
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
-      <NoticeIndexItem type="공지" color="blue" @click="goToNotice" />
+      <NoticeIndexItem type="일반공지" color="blue" @click="goToNotice" />
+      <NoticeIndexItem type="이벤트" color="brown" @click="goToNotice" />
+      <NoticeIndexItem type="점검/장애" color="gray" @click="goToNotice" />
+      <NoticeIndexItem type="정책변경" color="purple" @click="goToNotice" />
+      <NoticeIndexItem type="중요공지" color="deepRed" @click="goToNotice" />
+      <NoticeIndexItem type="일반공지" color="blue" @click="goToNotice" />
+      <NoticeIndexItem type="일반공지" color="blue" @click="goToNotice" />
+      <NoticeIndexItem type="일반공지" color="blue" @click="goToNotice" />
     </div>
   </BaseBody>
 </template>

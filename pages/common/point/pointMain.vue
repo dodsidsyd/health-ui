@@ -7,12 +7,12 @@
     :addTextClickEnabled="true"
     add-text="<span style='color:#555;font-size:1.4rem'><i class='icon ico-gift'></i>아이템 스토어</span>"
   >
-    <div class="point-main-wrap">
-      <PointMainCard />
-      <hr class="hr-section mt-32 ml-n20 mr-n20 mb-8" />
-      <LineTabs :tabs="lineTabs" :active-key="activeLineTab" @tab-change="onLineTabChange" />
-      <TotalCountSelectType />
-    </div>
+    <PointMainCard />
+    <hr class="hr-section mt-32 ml-n20 mr-n20 mb-8" />
+    <LineTabs :tabs="lineTabs" :active-key="activeLineTab" @tab-change="onLineTabChange" />
+    <TotalCountSelectType :count="6" v-model:selected-period="selectedPeriod" :select-options="periodOptions" />
+
+    <PointHistoryList />
   </BaseBody>
 </template>
 
@@ -23,8 +23,9 @@ import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import TotalCountSelectType from '~/components/publishing/common/temp/TotalCountSelectType.vue'
 
 import PointMainCard from '~/components/publishing/point/PointMainCard.vue'
+import PointHistoryList from '~/components/publishing/point/PointHistoryList.vue'
 
-const activeLineTab = ref('comm')
+const activeLineTab = ref('all')
 
 const lineTabs = ref<Tab[]>([
   { title: '전체', key: 'all' },
@@ -35,4 +36,11 @@ const lineTabs = ref<Tab[]>([
 const onLineTabChange = (key: string) => {
   activeLineTab.value = key
 }
+
+const selectedPeriod = ref('all')
+const periodOptions = [
+  { value: 'all', label: '전체' },
+  { value: '3month', label: '3개월' },
+  { value: '6month', label: '6개월' }
+]
 </script>

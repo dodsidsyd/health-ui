@@ -44,20 +44,20 @@ const paymentMethodText = computed(() => {
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding: 12px 0;
+  padding: 1.2rem 0;
   flex-direction: row;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 0.1rem solid #f0f0f0;
 
   &:last-child {
     border-bottom: none;
   }
 
   .title {
-    font-size: 14px;
+    font-size: 1.4rem;
     color: #666;
     font-weight: 500;
     margin: 0;
-    min-width: 80px;
+    min-width: 8rem;
   }
 
   .text {
