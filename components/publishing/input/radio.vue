@@ -76,6 +76,11 @@ function onChange(e: Event) {
   display: inline-flex;
   align-items: center;
   position: relative;
+  &.w-full {
+    .c-label {
+      width: 100%;
+    }
+  }
   &.small {
     .c-label {
       &::after {

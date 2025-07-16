@@ -1,38 +1,28 @@
 <template>
-  <BaseBody :show-back-button="true" :has-search="true" page-title="커뮤니티명 " @search="handleSearch">
-    <section class="ml-n20 mr-n20">
-      <FlexColDiv class="gap-16">
-        <CardFlip />
-        <FlexColDiv class="notice-list gap-20">
-          <NoticeItem
-            v-for="item in noticeList"
-            :key="item.id"
-            :text="item.text"
-            :type="item.type"
-            :label="item.label"
-          />
-        </FlexColDiv>
-        <Button aria-label="커뮤니티 가입하고 100P 받기" />
-      </FlexColDiv>
-      <hr class="hr-section ml-n20 mr-n20 mb-10" />
-      <LineTabs :tabs="lineTabs" :active-key="activeLineTab" @tab-change="onLineTabChange" />
+  <FlexColDiv class="gap-16">
+    <CardFlip />
+    <FlexColDiv class="notice-list gap-20">
+      <NoticeItem v-for="item in noticeList" :key="item.id" :text="item.text" :type="item.type" :label="item.label" />
+    </FlexColDiv>
+    <Button aria-label="커뮤니티 가입하고 100P 받기" />
+  </FlexColDiv>
+  <hr class="hr-section ml-n20 mr-n20 mb-10" />
 
-      <!-- 소통하기 탭 컨텐츠 -->
-      <div v-if="activeLineTab === 'comm'">
-        <CommContent />
-      </div>
+  <LineTabs :tabs="lineTabs" :active-key="activeLineTab" @tab-change="onLineTabChange" />
 
-      <!-- 둘러보기 탭 컨텐츠 -->
-      <div v-else-if="activeLineTab === 'look'">
-        <LookContent />
-      </div>
-    </section>
-  </BaseBody>
+  <!-- 소통하기 탭 컨텐츠 -->
+  <div v-if="activeLineTab === 'comm'">
+    <CommContent />
+  </div>
+
+  <!-- 둘러보기 탭 컨텐츠 -->
+  <div v-else-if="activeLineTab === 'look'">
+    <LookContent />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import BaseBody from '~/components/layout/BaseBody.vue'
 import CardFlip from '~/components/publishing/community/competitive/CardFlip.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'

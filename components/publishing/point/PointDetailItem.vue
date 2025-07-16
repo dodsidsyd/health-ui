@@ -76,7 +76,7 @@ const statusText = computed(() => {
   .title {
     font-size: 1.6rem;
     color: #555;
-    font-weight: 500;
+    font-weight: 400;
     margin: 0;
     display: flex;
     flex-direction: column;

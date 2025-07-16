@@ -12,7 +12,8 @@
     <LineTabs :tabs="tabs" />
     <div class="flex flex-col gap-12 mt-24 pb-48">
       <div class="input-container">
-        <div class="fz-16 bold">비밀번호</div>
+        <!-- 클래스 추가 및 텍스트 변경 -->
+        <div class="fz-16 bold mb-12">신체정보</div>
         <section class="flex flex-row gap-4">
           <InputText
             type="number"
@@ -292,9 +293,7 @@
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup gap="0" asymmetric class="is-fixed">
       <Button btn-type="secondary" element-type="button" class="lg btn-sticky"> 취소 </Button>
-      <Button btn-type="primary" element-type="button" class="lg btn-sticky" :disabled="!requiredAgreements">
-        저장
-      </Button>
+      <Button btn-type="primary" element-type="button" class="lg btn-sticky" @click="clickBottomModal"> 저장 </Button>
     </ButtonGroup>
     <!-- 만성질환 선택 모달 -->
     <ChronicDiseaseModal
@@ -315,11 +314,18 @@
       @cancel="closeExpertMemberModal"
       @close="closeExpertMemberModal"
     />
+
+    <!-- 레몬건강지수 서비스 이용동의 모달 -->
+    <BottomServiceAgreeMoal
+      :is-visible="showServiceAgreeModal"
+      @close="closeServiceAgreeModal"
+      @confirm="handleServiceAgreeConfirm"
+    />
   </BaseBody>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onMounted } from 'vue'
+import { ref, computed, inject, onMounted, watch } from 'vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
@@ -329,6 +335,8 @@ import InputText from '~/components/publishing/input/InputText.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import ChronicDiseaseModal from '~/components/modal/ChronicDiseaseModal.vue'
 import ConfirmModal from '~/components/common/modal/ConfirmModal.vue'
+
+import BottomServiceAgreeMoal from '~/components/common/setProfile/BottomServiceAgreeModal.vue'
 
 // 만성질환 데이터 타입 정의
 interface ChronicDisease {
@@ -358,6 +366,9 @@ const selectedDiseases = ref<string[]>([])
 
 // 전문가 회원 전환 모달 관련 상태
 const showExpertMemberModal = ref(false)
+
+// 서비스 이용동의 모달 관련 상태
+const showServiceAgreeModal = ref(false)
 
 // 만성질환 목록 데이터 (배지 표시용)
 const chronicDiseases = ref<ChronicDisease[]>([
@@ -486,6 +497,16 @@ const closeExpertMemberModal = () => {
 // 전문가 회원 전환 확인 처리
 const handleExpertMemberConfirm = () => {
   closeExpertMemberModal()
+}
+
+// 저장 버튼 클릭 시 서비스 이용동의 모달 열기
+const clickBottomModal = () => {
+  showServiceAgreeModal.value = true
+}
+
+// 서비스 이용동의 모달 닫기
+const closeServiceAgreeModal = () => {
+  showServiceAgreeModal.value = false
 }
 
 // 레이아웃에서 addTextClick 핸들러 등록

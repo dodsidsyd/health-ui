@@ -6,7 +6,7 @@
       :slides="commList"
       slide-type="custom"
       :slides-per-view="1.2"
-      :space-between="0"
+      :space-between="12"
       :navigation="false"
       :pagination="false"
       :scrollbar="false"
@@ -104,9 +104,8 @@ const commList = [
   margin: 0 -2rem;
 }
 ::v-deep(swiper-slide) {
-  padding: 0 0.6rem;
   &.swiper-slide-active {
-    padding-left: 2rem;
+    margin-left: 1.8rem;
   }
 }
 .review-slide {

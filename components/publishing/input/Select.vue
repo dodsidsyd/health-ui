@@ -22,36 +22,44 @@
       </div>
     </div>
 
-    <!-- BottomModal for Options -->
-    <BottomModal
-      :is-visible="isShowBottomModal"
-      :title="modalTitle || '옵션 선택'"
-      :is-show-cancel-button="true"
-      :is-show-confirm-button="true"
-      :is-show-close-button="true"
-      @close="cancelSelection"
-      @cancel="cancelSelection"
-      @confirm="confirmSelection"
-    >
-      <template #content>
-        <div class="select-options">
-          <div
-            v-for="option in customOpts"
-            :key="option.value"
-            :class="['option-item', { selected: tempSelected === option.value }]"
-            @click="selectOption(option)"
-          >
-            <span class="option-label">{{ option.label }}</span>
-            <i v-if="tempSelected === option.value" class="check-icon icon"></i>
+    <!-- Teleport BottomModal to body for independence -->
+    <Teleport to="body">
+      <BottomModal
+        v-if="isShowBottomModal"
+        :is-visible="isShowBottomModal"
+        :title="modalTitle || '옵션 선택'"
+        :is-show-cancel-button="isShowCancelBtn"
+        :is-show-confirm-button="isShowConfirmBtn"
+        :is-show-close-button="isShowCloseBtn"
+        :cancel-button-text="confirmButtonText"
+        :confirm-button-text="cancelButtonText"
+        :class="modalClasses"
+        role="dialog"
+        :aria-label="modalTitle || '옵션 선택'"
+        @close="cancelSelection"
+        @cancel="cancelSelection"
+        @confirm="confirmSelection"
+      >
+        <template #content>
+          <div class="select-options">
+            <div
+              v-for="option in customOpts"
+              :key="option.value"
+              :class="['option-item', { selected: tempSelected === option.value }]"
+              @click="selectOption(option)"
+            >
+              <span class="option-label">{{ option.label }}</span>
+              <i v-if="tempSelected === option.value" class="check-icon icon"></i>
+            </div>
           </div>
-        </div>
-      </template>
-    </BottomModal>
+        </template>
+      </BottomModal>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 
 interface OptionType {
@@ -71,6 +79,11 @@ const props = defineProps({
   isInvalid: { type: Boolean, default: false },
   inpType: { type: String, default: '' },
   transparent: { type: Boolean, default: false },
+  isShowCloseBtn: { type: Boolean, default: true },
+  isShowCancelBtn: { type: Boolean, default: true },
+  isShowConfirmBtn: { type: Boolean, default: true },
+  cancelButtonText: { type: String, default: '취소' },
+  confirmButtonText: { type: String, default: '확인' },
   customOpts: { type: Array as () => OptionType[], default: () => [] } // camelCase로 통일
 })
 
@@ -80,6 +93,7 @@ const emit = defineEmits(['update:modelValue', 'change'])
 const selected = ref(props.modelValue)
 const tempSelected = ref(props.modelValue) // 임시 선택값
 const isShowBottomModal = ref(false)
+const hasParentModal = ref(false) // 부모 모달 존재 여부
 
 // 선택된 옵션의 라벨 표시
 const selectedLabel = computed(() => {
@@ -109,16 +123,111 @@ watch(selected, newValue => {
   emit('update:modelValue', newValue)
 })
 
+// 부모 모달 감지 함수
+const detectParentModal = () => {
+  try {
+    // 현재 열려있는 .c-modal.bottom.is-show 모달들을 찾기
+    const existingModals = document.querySelectorAll('.c-modal.bottom.is-show')
+
+    // Select 컴포넌트가 포함된 모달 제외하고 다른 모달이 있는지 확인
+    for (const modal of existingModals) {
+      // 해당 모달 내부에 select 입력이 있는지 확인
+      const hasSelectInput = modal.querySelector('.c-input, .custom-select')
+      if (hasSelectInput) {
+        console.log('Parent modal found with select input:', modal)
+        return true
+      }
+    }
+
+    // 오늘버레이가 있는 모달을 찾아서 부모 모달 여부 판단
+    const modalsWithOverlay = document.querySelectorAll('.c-modal.is-show .c-dim')
+    return modalsWithOverlay.length > 0
+  } catch (error) {
+    console.warn('Error detecting parent modal:', error)
+    return false
+  }
+}
+
+// 동적 클래스 생성
+const modalClasses = computed(() => {
+  const baseClass = 'select-modal-teleported'
+  const parentModalClass = hasParentModal.value ? 'has-parent-modal' : 'no-parent-modal'
+  return `${baseClass} ${parentModalClass}`
+})
+
+// 부모 모달 dim 제어 함수들
+const hideParentModalDim = () => {
+  try {
+    // 부모 모달의 dim 요소들을 찾아서 투명하게 만들기
+    const parentModals = document.querySelectorAll('.c-modal.bottom.is-show:not(.select-modal-teleported)')
+    parentModals.forEach(modal => {
+      const dimElement = modal.querySelector('.c-dim')
+      if (dimElement) {
+        // 기존 배경색 저장
+        dimElement.dataset.originalBackground = dimElement.style.backgroundColor || ''
+        // 투명하게 설정
+        dimElement.style.backgroundColor = 'transparent'
+        dimElement.classList.add('select-hidden-dim')
+        console.log('Parent modal dim hidden:', modal)
+      }
+    })
+  } catch (error) {
+    console.warn('Error hiding parent modal dim:', error)
+  }
+}
+
+const restoreParentModalDim = () => {
+  try {
+    // 숨겨졌던 부모 모달 dim 복원
+    const hiddenDims = document.querySelectorAll('.c-dim.select-hidden-dim')
+    hiddenDims.forEach(dimElement => {
+      // 기존 배경색 복원
+      const originalBackground = dimElement.dataset.originalBackground
+      if (originalBackground) {
+        dimElement.style.backgroundColor = originalBackground
+      } else {
+        dimElement.style.backgroundColor = '' // 기본값으로 복원
+      }
+      dimElement.classList.remove('select-hidden-dim')
+      delete dimElement.dataset.originalBackground
+      console.log('Parent modal dim restored:', dimElement)
+    })
+  } catch (error) {
+    console.warn('Error restoring parent modal dim:', error)
+  }
+}
+
 // BottomModal 관련 함수들
-const openBottomModal = () => {
+const openBottomModal = async () => {
   if (props.disabled || props.readonly) return
   console.log('openBottomModal - customOpts:', props.customOpts)
+
+  // 부모 모달 존재 여부 감지
+  hasParentModal.value = detectParentModal()
+  console.log('Parent modal detected:', hasParentModal.value)
+
+  // 부모 모달의 dim을 투명하게 처리
+  if (hasParentModal.value) {
+    hideParentModalDim()
+  }
+
   tempSelected.value = selected.value // 모달 열 때 현재 선택값으로 초기화
   isShowBottomModal.value = true
+
+  // body 스크롤 방지
+  await nextTick()
+  document.body.style.overflow = 'hidden'
 }
 
 const closeBottomModal = () => {
+  // 부모 모달의 dim을 복원
+  if (hasParentModal.value) {
+    restoreParentModalDim()
+  }
+
   isShowBottomModal.value = false
+  // body 스크롤 복원
+  document.body.style.overflow = ''
 }
 
 const selectOption = (option: OptionType) => {
@@ -140,6 +249,18 @@ const cancelSelection = () => {
   tempSelected.value = selected.value
   closeBottomModal()
 }
+
+// 컴포넌트 unmount 시 cleanup
+onUnmounted(() => {
+  // 모달이 열린 상태로 unmount될 경우 body 스크롤 복원
+  if (isShowBottomModal.value) {
+    document.body.style.overflow = ''
+    // 부모 모달 dim도 복원
+    if (hasParentModal.value) {
+      restoreParentModalDim()
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -234,6 +355,7 @@ const cancelSelection = () => {
 }
 
 .c-inpType {
+  text-align: left;
   .c-inp-el {
     position: relative;
     display: flex;
@@ -487,5 +609,30 @@ const cancelSelection = () => {
       background-size: contain;
     }
   }
+}
+
+// Teleported Modal 독립적 스타일 (Global 적용)
+:global(.select-modal-teleported.c-modal.bottom) {
+  z-index: 9999; // 부모 모달보다 높은 z-index
+
+  .c-modal-inner {
+    max-height: 100vh !important; // 화면 전체 사용
+    border-radius: 2rem 2rem 0 0;
+  }
+}
+
+:global(.select-modal-teleported .c-dim) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+// 부모 모달 dim 숨김 처리
+:global(.c-dim.select-hidden-dim) {
+  background-color: transparent !important;
+  transition: background-color 0.3s ease;
+}
+
+// 부모 모달 dim 복원 애니메이션
+:global(.c-dim:not(.select-hidden-dim)) {
+  transition: background-color 0.3s ease;
 }
 </style>

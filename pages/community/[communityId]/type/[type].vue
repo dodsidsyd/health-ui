@@ -1,5 +1,5 @@
 <template>
-  <BaseBody :show-back-button="true" :has-search="true" page-title="커뮤니티명 " @search="handleSearch">
+  <BaseBody :show-back-button="true" :has-search="true" :page-title="pageTitle" @search="handleSearch">
     <!-- <DevOnly>커뮤니티-상세(경쟁형/병원형/청구의신형)</DevOnly> -->
     <CompetitionCommunity v-if="type === COMMUNITY_TYPE.COMPETITION" :community="communityData" />
     <HospitalCommunity v-else-if="type === COMMUNITY_TYPE.HOSPITAL" :community="communityData" />
@@ -22,10 +22,23 @@ const type = route.params.type as CommunityType
 type CommunityType = 'hospital' | 'competition' | 'insu'
 
 const COMMUNITY_TYPE = {
-  HOSPITAL: 'hospital',
   COMPETITION: 'competition',
+  HOSPITAL: 'hospital',
   INSU: 'insu'
 }
 
 const communityData = ref<any>({})
+
+const pageTitle = computed(() => {
+  switch (type) {
+    case COMMUNITY_TYPE.COMPETITION:
+      return '커뮤니티 명'
+    case COMMUNITY_TYPE.HOSPITAL:
+      return '세브란스 병원'
+    case COMMUNITY_TYPE.INSU:
+      return '청구의 신'
+    default:
+      return '커뮤니티'
+  }
+})
 </script>

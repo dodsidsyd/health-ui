@@ -1,7 +1,7 @@
 <template>
   <div class="custom-swiper">
     <ClientOnly>
-      <swiper-container 
+      <swiper-container
         ref="swiperContainerRef"
         :pagination="paginationEnabled"
         :navigation="navigation"
@@ -134,13 +134,13 @@ const loopEnabled = computed(() => {
 
 const autoplayEnabled = computed(() => {
   if (!props.autoplay || props.slides.length <= 1) return false
-  
+
   if (typeof props.autoplay === 'boolean') {
     return {
       delay: props.autoplayDelay
     }
   }
-  
+
   return {
     delay: props.autoplayDelay,
     ...props.autoplay
@@ -148,13 +148,13 @@ const autoplayEnabled = computed(() => {
 })
 
 // Methods
-const onSwiperInit = (event) => {
+const onSwiperInit = event => {
   console.log('Swiper initialized:', event.detail[0])
   isAutoplayActive.value = !!props.autoplay
   emit('swiper-init', event.detail[0])
 }
 
-const onSlideChange = (event) => {
+const onSlideChange = event => {
   const swiperInstance = event.detail[0]
   currentIndex.value = swiperInstance.realIndex || swiperInstance.activeIndex
   emit('update:currentIndex', currentIndex.value + 1)
@@ -174,14 +174,18 @@ const toggleAutoplay = () => {
 }
 
 // Watchers
-watch(() => props.slides, () => {
-  // 슬라이드 변경 시 swiper 업데이트
-  if (swiper.value) {
-    setTimeout(() => {
-      currentIndex.value = 0
-    }, 100)
-  }
-}, { deep: true })
+watch(
+  () => props.slides,
+  () => {
+    // 슬라이드 변경 시 swiper 업데이트
+    if (swiper.value) {
+      setTimeout(() => {
+        currentIndex.value = 0
+      }, 100)
+    }
+  },
+  { deep: true }
+)
 
 onMounted(() => {
   // 초기화 후 autoplay 상태 설정
@@ -260,7 +264,8 @@ swiper-slide {
   color: #666;
 }
 
-button.play, button.pause {
+button.play,
+button.pause {
   display: block;
   margin: 1rem auto 0;
   padding: 0.8rem 1.6rem;
@@ -281,7 +286,8 @@ button.pause {
   background-color: #dc3545;
 }
 
-button.play:hover, button.pause:hover {
+button.play:hover,
+button.pause:hover {
   opacity: 0.8;
 }
 </style>

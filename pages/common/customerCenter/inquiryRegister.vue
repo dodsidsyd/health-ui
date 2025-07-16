@@ -19,7 +19,7 @@
     </div>
     <!-- 25-07-11 pb-48 추가 -->
     <div class="mt-8 pb-48">
-      <AttachedWrap :current-count="currentFileCount" :max-count="maxFileCount">
+      <AttachedWrap has-count :current-count="currentFileCount" :max-count="maxFileCount">
         <CustomerCenterAttached
           v-for="(file, index) in files"
           :key="index"

@@ -1,58 +1,65 @@
 <template>
-  <NuxtLink to="#" class="community-box" v-if="!item.isBlind">
-    <FlexColDiv class="gap-8">
-      <FlexRowDiv v-if="item.writer" class="writer-box">
-        <div class="img"><img class="img" :src="writerImageUrl" alt="작성자 이미지" @error="handleImageError" /></div>
-        <span class="name">{{ item.writer }}</span>
-      </FlexRowDiv>
-      <div v-if="item.badge?.length" class="flex flex-row gap-8">
-        <span v-for="(b, i) in item.badge" :key="'badge-' + i" :class="['badge', { 'badge-blue': b.type === 'blue' }]">
-          {{ b.label }}
-        </span>
-      </div>
-      <div v-if="item.cate?.length" class="flex flex-row gap-8">
-        <span v-for="(c, i) in item.cate" :key="'cate-' + i" :class="['cate', { 'cate-blue': c.type === 'blue' }]">
-          {{ c.label }}
-        </span>
-      </div>
-      <FlexRowDiv class="info-box">
-        <FlexColDiv class="info">
-          <strong class="tit">{{ item.tit }}</strong>
-          <span class="text">{{ item.text }}</span>
-        </FlexColDiv>
-        <div class="img-wrap" v-if="item.src && !imageError">
-          <i v-if="item.length && item.length > 1" class="img-length">+{{ item.length }}</i>
-          <img :src="imageUrl" alt="게시글 이미지" @error="handleImageError" />
-        </div>
-      </FlexRowDiv>
-      <div class="detail-info" :class="typeFormat">
-        <template v-if="typeFormat === 'type1'">
-          <span class="like-num">{{ item.likeNum ?? 0 }}</span>
-          <span class="view-num">조회 {{ item.viewNum ?? 0 }}</span>
-          <span class="reply-num">댓글 {{ item.replyNum ?? 0 }}</span>
-          <span class="date-num">{{ item.dateNum }} 전</span>
-        </template>
-        <template v-else-if="typeFormat === 'type2'">
-          <div class="profile-img">
-            <img :src="profileImageUrl" alt="프로필" />
-          </div>
-          <span class="nickname">{{ item.nickname || '??' }}</span>
-          <span class="star">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M7.66339 1.80937C7.8011 1.53034 8.19899 1.53034 8.3367 1.80937L10.1194 5.42145C10.1741 5.53226 10.2798 5.60906 10.402 5.62682L14.3882 6.20605C14.6961 6.25079 14.8191 6.62921 14.5963 6.8464L11.7119 9.65802C11.6234 9.74427 11.583 9.86853 11.6039 9.99032L12.2848 13.9604C12.3374 14.2671 12.0155 14.5009 11.7401 14.3561L8.17475 12.4817C8.06538 12.4242 7.93472 12.4242 7.82535 12.4817L4.26001 14.3561C3.98459 14.5009 3.66269 14.2671 3.71529 13.9604L4.39621 9.99032C4.4171 9.86853 4.37672 9.74427 4.28824 9.65802L1.40382 6.8464C1.181 6.62921 1.30396 6.25079 1.61189 6.20605L5.59806 5.62682C5.72033 5.60906 5.82604 5.53226 5.88073 5.42145L7.66339 1.80937Z"
-                fill="#FCD233"
-                stroke="#FBC700"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span class="score">{{ item.rating ?? '0.0' }}</span>
+  <div class="community-box" v-if="!item.isBlind">
+    <NuxtLink to="#">
+      <FlexColDiv class="gap-8">
+        <FlexRowDiv v-if="item.writer" class="writer-box">
+          <div class="img"><img class="img" :src="writerImageUrl" alt="작성자 이미지" @error="handleImageError" /></div>
+          <span class="name">{{ item.writer }}</span>
+        </FlexRowDiv>
+        <div v-if="item.badge?.length" class="flex flex-row gap-8">
+          <span
+            v-for="(b, i) in item.badge"
+            :key="'badge-' + i"
+            :class="['badge', { 'badge-blue': b.type === 'blue' }]"
+          >
+            {{ b.label }}
           </span>
-          <span class="date-num">{{ item.dateNum }} 전</span>
-        </template>
-      </div>
-    </FlexColDiv>
-  </NuxtLink>
+        </div>
+        <div v-if="item.cate?.length" class="flex flex-row gap-8">
+          <span v-for="(c, i) in item.cate" :key="'cate-' + i" :class="['cate', { 'cate-blue': c.type === 'blue' }]">
+            {{ c.label }}
+          </span>
+        </div>
+        <FlexRowDiv class="info-box">
+          <FlexColDiv class="info">
+            <strong class="tit">{{ item.tit }}</strong>
+            <span class="text">{{ item.text }}</span>
+          </FlexColDiv>
+          <div class="img-wrap" v-if="item.src && !imageError">
+            <i v-if="item.length && item.length > 1" class="img-length">+{{ item.length }}</i>
+            <img :src="imageUrl" alt="게시글 이미지" @error="handleImageError" />
+          </div>
+        </FlexRowDiv>
+        <div class="detail-info" :class="typeFormat">
+          <template v-if="typeFormat === 'type1'">
+            <span class="like-num">{{ item.likeNum ?? 0 }}</span>
+            <span class="view-num">조회 {{ item.viewNum ?? 0 }}</span>
+            <span class="reply-num">댓글 {{ item.replyNum ?? 0 }}</span>
+            <span class="date-num">{{ item.dateNum }} 전</span>
+          </template>
+          <template v-else-if="typeFormat === 'type2'">
+            <div class="profile-img">
+              <img :src="profileImageUrl" alt="프로필" />
+            </div>
+            <span class="nickname">{{ item.nickname || '??' }}</span>
+            <span class="star">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M7.66339 1.80937C7.8011 1.53034 8.19899 1.53034 8.3367 1.80937L10.1194 5.42145C10.1741 5.53226 10.2798 5.60906 10.402 5.62682L14.3882 6.20605C14.6961 6.25079 14.8191 6.62921 14.5963 6.8464L11.7119 9.65802C11.6234 9.74427 11.583 9.86853 11.6039 9.99032L12.2848 13.9604C12.3374 14.2671 12.0155 14.5009 11.7401 14.3561L8.17475 12.4817C8.06538 12.4242 7.93472 12.4242 7.82535 12.4817L4.26001 14.3561C3.98459 14.5009 3.66269 14.2671 3.71529 13.9604L4.39621 9.99032C4.4171 9.86853 4.37672 9.74427 4.28824 9.65802L1.40382 6.8464C1.181 6.62921 1.30396 6.25079 1.61189 6.20605L5.59806 5.62682C5.72033 5.60906 5.82604 5.53226 5.88073 5.42145L7.66339 1.80937Z"
+                  fill="#FCD233"
+                  stroke="#FBC700"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span class="score">{{ item.rating ?? '0.0' }}</span>
+            </span>
+            <span class="date-num">{{ item.dateNum }} 전</span>
+          </template>
+        </div>
+      </FlexColDiv>
+    </NuxtLink>
+  </div>
+
   <div v-else class="community-box blind-box">
     <strong class="tit tit-blind">이 게시물은 신고로 가려졌어요</strong>
     <span class="text text-blind">운영원칙에 따라 블라인드 처리된 게시물입니다.</span>
@@ -111,10 +118,14 @@ const handleImageError = () => (imageError.value = true)
 <style scoped lang="scss">
 .community-box {
   display: block;
-  padding: 2.4rem 0;
   & + .community-box {
     border-top: 1px solid #eee;
   }
+  a {
+    display: block;
+    padding: 2.4rem 0;
+  }
+
   .cate {
     display: block;
     font-size: 1.4rem;

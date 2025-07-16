@@ -3,51 +3,55 @@
     <h5 class="reaction-tit">공감 리액션</h5>
     <div class="reaction-list">
       <div class="reaction-box">
-        <button type="button" class="reaction-item">
+        <button type="button" class="reaction-item" @click="handleReactionClick('ico-cheer', count1)">
           <span class="icon ico-cheer"></span>
         </button>
         <span class="type">응원</span>
-        <span class="count">{{ likeCount }}</span>
+        <span class="count">{{ count1 }}</span>
       </div>
       <div class="reaction-box">
-        <button type="button" class="reaction-item">
+        <button type="button" class="reaction-item" @click="handleReactionClick('ico-congrats', count2)">
           <span class="icon ico-congrats"></span>
         </button>
         <span class="type">축하</span>
-        <span class="count">{{ likeCount }}</span>
+        <span class="count">{{ count2 }}</span>
       </div>
       <div class="reaction-box">
-        <button type="button" class="reaction-item">
+        <button type="button" class="reaction-item" @click="handleReactionClick('ico-thanks', count3)">
           <span class="icon ico-thanks"></span>
         </button>
         <span class="type">감사</span>
-        <span class="count">{{ likeCount }}</span>
+        <span class="count">{{ count3 }}</span>
       </div>
       <div class="reaction-box">
-        <button type="button" class="reaction-item">
+        <button type="button" class="reaction-item" @click="handleReactionClick('ico-sadness', count4)">
           <span class="icon ico-sadness"></span>
         </button>
         <span class="type">슬픔</span>
-        <span class="count">{{ likeCount }}</span>
+        <span class="count">{{ count4 }}</span>
       </div>
       <div class="reaction-box">
-        <button type="button" class="reaction-item">
+        <button type="button" class="reaction-item" @click="handleReactionClick('ico-comfort', count5)">
           <span class="icon ico-comfort"></span>
         </button>
         <span class="type">위로</span>
-        <span class="count">{{ likeCount }}</span>
+        <span class="count">{{ count5 }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
-const props = defineProps({
-  likeCount: { type: Number, default: 0 },
-  viewCount: { type: Number, default: 0 }
-})
+import { ref, defineEmits } from 'vue'
+const count1 = ref(3)
+const count2 = ref(24)
+const count3 = ref(104)
+const count4 = ref(2)
+const count5 = ref(8)
+const emits = defineEmits(['reaction-selected'])
+const handleReactionClick = (iconClass: string, count: number) => {
+  emits('reaction-selected', iconClass, count)
+}
 </script>
 
 <style scoped lang="scss">
@@ -88,7 +92,11 @@ const props = defineProps({
       width: 4rem;
       height: 4rem;
       background-size: 4rem 4rem;
+      background-position: center;
       background-repeat: no-repeat;
+      &.ico-sadness {
+        background-size: 3.5rem;
+      }
     }
   }
 }

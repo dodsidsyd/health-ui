@@ -92,6 +92,7 @@ interface PageItemData {
     | 'wholeMenu'
     | 'commonProfile'
     | 'DirectMessage'
+    | 'pointStore'
     | 'setting'
     | 'community'
     | 'common'
@@ -122,11 +123,13 @@ const sectionTabs = [
   { title: '전체메뉴', key: 'wholeMenu' },
   { title: '회원프로필 ', key: 'commonProfile' },
   { title: '설정', key: 'setting' },
+  { title: '설정', key: 'setting' },
   { title: 'DM', key: 'DirectMessage' },
   { title: '커뮤니티', key: 'community' },
   { title: '공통', key: 'common' },
   { title: '대시보드', key: 'dashboard' },
   { title: '결제', key: 'payment' },
+  { title: '포인트스토어', key: 'pointStore' },
   { title: '가이드', key: 'guide' },
   { title: '리워드보관함', key: 'lottery' }
 ]
@@ -1021,6 +1024,40 @@ const pageListData: PageItemData[] = [
     section: 'lottery',
     status: ''
   },
+  // 포인트 스토어
+  {
+    title: '레몬포인트 메인',
+    description: '환전신청내역',
+    path: '/common/point/exchangeRequestList',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  {
+    title: '포인트 환전신청내역',
+    description: '환전신청내역',
+    path: '/common/point/exchangeRequestList',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  {
+    title: '포인트 환전 상세내역',
+    description: '환전 상세내역',
+    path: '/common/point/exchangeRequestDetail',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  {
+    title: '포인트 스토어',
+    description: '레몬포인트 환전 신청',
+    path: '/common/point/exchangeRequest',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+
   // 커뮤니티 섹션
   {
     title: '마음일기',
@@ -1034,6 +1071,22 @@ const pageListData: PageItemData[] = [
     title: '커뮤니티 상세',
     description: '커뮤니티 상세 - 경쟁형',
     path: '/community/[community]/type/competition',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '커뮤니티 상세',
+    description: '커뮤니티 상세 - 병원형',
+    path: '/community/[community]/type/hospital',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '커뮤니티 상세',
+    description: '커뮤니티 상세 - 청구의신',
+    path: '/community/[community]/type/insu',
     category: '커뮤니티',
     section: 'community',
     status: 'ing'

@@ -2,7 +2,7 @@
   <div class="post-detail-summary-wrap">
     <div class="flex align-center">
       <button type="button" class="reaction-item" @click="handleLikeToggle">
-        <span class="icon ico-cheer"></span>
+        <span class="icon" :class="activeReactionIcon || 'ico-cheer'"></span>
         {{ likeCount }}
       </button>
       <div class="view-count-box">
@@ -18,7 +18,8 @@ import { defineProps, ref } from 'vue'
 
 const props = defineProps({
   likeCount: { type: Number, default: 0 },
-  viewCount: { type: Number, default: 0 }
+  viewCount: { type: Number, default: 0 },
+  activeReactionIcon: { type: String, default: 'ico-cheer' }
 })
 
 // likeCount를 반응형 변수로 선언
@@ -74,6 +75,18 @@ const handleScrapToggle = () => {
     &::before {
       content: none;
     }
+  }
+}
+.reaction-item {
+  position: relative;
+  @include mixin.rippleEffectPrimary;
+  .icon {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.6rem;
+    background-size: 2rem 2rem;
+    background-repeat: no-repeat;
   }
 }
 </style>

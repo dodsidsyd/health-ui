@@ -245,6 +245,70 @@ function onChange(e: Event) {
       }
     }
   }
+  // 버튼 타입 2
+  &.buttonType2 {
+    padding: 0;
+    background-color: transparent;
+    &.small {
+      .c-label {
+        height: 4.8rem;
+        font-size: 1.4rem;
+      }
+    }
+
+    .c-check {
+      &:disabled {
+        ~ .c-label {
+          opacity: 0.4;
+          .icon {
+            background-color: transparent;
+            &::before {
+              background-color: transparent;
+            }
+          }
+        }
+      }
+      &:checked {
+        ~ .c-label {
+          border: 1px solid #4c7ff7;
+          background: #f6f9ff;
+          font-weight: 500;
+          &::before {
+            color: #4c7ff7;
+          }
+        }
+      }
+    }
+    .c-label {
+      height: 5.6rem;
+      margin: 0;
+      padding: 1.7rem 1.6rem;
+      border-radius: 0.8rem;
+      border: 1px solid #e2e2e2;
+      background: #fff;
+      color: rgb(var(--black));
+      font-size: 1.6rem;
+      cursor: pointer;
+      &::before {
+        content: attr(aria-label);
+        text-align: center;
+        flex: 1;
+        min-width: 0;
+        color: #959595;
+        text-align: center;
+        order: 2;
+      }
+      &::after {
+        display: none;
+      }
+    }
+    .icon {
+      display: none;
+    }
+    &.flex-11 {
+      width: 100%;
+    }
+  }
   &.agree-all {
     .c-check {
       &:checked {

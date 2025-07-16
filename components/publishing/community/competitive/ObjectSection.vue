@@ -1,58 +1,33 @@
 <template>
   <FlexRowDiv class="object-section">
-    <ShadowCard card-class="heart-card">
-      <div class="flex flex-row">
-        <div class="flex flex-col gap-8">
-          <p class="tit">심박수</p>
-          <strong class="data-num">85bpm</strong>
-        </div>
-        <i class="icon"></i>
-      </div>
-
+    <!-- <AverageStatusCard title="심박수" main-data="85bpm" card-type="heart-beep">
       <AverageCurve :heart-rate-data="heartRateData" />
-    </ShadowCard>
+    </AverageStatusCard> -->
 
-    <ShadowCard card-class="oxygen-card">
-      <div class="flex flex-row">
-        <div class="flex flex-col gap-8">
-          <p class="tit">산소포화도</p>
-          <strong class="data-num">92%</strong>
-        </div>
-        <i class="icon"></i>
-      </div>
-      <div class="flex flex-row space-between">
-        <div class="flex flex-col">
-          <p class="txt">또래 평균</p>
-          <strong class="data-average">95.3%</strong>
-        </div>
-        <i class="emoji"></i>
-      </div>
-    </ShadowCard>
+    <CommonStatusCard title="심박수" main-data="85bpm" card-type="heart-beep" :chart="true"
+      ><!-- chart있으면 true -->
+      <AverageCurve :heart-rate-data="heartRateData" />
+    </CommonStatusCard>
 
-    <ShadowCard card-class="severity-card">
-      <div class="flex flex-row">
-        <div class="flex flex-col gap-8">
-          <p class="tit">심박변이도</p>
-          <strong class="data-num">73ms</strong>
-        </div>
-        <i class="icon"></i>
-      </div>
-      <div class="flex flex-row space-between">
-        <div class="flex flex-col">
-          <p class="txt">또래 평균</p>
-          <strong class="data-average">70ms</strong>
-        </div>
-        <i class="emoji"></i>
-      </div>
-    </ShadowCard>
-    <ShadowCard card-class="stress-card">
-      <div class="flex flex-row">
-        <div class="flex flex-col gap-8">
-          <p class="tit">스트레스</p>
-          <strong class="data-num">73.2</strong>
-        </div>
-        <i class="icon"></i>
-      </div>
+    <CommonStatusCard
+      title="산소포화도"
+      sub-title="또래 평균"
+      main-data="92%"
+      card-type="oxygen"
+      emoji-type="good"
+      sub-data="95.3%"
+    />
+
+    <CommonStatusCard
+      title="심박변이도"
+      sub-title="또래 평균"
+      main-data="73ms"
+      card-type="oxygen"
+      emoji-type="good"
+      sub-data="70ms"
+    />
+
+    <CommonStatusCard title="스트레스" main-data="73.2" card-type="stress" :chart="true">
       <div class="bar-wrap">
         <div class="box my-box">
           <div class="bar-area">
@@ -71,7 +46,8 @@
           <span>또래평균</span>
         </div>
       </div>
-    </ShadowCard>
+    </CommonStatusCard>
+
     <ShadowCard card-class="cheer-card">
       <div class="flex flex-row">
         <div class="flex flex-col gap-4">
@@ -130,17 +106,19 @@
   </FlexRowDiv>
 </template>
 <script setup lang="ts">
-import AverageCurve from '~/components/publishing/community//competitive/AverageCurve.vue'
+import { ref, computed } from 'vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
-
+import AverageStatusCard from '~/components/common/statusCard/AverageStatusCard.vue'
+import CommonStatusCard from '~/components/common/statusCard/CommonStatusCard.vue'
+import AverageCurve from '~/components/publishing/community/competitive/AverageCurve.vue'
 import ShadowCard from '~/components/publishing/card/ShadowCard.vue'
 
 const heartRateData = ref([
-  { value: 78, timestamp: new Date('2024-01-01 09:00') },
-  { value: 82, timestamp: new Date('2024-01-01 10:00') },
-  { value: 64, timestamp: new Date('2024-01-01 11:00') },
-  { value: 96, timestamp: new Date('2024-01-01 12:00') },
-  { value: 80, timestamp: new Date('2024-01-01 15:00') }
+  { value: 50, timestamp: new Date('2024-01-01 09:00') },
+  { value: 40, timestamp: new Date('2024-01-01 10:00') },
+  { value: 10, timestamp: new Date('2024-01-01 11:00') },
+  { value: 16, timestamp: new Date('2024-01-01 12:00') },
+  { value: 10, timestamp: new Date('2024-01-01 15:00') }
 ])
 
 // 심박수 범위 설정
@@ -170,15 +148,76 @@ defineExpose({
 .object-section {
   gap: 1.2rem;
   flex-wrap: wrap;
-  .shadow-card {
+  .bar-wrap {
     display: flex;
-    flex-direction: column;
-    padding-bottom: 3.2rem;
-    height: 18.8rem;
-    justify-content: space-between;
-    .flex-row {
-      justify-content: space-between;
+    justify-content: center;
+    gap: 1.6rem;
+    .bar-area {
+      display: flex;
+      align-items: flex-end;
+      height: 5.6rem;
     }
+    .box {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: flex-end;
+      gap: 0.6rem;
+    }
+    span {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.5rem;
+      color: #959595;
+    }
+    .bar {
+      width: 4rem;
+      height: 0%;
+      border-radius: 0.8rem;
+      height: 0.6rem;
+    }
+  }
+  .my-box {
+    .bar {
+      background: #4c7ff7;
+    }
+  }
+  .average-box {
+    position: relative;
+    .bar {
+      position: relative;
+      background: #ececec;
+      .tooltip {
+        position: absolute;
+        bottom: 100%; // bar 상단 바로 위
+        left: 50%;
+        transform: translateX(-50%) translateY(-0.8rem); // 위로 띄우기
+        background: #4f5561;
+        border-radius: 1.2rem;
+        padding: 0.4rem 0.8rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #fff;
+        white-space: nowrap;
+        z-index: 10;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0.7rem;
+          height: 0.4rem;
+          background-image: url("data:image/svg+xml,%3Csvg width='7' height='4' viewBox='0 0 7 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M5.23228 3C4.46248 4.33333 2.53798 4.33333 1.76818 3L0.0361328 0H6.96433L5.23228 3Z' fill='%234F5561'/%3E%3C/svg%3E%0A");
+        }
+      }
+    }
+  }
+
+  .shadow-card,
+  .status-card {
     flex: 0 0 calc(50% - 0.6rem);
     &:last-child {
       flex: 1 1 100%;
@@ -276,79 +315,13 @@ defineExpose({
         background-image: url("data:image/svg+xml,%3Csvg width='48' height='40' viewBox='0 0 48 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='23.999' cy='20' r='20' fill='url(%23paint0_radial_8966_93450)'/%3E%3Cg filter='url(%23filter0_f_8966_93450)'%3E%3Cpath d='M43.265 21.4439C42.959 22.9973 42.4723 24.4839 41.825 25.8839C41.1517 26.0973 40.3717 26.1573 39.5657 26.0239C37.399 25.6639 35.8583 24.0239 36.1383 22.3706C36.4117 20.7173 38.391 19.6706 40.5657 20.0306C41.6923 20.2173 42.645 20.7506 43.265 21.4439Z' fill='%23FF9A61' fill-opacity='0.5'/%3E%3C/g%3E%3Cg filter='url(%23filter1_f_8966_93450)'%3E%3Cpath d='M11.8717 22.3706C12.1517 24.0239 10.6117 25.6639 8.44506 26.0239C7.6984 26.1506 6.9784 26.1039 6.3384 25.9306C5.66507 24.4839 5.16507 22.9439 4.8584 21.3306C5.47173 20.6906 6.38506 20.2106 7.44506 20.0306C9.6184 19.6706 11.5977 20.7173 11.8717 22.3706Z' fill='%23FF9A61' fill-opacity='0.5'/%3E%3C/g%3E%3Cpath d='M24.1098 26.3367C25.7878 26.3367 27.2311 27.032 27.9038 28.05C26.8858 29.1253 25.5571 29.7747 24.1098 29.7747C22.6551 29.7747 21.3325 29.1253 20.3145 28.05C20.9871 27.032 22.4311 26.3367 24.1098 26.3367Z' fill='%23FF7C5F'/%3E%3Cpath d='M29.8842 23.1689H29.8896C29.7816 25.1176 29.0329 26.8489 27.9016 28.0503C27.2282 27.0329 25.7856 26.3369 24.1076 26.3369C22.4289 26.3369 20.9849 27.0323 20.3122 28.0503C19.1809 26.8489 18.4336 25.1183 18.3242 23.1689H18.3295C18.3282 23.1689 22.1055 22.2203 29.8842 23.1689Z' fill='black'/%3E%3Cpath d='M28.0875 20.6277C29.0079 20.6277 29.8345 21.2565 29.8876 22.1754C29.8973 22.3436 29.9022 22.5136 29.9022 22.6857C29.9022 22.8452 29.897 23.0041 29.8904 23.163C29.8903 23.166 29.8878 23.1683 29.8849 23.1683C22.3333 23.6667 18.3289 23.1683 18.3289 23.1683C18.3259 23.1683 18.3234 23.166 18.3233 23.163C18.3167 23.0041 18.3115 22.8452 18.3115 22.6857C18.3115 22.5136 18.3165 22.3436 18.3262 22.1754C18.3792 21.2565 19.2058 20.6277 20.1262 20.6277H28.0875Z' fill='black'/%3E%3Cpath d='M15.2747 18.7284C14.9987 18.7284 14.7747 18.5044 14.7747 18.2284C14.7747 17.3584 14.1267 16.6504 13.3307 16.6504C12.5347 16.6504 11.8867 17.3584 11.8867 18.2284C11.8867 18.5044 11.6627 18.7284 11.3867 18.7284C11.1107 18.7284 10.8867 18.5044 10.8867 18.2284C10.8867 16.8071 11.9834 15.6504 13.3307 15.6504C14.6787 15.6504 15.7747 16.8071 15.7747 18.2284C15.7747 18.5044 15.5507 18.7284 15.2747 18.7284Z' fill='black'/%3E%3Cpath d='M15.6087 18.2284C15.6087 16.8906 14.579 15.817 13.3314 15.817C12.0844 15.817 11.054 16.8907 11.054 18.2284C11.0541 18.4123 11.2035 18.5618 11.3874 18.5618C11.5713 18.5618 11.7206 18.4123 11.7207 18.2284C11.7207 17.2806 12.4297 16.4836 13.3314 16.4836C14.233 16.4837 14.9421 17.2806 14.9421 18.2284C14.9421 18.4123 15.0915 18.5618 15.2754 18.5618C15.4593 18.5618 15.6087 18.4123 15.6087 18.2284ZM15.9421 18.2284C15.942 18.5964 15.6434 18.8951 15.2754 18.8951C14.9074 18.8951 14.6088 18.5964 14.6087 18.2284C14.6087 17.4363 14.0217 16.817 13.3314 16.817C12.641 16.817 12.054 17.4363 12.054 18.2284C12.054 18.5964 11.7554 18.8951 11.3874 18.8951C11.0194 18.8951 10.7208 18.5964 10.7207 18.2284C10.7207 16.7235 11.8837 15.4836 13.3314 15.4836C14.7797 15.4837 15.9421 16.7236 15.9421 18.2284Z' fill='black'/%3E%3Cpath d='M36.5091 18.7284C36.2331 18.7284 36.0091 18.5044 36.0091 18.2284C36.0091 17.3584 35.3611 16.6504 34.5651 16.6504C33.7691 16.6504 33.1211 17.3584 33.1211 18.2284C33.1211 18.5044 32.8971 18.7284 32.6211 18.7284C32.3451 18.7284 32.1211 18.5044 32.1211 18.2284C32.1211 16.8071 33.2178 15.6504 34.5651 15.6504C35.9131 15.6504 37.0091 16.8071 37.0091 18.2284C37.0091 18.5044 36.7851 18.7284 36.5091 18.7284Z' fill='black'/%3E%3Cpath d='M36.8431 18.2284C36.8431 16.8906 35.8134 15.817 34.5658 15.817C33.3187 15.817 32.2884 16.8907 32.2884 18.2284C32.2885 18.4123 32.4378 18.5618 32.6217 18.5618C32.8057 18.5618 32.955 18.4123 32.9551 18.2284C32.9551 17.2806 33.6641 16.4836 34.5658 16.4836C35.4674 16.4836 36.1764 17.2806 36.1764 18.2284C36.1765 18.4123 36.3259 18.5618 36.5098 18.5618C36.6937 18.5618 36.843 18.4123 36.8431 18.2284ZM37.1764 18.2284C37.1764 18.5964 36.8778 18.8951 36.5098 18.8951C36.1418 18.8951 35.8432 18.5964 35.8431 18.2284C35.8431 17.4363 35.2561 16.817 34.5658 16.817C33.8754 16.817 33.2884 17.4363 33.2884 18.2284C33.2883 18.5964 32.9897 18.8951 32.6217 18.8951C32.2537 18.8951 31.9551 18.5964 31.9551 18.2284C31.9551 16.7235 33.1181 15.4836 34.5658 15.4836C36.0141 15.4836 37.1764 16.7236 37.1764 18.2284Z' fill='black'/%3E%3Cdefs%3E%3Cfilter id='filter0_f_8966_93450' x='32.1055' y='15.9597' width='15.1592' height='14.135' filterUnits='userSpaceOnUse' color-interpolation-filters='sRGB'%3E%3CfeFlood flood-opacity='0' result='BackgroundImageFix'/%3E%3CfeBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape'/%3E%3CfeGaussianBlur stdDeviation='2' result='effect1_foregroundBlur_8966_93450'/%3E%3C/filter%3E%3Cfilter id='filter1_f_8966_93450' x='0.858398' y='15.9597' width='15.0459' height='14.136' filterUnits='userSpaceOnUse' color-interpolation-filters='sRGB'%3E%3CfeFlood flood-opacity='0' result='BackgroundImageFix'/%3E%3CfeBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape'/%3E%3CfeGaussianBlur stdDeviation='2' result='effect1_foregroundBlur_8966_93450'/%3E%3C/filter%3E%3CradialGradient id='paint0_radial_8966_93450' cx='0' cy='0' r='1' gradientUnits='userSpaceOnUse' gradientTransform='translate(15.3324 4) rotate(60.9454) scale(41.1825)'%3E%3Cstop stop-color='%23FFDE65'/%3E%3Cstop offset='1' stop-color='%23FFCE1B'/%3E%3C/radialGradient%3E%3C/defs%3E%3C/svg%3E%0A");
       }
     }
+
     &.stress-card {
       display: flex;
       flex-direction: column;
       padding-bottom: 2.4rem;
       .icon {
         background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.66646 17.4009H9.10161L10.2836 15.0068H6.2713L4.91721 17.7496C4.69904 18.1915 5.0206 18.7088 5.51339 18.7088H6.48943L6.57287 21.4014C6.58451 21.7764 7.0619 21.9275 7.28722 21.6275L9.98401 18.0364C10.1805 17.7747 9.99376 17.4009 9.66646 17.4009Z' fill='%23FED402'/%3E%3Cpath d='M13.7171 16.496H18.1187C21.266 16.496 23.8174 13.9446 23.8174 10.7973C23.8174 7.64993 21.266 5.09855 18.1187 5.09855C17.9463 5.09855 17.7757 5.10666 17.6072 5.12168C17.2803 3.19849 16.0624 1.57875 14.393 0.702393L8.96726 2.20044L7.92285 13.621L13.7171 16.496Z' fill='%236F7B96'/%3E%3Cpath d='M9.91363 8.86421C9.91363 5.62489 11.643 2.7134 14.3934 0.702712C13.5389 0.254101 12.5662 0 11.534 0C8.14632 0 5.39762 2.73417 5.37318 6.11609C5.37299 6.11609 5.3728 6.11609 5.3726 6.11609C2.50627 6.11609 0.182617 8.43969 0.182617 11.3061C0.182617 14.1725 2.50622 16.4961 5.3726 16.4961H13.7176C11.3629 14.5197 9.91363 11.8293 9.91363 8.86421Z' fill='%236F7B96'/%3E%3Cpath d='M18.0918 17.5311H17.2605L19 14H13.0952L11.1024 18.0454C10.7813 18.6972 11.2545 19.4602 11.9798 19.4602H13.4161L13.5389 23.4315C13.556 23.9847 14.2586 24.2076 14.5902 23.7651L18.5591 18.4684C18.8483 18.0824 18.5735 17.5311 18.0918 17.5311Z' fill='%23FED402'/%3E%3C/svg%3E%0A");
-      }
-      .bar-wrap {
-        display: flex;
-        justify-content: center;
-        gap: 1.6rem;
-        .bar-area {
-          display: flex;
-          align-items: flex-end;
-          height: 5.6rem;
-        }
-        .box {
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-          justify-content: flex-end;
-          gap: 0.6rem;
-        }
-        span {
-          display: block;
-          font-size: 1.1rem;
-          font-weight: 400;
-          line-height: 1.5rem;
-          color: #959595;
-        }
-        .bar {
-          width: 4rem;
-          height: 0%;
-          border-radius: 0.8rem;
-          height: 0.6rem;
-        }
-      }
-      .my-box {
-        .bar {
-          background: #4c7ff7;
-        }
-      }
-      .average-box {
-        position: relative;
-        .bar {
-          position: relative;
-          background: #ececec;
-          .tooltip {
-            position: absolute;
-            bottom: 100%; // bar 상단 바로 위
-            left: 50%;
-            transform: translateX(-50%) translateY(-0.8rem); // 위로 띄우기
-            background: #4f5561;
-            border-radius: 1.2rem;
-            padding: 0.4rem 0.8rem;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #fff;
-            white-space: nowrap;
-            z-index: 10;
-
-            &::after {
-              content: '';
-              position: absolute;
-              top: 100%;
-              left: 50%;
-              transform: translateX(-50%);
-              width: 0.7rem;
-              height: 0.4rem;
-              background-image: url("data:image/svg+xml,%3Csvg width='7' height='4' viewBox='0 0 7 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M5.23228 3C4.46248 4.33333 2.53798 4.33333 1.76818 3L0.0361328 0H6.96433L5.23228 3Z' fill='%234F5561'/%3E%3C/svg%3E%0A");
-            }
-          }
-        }
       }
     }
     &.cheer-card {

@@ -37,17 +37,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 
 import TotalCount from '~/components/publishing/common/temp/TotalCount.vue'
 import PointExchangeItem from '~/components/publishing/point/PointExchangeItem.vue'
 
-const activeLineTab = ref('all')
+const activeLineTab = ref('refundHistory')
 
 const lineTabs = ref<Tab[]>([
-  { title: '환전신청내역', key: 'all' },
-  { title: '포인트 환전신청', key: 'credit' }
+  { title: '환전신청내역', key: 'refundHistory', to: '/common/point/exchangeRequestList' },
+  { title: '포인트 환전신청', key: 'refundRequest', to: '/common/point/exchangeRequest' }
 ])
 // LineTabs 이벤트 핸들러
 const onLineTabChange = (key: string) => {

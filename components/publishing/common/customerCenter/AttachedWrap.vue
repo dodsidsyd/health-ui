@@ -2,7 +2,7 @@
   <div class="attached-wrap">
     <slot></slot>
   </div>
-  <p class="count-box">
+  <p v-if="hasCount" class="count-box">
     <span class="file-count">{{ currentCount }}</span
     >/{{ maxCount }}
   </p>
@@ -10,8 +10,9 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 defineProps<{
-  currentCount: number
-  maxCount: number
+  currentCount?: number
+  maxCount?: number
+  hasCount?: boolean
 }>()
 </script>
 

@@ -85,9 +85,9 @@
       <section class="btn-radio-box w-full">
         <label for="" class="c-label" style="font-size: 1.2rem">상담채널</label>
         <div class="flex flex-row w-full gap-8">
-          <Radio id="rdo5" name="rdo2" checked custom-style="button" aria-label="Direct Message" class="flex-11" />
-          <Radio id="rdo6" name="rdo2" custom-style="button" aria-label="전화" class="flex-11" />
-          <Radio id="rdo7" name="rdo2" custom-style="button" aria-label="문자" class="flex-11" />
+          <Check id="chk1" name="chk1" checked custom-style="buttonType2" aria-label="Direct Message" class="flex-11" />
+          <Check id="chk2" name="chk1" custom-style="buttonType2" aria-label="전화" class="flex-11" />
+          <Check id="chk3" name="chk1" custom-style="buttonType2" aria-label="문자" class="flex-11" />
         </div>
       </section>
     </div>
@@ -119,6 +119,7 @@ import BaseBody from '~/components/layout/BaseBody.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import Radio from '~/components/publishing/input/radio.vue'
+import Check from '~/components/publishing/input/Check.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import defaultProfileImage from '~/assets/images/img-profile.svg'
 import FieldSet from '~/components/publishing/input/FieldSet.vue'
