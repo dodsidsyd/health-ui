@@ -16,7 +16,7 @@
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/fonts/jalnan2';
+// @import '@/assets/scss/fonts/jalnan2';
 
 .attendance-status-wrap {
   position: relative;

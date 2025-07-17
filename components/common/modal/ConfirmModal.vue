@@ -12,7 +12,7 @@
         <div v-if="html" v-html="html" />
         <div v-else-if="content">{{ content }}</div>
       </div>
-      <div class="c-modal-footer">
+      <div v-if="isShowFooter" class="c-modal-footer">
         <button
           v-if="isShowCancelButton"
           type="button"
@@ -46,6 +46,7 @@ const props = withDefaults(defineProps<ConfirmModalProps>(), {
   isShowCloseButton: true,
   isShowCancelButton: true,
   isShowConfirmButton: true,
+  isShowFooter: true,
   html: '',
   content: '',
   confirmButtonText: '확인',

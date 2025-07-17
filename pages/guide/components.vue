@@ -66,7 +66,33 @@
           { value: 'kakao.com', label: 'kakao.com' }
         ]"
       />
-      <InputID />
+      
+      <div class="resident-id-form-group">
+        <label for="resident-id-front" class="resident-id-label">주민등록번호</label>
+        <div class="resident-id-inputs">
+          <input
+            id="resident-id-front"
+            v-model="residentIdFront"
+            type="tel"
+            class="resident-id-input"
+            maxlength="6"
+            placeholder="생년월일 6자리"
+            inputmode="numeric"
+            aria-label="주민등록번호 앞 6자리"
+          />
+          <span class="resident-id-hyphen">-</span>
+          <input
+            id="resident-id-back"
+            v-model="residentIdBack"
+            type="tel"
+            class="resident-id-input"
+            maxlength="7"
+            placeholder="뒷자리 입력"
+            inputmode="numeric"
+            aria-label="주민등록번호 뒤 7자리"
+          />
+        </div>
+      </div>
       <Select
         :custom-opts="[
           { value: 'gmail.com', label: 'gmail.com' },
@@ -287,7 +313,7 @@ import Button from '~/components/publishing/button/Button.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import InputPhone from '~/components/publishing/input/InputPhone.vue'
 import InputMail from '~/components/publishing/input/InputMail.vue'
-import InputID from '~/components/publishing/input/InputID.vue'
+
 import Select from '~/components/publishing/input/Select.vue'
 import InputCalendar from '~/components/publishing/input/InputCalendar.vue'
 import InputCalendarFromTo from '~/components/publishing/input/InputCalendarFromTo.vue'
@@ -319,6 +345,10 @@ const checkbox24 = ref(true)
 const checkbox25 = ref(true)
 const checkbox26 = ref(true)
 const checkbox27 = ref(false)
+
+// 주민등록번호 입력 필드
+const residentIdFront = ref('')
+const residentIdBack = ref('')
 </script>
 
 <style lang="scss" scoped>
@@ -336,6 +366,50 @@ const checkbox27 = ref(false)
   border: 0.1rem dashed var(--Semantic-Border-BRD-01, #e2e2e2);
   [type='file'] {
     display: none;
+  }
+}
+.resident-id-form-group {
+  // margin: 1rem;
+  width: 100%; /* Ensures it takes full width of its parent */
+  // max-width: 400px; /* Optional: Sets a max width for desktop for better aesthetics */
+  .resident-id-label {
+    display: block; /* Makes the label take its own line */
+    margin-bottom: 0.6rem;
+    font-weight: 400;
+    color: #555;
+    font-size: 12px;
+    position: relative;
+    &.required {
+      &::after {
+        content: "*";
+        font-size: 1.2rem;
+        display: inline-block;
+        margin-left: 0.3rem;
+        color: #f14960;
+      }
+    }
+  }
+  .resident-id-inputs {
+    display: flex; /* Uses flexbox for horizontal alignment */
+    align-items: center; /* Vertically aligns items */
+    gap: 10px; /* Space between inputs and hyphen */
+    .resident-id-input {
+      flex: 1; /* Allows inputs to grow and shrink */
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+      min-width: 0; /* Allows shrinking below content size */
+      &::placeholder {
+        color: #bbb;
+      }
+    }
+    .resident-id-hyphen {
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
+    }
   }
 }
 </style>

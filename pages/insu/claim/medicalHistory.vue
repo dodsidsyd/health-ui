@@ -14,7 +14,7 @@
       <div class="loading-tit">보험사에 청구 가능<br />여부를 조회하고 있어요</div>
       <div class="loading-tit-sub">최대 1분까지 걸릴 수 있어요.</div>
     </div> -->
-    <div class="agree-wrap flex flex-col gap-10 pb-48 mt-40">
+    <div class="agree-wrap flex flex-col gap-10 pb-32 mt-40">
       <h1 class="c-tit">
         <span class="text">
           진료내역을 선택해 주세요
@@ -23,12 +23,14 @@
     </div>
     <FlexSection>
       <div class="medical-info">
-        <img src="/assets/images/insu/logo_KUMedicine.svg" alt="로고" class="logo" />
-        <div class="wrap-hospital">
-          <div class="text">강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 </div>
-          <div class="label out">통원</div>
+        <div class="medical-info-head">
+          <img src="/assets/images/insu/logo_KUMedicine.svg" alt="로고" class="logo" />
+          <div class="wrap-hospital">
+            <div class="text">강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 </div>
+            <div class="label out">통원</div>
+          </div>
+          <div class="count"><strong>12</strong>건</div>
         </div>
-        <div class="count"><strong>12</strong>건</div>
       </div>
     </FlexSection>
     <hr class="hr-section mt-32 ml-n20 mr-n20" />
@@ -215,53 +217,55 @@ const clickConfirmModal = async () => {
   border: 0.1rem solid #E2E2E2;
   border-radius: 1.2rem;
   padding: 1.2rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.2rem;
-  .logo {
-    flex: 0 0;
-    width: 4.8rem;
-    height: auto;
-  }
-  .wrap-hospital {
-    flex: 1 0 auto;
-    max-width: calc(100% - 10rem);
+  .medical-info-head {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.4rem;
-    .text {
-      flex: 1;
-      min-width: 0;
-      font-weight: 700;
-      @include mixin.ellipsis;
+    gap: 1.2rem;
+    .logo {
+      flex: 0 0;
+      width: 4.8rem;
+      height: auto;
     }
-    .label {
-      display: inline-block;
-      padding: 0.3rem 0.6rem;
-      border-radius: 0.3rem;
-      font-size: 1.2rem;
-      font-weight: 500;
-      line-height: 130%;
-      // 통원
-      &.out {
-        background-color: #FEF4CC;
-        color: #8D7000;
+    .wrap-hospital {
+      flex: 1 0 auto;
+      max-width: calc(100% - 10rem);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      .text {
+        flex: 1;
+        min-width: 0;
+        font-weight: 700;
+        @include mixin.ellipsis;
       }
-      // 입원
-      &.in {
-        background-color: #EAF2CC;
-        color: #506A1D;
+      .label {
+        display: inline-block;
+        padding: 0.3rem 0.6rem;
+        border-radius: 0.3rem;
+        font-size: 1.2rem;
+        font-weight: 500;
+        line-height: 130%;
+        // 통원
+        &.out {
+          background-color: #FEF4CC;
+          color: #8D7000;
+        }
+        // 입원
+        &.in {
+          background-color: #EAF2CC;
+          color: #506A1D;
+        }
       }
     }
-  }
-  .count {
-    flex: 0 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-    strong {
-      margin-right: 0.3rem;
-      color: #4C7FF7;
+    .count {
+      flex: 0 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      strong {
+        margin-right: 0.3rem;
+        color: #4C7FF7;
+      }
     }
   }
 }

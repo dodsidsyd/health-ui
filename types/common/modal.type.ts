@@ -24,6 +24,7 @@ export interface AlertModalProps {
 export interface ConfirmModalProps extends BaseModalProps {
   html?: string
   content?: string
+  isShowFooter?: boolean
 }
 
 export type NoticeModalEvent = 'skipToday' | 'close'

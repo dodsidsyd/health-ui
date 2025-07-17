@@ -15,7 +15,7 @@
     </div>
     <div class="flex flex-col gap-12 mt-32">
       <div class="wrap-signature">
-        <div class="input-tit">사고(질병) 내용</div>
+        <div class="input-tit required">사고(질병) 내용</div>
         <InputText placeholder="(예) 감기몸살, 장염, 골절" />
       </div>
       <Select
@@ -61,12 +61,14 @@ import Select from '~/components/publishing/input/Select.vue'
   line-height: 1.3;
   color: #555555;
   position: relative;
-  &::after {
-    content: "*";
-    font-size: 1.2rem;
-    display: inline-block;
-    margin-left: 0.3rem;
-    color: #f14960;
+  &.required {
+    &::after {
+      content: "*";
+      font-size: 1.2rem;
+      display: inline-block;
+      margin-left: 0.3rem;
+      color: #f14960;
+    }
   }
 }
 </style>

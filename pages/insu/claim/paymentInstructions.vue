@@ -10,12 +10,17 @@
     <div class="wrap-payment-main">
       <h1 class="c-tit">
         <span class="text">병원에서<br />진단서를 발급 받으셨나요?</span>
+        <div class="icon" @click="toggleTooltip">
+          <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10.5V6.75M10 13.2795V13.3125M17.5 10.5C17.5 14.6421 14.1421 18 10 18C5.85786 18 2.5 14.6421 2.5 10.5C2.5 6.35786 5.85786 3 10 3C14.1421 3 17.5 6.35786 17.5 10.5Z" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="tooltip" v-show="isTooltipOpen">
+            <button type="button" class="c-tooltip-close-btn" aria-label="닫기" @click.stop="closeTooltip"></button>
+            <div class="text">MY병원을 연결해 최근 진료 내역을 업데이트할 수 있어요.</div>
+          </div>
+        </div>
       </h1>
-      <img
-        class="img-payment-main"
-        src="/assets/images/insu/img-paymentInstructions-main.png"
-        alt="입원비 청구 이미지"
-      />
+      <img class="img-payment-main" src="/assets/images/insu/img-paymentInstructions-main.png" alt="입원비 청구 이미지" />
       <div class="wrap-payment-method">
         <div class="item">
           <img class="img-method" src="/assets/images/insu/icon-hospital-doc.svg" alt="입원비 청구 방법 1" />
@@ -33,44 +38,20 @@
         </div>
       </div>
     </div>
-
+    
     <div class="wrap-payment-instructions-info">
-      <!-- 클래스 추가 및 툴팁 위치 변경 -->
-      <h2 class="tit2 c-tit-sub">
-        진단서 사본 발급 방법 안내
-        <div class="icon" @click="toggleTooltip">
-          <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M10 10.5V6.75M10 13.2795V13.3125M17.5 10.5C17.5 14.6421 14.1421 18 10 18C5.85786 18 2.5 14.6421 2.5 10.5C2.5 6.35786 5.85786 3 10 3C14.1421 3 17.5 6.35786 17.5 10.5Z"
-              stroke="#555555"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <div class="tooltip" v-show="isTooltipOpen">
-            <button type="button" class="c-tooltip-close-btn" aria-label="닫기" @click.stop="closeTooltip"></button>
-            <div class="text">
-              자동생성된 진단서가 보험사로 전송되지 않을 수 있으니, 아래 방법 중 하나로 진단서를 준비해주세요.
-            </div>
-          </div>
-        </div>
-      </h2>
+      <h2 class="tit2">진단서 사본 발급 방법 안내</h2>
       <div class="wrap-spread">
         <div class="item">
           <div class="item-head" @click="toggleItem(0)">
-            <img
-              class="ico-payment-method"
-              src="/assets/images/insu/icon-payment-method1.svg"
-              alt="진단서 발급 방법1"
-            />
+            <img class="ico-payment-method" src="/assets/images/insu/icon-payment-method1.svg" alt="진단서 발급 방법1" />
             <div class="wrap-desc">
               <div class="text">청구에신에서 발급하기</div>
               <div class="label">가능</div>
             </div>
-            <i class="icon-arrow-down" :class="{ rotated: expandedItems[0] }"></i>
+            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[0] }"></i>
           </div>
-          <div class="item-body" :class="{ expanded: expandedItems[0] }">
+          <div class="item-body" :class="{ 'expanded': expandedItems[0] }">
             <div class="spread-tit">청구의신 병원 서류발급 서비스를 이용하여 진단서 사본을 발급해요.</div>
             <ul class="spread-list circle-num">
               <li>병원 서류 발급 > 병원 선택</li>
@@ -83,18 +64,14 @@
         </div>
         <div class="item">
           <div class="item-head" @click="toggleItem(1)">
-            <img
-              class="ico-payment-method"
-              src="/assets/images/insu/icon-payment-method2.svg"
-              alt="진단서 발급 방법2"
-            />
+            <img class="ico-payment-method" src="/assets/images/insu/icon-payment-method2.svg" alt="진단서 발급 방법2" />
             <div class="wrap-desc">
               <div class="text">병원 홈페이지에서 발급하기</div>
               <div class="label">가능</div>
             </div>
-            <i class="icon-arrow-down" :class="{ rotated: expandedItems[1] }"></i>
+            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[1] }"></i>
           </div>
-          <div class="item-body" :class="{ expanded: expandedItems[1] }">
+          <div class="item-body" :class="{ 'expanded': expandedItems[1] }">
             <div class="spread-tit">병원 홈페이지에서 진단서 사본을 발급해요.</div>
             <ul class="spread-list circle-num">
               <li>병원 홈페이지 접속</li>
@@ -106,21 +83,15 @@
         </div>
         <div class="item">
           <div class="item-head" @click="toggleItem(2)">
-            <img
-              class="ico-payment-method"
-              src="/assets/images/insu/icon-payment-method3.svg"
-              alt="진단서 발급 방법3"
-            />
+            <img class="ico-payment-method" src="/assets/images/insu/icon-payment-method3.svg" alt="진단서 발급 방법3" />
             <div class="wrap-desc">
               <div class="text">병원 방문 후 직접 발급하기</div>
               <div class="label">가능</div>
             </div>
-            <i class="icon-arrow-down" :class="{ rotated: expandedItems[2] }"></i>
+            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[2] }"></i>
           </div>
-          <div class="item-body" :class="{ expanded: expandedItems[2] }">
-            <div class="spread-tit">
-              신분증을 지참하신 후 실손청구 하실 병원에<br />직접 방문하여 진단서 사본 발급을 신청해요.
-            </div>
+          <div class="item-body" :class="{ 'expanded': expandedItems[2] }">
+            <div class="spread-tit">신분증을 지참하신 후 실손청구 하실 병원에<br />직접 방문하여 진단서 사본 발급을 신청해요.</div>
             <div class="spread-desc">각 병원의 운영 시간을 꼭 확인하신 후 방문해주세요.</div>
           </div>
         </div>
@@ -155,7 +126,7 @@ const toggleItem = (index: number) => {
 .wrap-payment-main {
   margin: 0 -2rem;
   padding: 0.8rem 2rem 2.4rem;
-  background-color: #e7f4ff;
+  background-color: #E7F4FF;
   .img-payment-main {
     margin: 0.8rem auto;
     width: 28rem;
@@ -172,7 +143,7 @@ const toggleItem = (index: number) => {
       align-items: center;
       gap: 0.8rem;
       &:not(:first-child) {
-        border-top: 0.1rem solid #eeeeee;
+        border-top: 0.1rem solid #EEEEEE;
       }
       .img-method {
         width: 7.2rem;
@@ -182,7 +153,7 @@ const toggleItem = (index: number) => {
         .tit {
           font-size: 1.6rem;
           font-weight: 700;
-          color: #2b2b2b;
+          color: #2B2B2B;
         }
         .sub-tit {
           margin-top: 0.2rem;
@@ -195,20 +166,11 @@ const toggleItem = (index: number) => {
   }
 }
 
-h2.tit2 {
-  font-size: 1.8rem;
+h2.tit2 {  font-size: 1.8rem;
   font-weight: 700;
   line-height: 140%;
-  color: #2b2b2b;
+  color: #2B2B2B;
   margin-top: 3.2rem;
-  display: flex;
-  align-items: center;
-  .icon {
-    .tooltip {
-      width: calc(100% - 4rem);
-      left: 2rem;
-    }
-  }
 }
 .wrap-payment-instructions-info {
   margin: 0 -2rem;
@@ -224,10 +186,10 @@ h2.tit2 {
     .item {
       width: 100%;
       &:not(:first-child) {
-        border-top: 0.1rem solid #eeeeee;
+        border-top: 0.1rem solid #EEEEEE;
       }
       &:last-child .item-body {
-        border-bottom: 0.1rem solid #eeeeee;
+        border-bottom: 0.1rem solid #EEEEEE;
       }
       .item-head {
         padding: 1.2rem 2.4rem;
@@ -237,7 +199,7 @@ h2.tit2 {
         gap: 1.2rem;
         cursor: pointer;
         transition: background-color 0.2s ease;
-
+        
         .ico-payment-method {
           flex: 0 0;
           width: 4.8rem;
@@ -251,7 +213,7 @@ h2.tit2 {
           .text {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #2b2b2b;
+            color: #2B2B2B;
           }
           .label {
             flex: 0 0;
@@ -259,8 +221,8 @@ h2.tit2 {
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 130%;
-            color: #4c7ff7;
-            background-color: #e5edff;
+            color: #4C7FF7;
+            background-color: #E5EDFF;
             border-radius: 0.4rem;
           }
         }
@@ -271,7 +233,7 @@ h2.tit2 {
           background-size: 100%;
           transition: transform 0.3s ease;
           transform-origin: center center;
-
+          
           &.rotated {
             transform: rotate(180deg);
           }
@@ -280,24 +242,21 @@ h2.tit2 {
       .item-body {
         max-height: 0;
         overflow: hidden;
-        transition:
-          max-height 0.3s ease,
-          padding 0.3s ease,
-          border-top 0.3s ease;
+        transition: max-height 0.3s ease, padding 0.3s ease, border-top 0.3s ease;
         padding: 0 2rem;
         border-top: 0.1rem solid transparent;
-        background-color: #f9f9f9;
-
+        background-color: #F9F9F9;
+        
         &.expanded {
           max-height: 50rem; // 충분한 높이로 설정
           padding: 2.4rem 2rem;
-          border-top: 0.1rem solid #eeeeee;
+          border-top: 0.1rem solid #EEEEEE;
         }
-
+        
         .spread-tit {
           font-size: 1.6rem;
           font-weight: 500;
-          color: #2b2b2b;
+          color: #2B2B2B;
         }
         .spread-list {
           margin-top: 1.6rem;
@@ -318,7 +277,7 @@ h2.tit2 {
               width: 2rem;
               height: 2rem;
               border-radius: 50%;
-              background: #4f5561;
+              background: #4F5561;
               color: #fff;
               display: flex;
               align-items: center;

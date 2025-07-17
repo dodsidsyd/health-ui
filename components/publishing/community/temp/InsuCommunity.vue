@@ -29,7 +29,6 @@
               :text="slide.text"
               :sub-text="slide.subText"
               :sub-text-type="slide.subTextType"
-              :type="slide.type"
               :card-link-class="slide.cardLinkClass"
             />
           </div>
@@ -71,8 +70,8 @@ import Button from '~/components/publishing/button/Button.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import CardCommInfo from '~/components/publishing/community/common/CardCommInfo.vue'
-import NoticeItem from '~/components/publishing/community/common/NoticeItem.vue'
-import CardLink from '~/components/publishing/community/common/CardLink.vue'
+import NoticeItem from '~/components/publishing/community/common/LinkItemBadge.vue'
+import CardLink from '~/components/publishing/community/hospital/CardLink.vue'
 import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
 import CommContent from '~/components/publishing/community/hospital/CommContent.vue'
 import ClaimContent from '~/components/publishing/community/hospital/ClaimContent.vue'

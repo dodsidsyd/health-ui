@@ -23,6 +23,7 @@ const handleTextChange = (textLength: number) => {
 .comment-wrap {
   position: relative;
   display: flex;
+  align-items: center;
   margin: 2.4rem -0.4rem 0;
   padding: 1.6rem 0;
   gap: 1.6rem;

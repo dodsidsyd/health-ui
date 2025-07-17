@@ -11,7 +11,7 @@
     <div class="agree-wrap flex flex-col gap-10 mt-40">
       <h1 class="c-tit">
         <span class="text">
-          다녀온 병원을 선택해주세요.
+          다녀온 병원을 검색해 주세요
         </span>
       </h1>
       <div class="c-tit-sub">서류 없이도 청구 가능한 병원인지 알 수 있어요.</div>
@@ -21,7 +21,7 @@
     <FlexSection>
       <div class="wrap-recent-searches">
         <div class="text">최근 검색</div>
-        <Button btn-type="text" element-type="button" aria-label="텍스트버튼명" class="hasLine xs" />
+        <Button btn-type="text" element-type="button" aria-label="전체삭제" class="hasLine xs" />
       </div>
       <!-- ToDo: line16에 입력값이 있으면 위에는 비활성화, 아래 활성화 -->
       <!-- <div class="wrap-claim-type">

@@ -16,14 +16,32 @@
       
     </div>
     <FlexSection>
-      <InputID
-        label="주민등록번호"
-        :is-valid="false"
-        class="require"
-        v-model="idInputValue"
-        :masked-value="maskedIdValue"
-        @input-complete="onIdInputComplete"
-      />
+      <div class="resident-id-form-group">
+        <label for="resident-id-front" class="resident-id-label">주민등록번호</label>
+        <div class="resident-id-inputs">
+          <input
+            id="resident-id-front"
+            v-model="residentIdFront"
+            type="tel"
+            class="resident-id-input"
+            maxlength="6"
+            placeholder="생년월일 6자리"
+            inputmode="numeric"
+            aria-label="주민등록번호 앞 6자리"
+          />
+          <span class="resident-id-hyphen">-</span>
+          <input
+            id="resident-id-back"
+            v-model="residentIdBack"
+            type="tel"
+            class="resident-id-input"
+            maxlength="7"
+            placeholder="뒷자리 입력"
+            inputmode="numeric"
+            aria-label="주민등록번호 뒤 7자리"
+          />
+        </div>
+      </div>
       <BottomModal
         :isVisible="isShowBottomModal"
         v-bind="bottomModalProps"
@@ -113,18 +131,18 @@
 <script setup lang="ts">
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
-import InputID from '~/components/publishing/input/InputID.vue'
+
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import RadioImg from '~/components/publishing/input/radioImg.vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 import iconHospitalNondoc from '~/assets/images/insu/icon-hospital-nondoc.svg'
 import iconHospitalDoc from '~/assets/images/insu/icon-hospital-doc.svg'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const isShowBottomModal = ref(false)
-const idInputValue = ref('')
-const maskedIdValue = ref('')
+const residentIdFront = ref('')
+const residentIdBack = ref('')
 
 const toggleBottomModal = () => {
   isShowBottomModal.value = !isShowBottomModal.value
@@ -148,7 +166,7 @@ const clickConfirm = () => {
   console.log('모달 확인 클릭')
   // 입력된 7자리 숫자를 *로 마스킹하여 두 번째 입력 필드에 설정
   if (inputNums.value.length === 7) {
-    maskedIdValue.value = '*'.repeat(7)
+    residentIdBack.value = '*'.repeat(7)
     toggleBottomModal()
     inputNums.value = [] // 키패드 입력 초기화
   }
@@ -199,15 +217,73 @@ const clickFindHospitals = () => {
   navigateTo('/insu/SuccessFIndHospitals')
 }
 
-// ID 입력이 6글자 완료되면 모달 열기
-const onIdInputComplete = (value: string) => {
-  console.log('ID input complete:', value)
-  flatKeypad.value = shuffleKeypad() // 키패드 위치 랜덤 변경
-  toggleBottomModal()
-}
+// 주민등록번호 앞자리 입력이 6글자 완료되면 모달 열기
+watch(residentIdFront, (newValue: string) => {
+  if (newValue.length === 6) {
+    console.log('Front ID input complete:', newValue)
+    flatKeypad.value = shuffleKeypad() // 키패드 위치 랜덤 변경
+    toggleBottomModal()
+  }
+})
 </script>
 
 <style scoped lang="scss">
+.resident-id-form-group {
+  width: 100%;
+  margin-bottom: 2rem;
+  
+  .resident-id-label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-weight: 400;
+    color: #555;
+    font-size: 12px;
+    position: relative;
+    
+    &.required {
+      &::after {
+        content: "*";
+        font-size: 1.2rem;
+        display: inline-block;
+        margin-left: 0.3rem;
+        color: #f14960;
+      }
+    }
+  }
+  
+  .resident-id-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    .resident-id-input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      min-width: 0;
+      transition: border-color 0.2s;
+      
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+      
+      &::placeholder {
+        color: #bbb;
+      }
+    }
+    
+    .resident-id-hyphen {
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
+    }
+  }
+}
+
 .wrap-radio-btn {
   margin-top: 3.2rem;
   display: flex;

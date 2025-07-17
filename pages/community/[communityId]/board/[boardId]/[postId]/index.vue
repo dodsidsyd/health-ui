@@ -278,7 +278,7 @@ const clickConfirmSeeMoreOtherModal = () => {
 }
 
 // 신고하기 모달 초기 상태값
-const isShowReportModal = ref(true)
+const isShowReportModal = ref(false)
 // 타인 댓글 더보기 모달 props
 const ReportModalProps = ref({
   title: '신고하기',

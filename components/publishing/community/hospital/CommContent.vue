@@ -58,15 +58,15 @@ const boxTabs = ref<BoxTab[]>([
   { title: '기타', key: 'option6' }
 ])
 
+const onBoxTabChange = (key: string) => {
+  activeBoxTab.value = key
+}
+
 const periodOptions = [
   { value: 'new', label: '최신순' },
   { value: 'reaction', label: '반응순' },
   { value: 'comment', label: '댓글순' }
 ]
-
-const onBoxTabChange = (key: string) => {
-  activeBoxTab.value = key
-}
 
 const commList = [
   {

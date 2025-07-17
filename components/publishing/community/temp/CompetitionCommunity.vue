@@ -27,7 +27,7 @@ import CardFlip from '~/components/publishing/community/competitive/CardFlip.vue
 import Button from '~/components/publishing/button/Button.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
-import NoticeItem from '~/components/publishing/community/common/NoticeItem.vue'
+import NoticeItem from '~/components/publishing/community/common/LinkItemBadge.vue'
 import CommContent from '~/components/publishing/community/competitive/CommContent.vue'
 import LookContent from '~/components/publishing/community/competitive/LookContent.vue'
 

@@ -264,6 +264,7 @@ function onSearchClick() {
       &:focus-within {
         background: #fff;
         border-color: #eee;
+        border-radius: 0;
       }
       .c-inp {
         font-weight: 700;

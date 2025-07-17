@@ -29,12 +29,13 @@
         @click="openCategoryModal"
       />
       <InputText placeholder="제목을 입력해주세요" class="has-no-border" />
-      <textarea
+      <!-- <textarea
         placeholder="본문에는 사진과 건강데이터를 첨부할 수 있어요"
         maxlength="1000"
         rows="10"
         class="mt-8"
-      ></textarea>
+      ></textarea> -->
+      <EditorCustom />
     </FlexSection>
 
     <BottomModal
@@ -54,9 +55,9 @@
         />
       </template>
     </BottomModal>
-    <ButtonGroup class="is-fixed">
+    <!-- <ButtonGroup class="is-fixed">
       <Button btn-type="primary" element-type="button" aria-label="등록하기" class="lg w-full medium btn-sticky" />
-    </ButtonGroup>
+    </ButtonGroup> -->
   </BaseBody>
 </template>
 
@@ -69,8 +70,10 @@ import Select from '~/components/publishing/input/Select.vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 import SelectBoard from '~/components/publishing/community/board/SelectBoard.vue'
 import SelectTypeBtn from '~/components/publishing/community/board/SelectTypeBtn.vue'
+import EditorCustom from '~/components/publishing/community/board/EditorCustom.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
+
 // 최종 선택된 옵션의 value (v-model용)
 const selectedCategoryValue = ref<string>('')
 // '카테고리명 > 옵션명' 형식으로 표시될 텍스트

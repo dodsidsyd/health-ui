@@ -12,6 +12,7 @@
       :pagination="false"
       :scrollbar="false"
       :autoplay="false"
+      :loop="true"
       :show-slide-length="false"
       :show-play-pause-button="false"
     >
@@ -101,9 +102,10 @@ const communitySlides = ref([
 <style scoped lang="scss">
 .another-board-wrap {
   margin: 0 -2rem;
-  padding-left: 2rem;
+
   .wrap-title {
     margin-bottom: 1.6rem;
+    padding: 0 2rem;
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 2.5rem;
@@ -112,6 +114,9 @@ const communitySlides = ref([
     }
   }
 
+  :deep(swiper-slide:first-child) {
+    margin-left: 2rem;
+  }
   :deep(.swiper-slide) {
     border-radius: 0 !important;
   }

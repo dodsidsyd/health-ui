@@ -318,8 +318,8 @@ const pageListData: PageItemData[] = [
     status: ''
   },
   {
-    title: 'MY병원찾기',
-    description: 'MY병원찾기',
+    title: 'MY병원 등록',
+    description: 'MY병원 등록',
     path: '/insu/claim/paperless/findHospitals',
     category: '보험청구',
     section: 'insu',
@@ -376,7 +376,7 @@ const pageListData: PageItemData[] = [
   {
     title: '최초청구 기본정보',
     description: '서류없이 찾기 - 주소 찾기',
-    path: '/insu/claim/inputDefaultInfoData',
+    path: '/insu/claim/paperless/inputDefaultInfoData',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -384,7 +384,7 @@ const pageListData: PageItemData[] = [
   {
     title: '주소검색',
     description: '주소찾기 공통',
-    path: '/insu/claim/searchAddress',
+    path: '/insu/claim/paperless/searchAddress',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -400,7 +400,7 @@ const pageListData: PageItemData[] = [
   {
     title: '사고내용(상해)',
     description: '사고(내원) 내용 입력',
-    path: '/insu/claim/accidentDetailsInjured1',
+    path: '/insu/claim/paperless/accidentDetailsInjured1',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -408,7 +408,7 @@ const pageListData: PageItemData[] = [
   {
     title: '사고(상해)가 일어난 주소',
     description: '사고(상해)가 일어난 주소입력',
-    path: '/insu/claim/accidentDetailsInjured2',
+    path: '/insu/claim/paperless/accidentDetailsInjured2',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -424,12 +424,171 @@ const pageListData: PageItemData[] = [
   {
     title: '서류첨부',
     description: '서류첨부',
-    path: '/insu/claim/attachMedicalCertificate',
+    path: '/insu/claim/paperless/attachClaimFiles',
     category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서류 발급 안내',
+    description: '서류 발급 안내',
+    path: '/insu/claim/paperless/guideCopyCertificateDoc',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '수익자 정보입력',
+    description: '수익자 정보입력',
+    path: '/insu/claim/paperless/beneficiaryInfo',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구내용',
+    description: '청구내용',
+    path: '/insu/claim/paperless/claimDetails',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구완료',
+    description: '청구완료',
+    path: '/insu/claim/paperless/claimCompleted',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 병원검색(직접 병원 찾기)',
+    description: '사진찍어청구 - 병원검색(직접 병원 찾기)',
+    path: '/insu/claim/picture/findSelfHospitals',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 주민등록번호 입력',
+    description: '사진찍어청구 - 주민등록번호 입력',
+    path: '/insu/claim/picture/inputIdentification',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 보험사 선택',
+    description: '사진찍어청구 - 보험사 선택',
+    path: '/insu/claim/picture/selectInsuranceCompany',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 최초청구 기본정보',
+    description: '사진찍어청구 - 최초청구 기본정보',
+    path: '/insu/claim/picture/inputDefaultInfoData',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 주소검색',
+    description: '사진찍어청구 - 주소찾기 공통',
+    path: '/insu/claim/picture/searchAddress',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 사고내용(상해)',
+    description: '사진찍어청구 - 사고(내원) 내용 입력',
+    path: '/insu/claim/picture/accidentDetailsInjured1',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 사고(상해)가 일어난 주소',
+    description: '사진찍어청구 - 사고(상해)가 일어난 주소입력',
+    path: '/insu/claim/picture/accidentDetailsInjured2',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 수익자 정보입력',
+    description: '사진찍어청구 - 수익자 정보입력',
+    path: '/insu/claim/picture/beneficiaryInfo',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 서류첨부',
+    description: '사진찍어청구 - 서류첨부',
+    path: '/insu/claim/picture/attachClaimFiles',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 청구내용',
+    description: '사진찍어청구 - 청구내용',
+    path: '/insu/claim/picture/claimDetails',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 팩스번호',
+    description: '사진찍어청구 - 팩스번호',
+    path: '/insu/claim/picture/claimFax',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사진찍어청구 - 청구완료',
+    description: '사진찍어청구 - 청구완료',
+    path: '/insu/claim/picture/claimCompleted',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서비스 안내',
+    description: '서비스 안내',
+    path: '/insu/claim/subrogation/serviceNotInUse/signupInfo',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '약관보기',
+    description: '약관보기',
+    path: '/insu/claim/subrogation/serviceNotInUse/term',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서비스 가입(설계사)',
+    description: '서비스 가입(설계사)',
+    path: '/insu/claim/subrogation/serviceNotInUse/selectInsuranceCompany',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '가입완료',
+    description: '가입완료',
+    path: '/insu/claim/subrogation/serviceNotInUse/successSubrogation',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
     section: 'insu',
     status: 'ing'
   },
-
   // 걷기왕 섹션
   {
     title: '걷기왕 홈',
@@ -1090,6 +1249,22 @@ const pageListData: PageItemData[] = [
     category: '커뮤니티',
     section: 'community',
     status: 'ing'
+  },
+  {
+    title: '게시글 상세',
+    description: '커뮤니티 공통-게시글 상세/글쓰기',
+    path: '/community/[community]/board/[boardID]/[postId]',
+    category: '커뮤니티',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '게시글 글쓰기',
+    description: '커뮤니티 공통-게시글 상세/글쓰기',
+    path: '/community/[community]/board/[boardID]/create',
+    category: '커뮤니티',
+    section: 'community',
+    status: ''
   },
   // 가이드 페이지
   {

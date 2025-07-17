@@ -1,5 +1,5 @@
 <template>
-  <div :class="['title-box', titleBoxClass]">
+  <div :class="['title-box', titleBoxClass, { center: center }]">
     <strong :class="['title', titleClass]">{{ title }}</strong>
     <Button
       v-if="isShowLink"
@@ -27,6 +27,7 @@
         <span class="total-score">{{ totalRating ?? '5' }}</span>
       </div>
     </div>
+    <p v-if="text" v-html="text" class="text"></p>
   </div>
 </template>
 <script setup lang="ts">
@@ -46,6 +47,8 @@ const props = withDefaults(
     isLink?: boolean
     rating?: string
     totalRating?: string
+    center?: boolean
+    text: string
   }>(),
   {
     titleBoxClass: '',
@@ -56,7 +59,8 @@ const props = withDefaults(
     isLink: true,
     linkClass: '',
     rating: '',
-    totalRating: '5'
+    totalRating: '5',
+    center: false
   }
 )
 </script>
@@ -70,6 +74,11 @@ const props = withDefaults(
     display: inline-block;
     font-size: 2rem;
     line-height: 2.6rem;
+  }
+  .text {
+    font-weight: 500;
+    color: #555;
+    line-height: 2.2rem;
   }
   .star-box {
     display: flex;
@@ -90,6 +99,10 @@ const props = withDefaults(
         content: '/';
       }
     }
+  }
+  //센터모드
+  &.center {
+    justify-content: center;
   }
 }
 </style>

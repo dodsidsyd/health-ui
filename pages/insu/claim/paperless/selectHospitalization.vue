@@ -8,7 +8,7 @@
     :has-add-text-left="true"
     class="pb-36"
   >
-    <div class="agree-wrap flex flex-col gap-10 mt-40">
+    <div class="flex flex-col gap-10 mt-40">
       <h1 class="c-tit">
         <span class="text">
           다녀온 병원을 선택해주세요.
@@ -224,7 +224,8 @@ const bottomModalProps = ref({
   confirmButtonText: '확인',
   cancelButtonText: '취소',
   disabledCancelButton: false,
-  disabledConfirmButton: false
+  disabledConfirmButton: false,
+  isShowFooter: false
 })
 
 </script>
@@ -239,7 +240,7 @@ const bottomModalProps = ref({
   .total {
     font-size: 1.6rem;
     font-weight: 500;
-    line-height: 1.4rem;
+    line-height: 140%;
     color: #2B2B2B;
   }
   .info {
@@ -253,7 +254,7 @@ const bottomModalProps = ref({
     .text {
       font-size: 1.4rem;
       font-weight: 400;
-      line-height: 1.4rem;
+      line-height: 140%;
       color: #2B2B2B;
     }
   }
@@ -423,5 +424,6 @@ const bottomModalProps = ref({
   width: 100%;
   display: flex;
   justify-content: center;
+  gap: 1.6rem;
 }
 </style>

@@ -9,8 +9,8 @@
       src="community/ico-hospital.svg"
     />
     <FlexRowDiv class="gap-12">
-      <CardLink href="teststs" text="병원 <br/>홈페이지" type="guide" card-link-class="hospital-link" />
-      <CardLink href="teststs" text="챗봇 <br/>상담받기" type="guide" card-link-class="chatbot-link" />
+      <CardLink href="teststs" text="병원 <br/>홈페이지" card-link-class="hospital-link" />
+      <CardLink href="teststs" text="챗봇 <br/>상담받기" card-link-class="chatbot-link" />
     </FlexRowDiv>
     <FlexColDiv class="notice-list gap-20">
       <NoticeItem v-for="item in noticeList" :key="item.id" :text="item.text" :type="item.type" :label="item.label" />
@@ -35,7 +35,7 @@
     >
       <template #default="{ slide }">
         <div class="link-slide">
-          <CardLink :href="slide.href" :text="slide.text" type="info" :card-link-class="slide.cardLinkClass" />
+          <CardInfoLink :href="slide.href" :text="slide.text" :card-link-class="slide.cardLinkClass" />
         </div>
       </template>
     </CommonSwiper>
@@ -70,8 +70,9 @@ import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import CardCommInfo from '~/components/publishing/community/common/CardCommInfo.vue'
-import NoticeItem from '~/components/publishing/community/common/NoticeItem.vue'
-import CardLink from '~/components/publishing/community/common/CardLink.vue'
+import NoticeItem from '~/components/publishing/community/common/LinkItemBadge.vue'
+import CardLink from '~/components/publishing/community/hospital/CardLink.vue'
+import CardInfoLink from '~/components/publishing/community/hospital/CardInfoLink.vue'
 import TitleBox from '~/components/common/TitleBox.vue'
 import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
 import CommContent from '~/components/publishing/community/hospital/CommContent.vue'

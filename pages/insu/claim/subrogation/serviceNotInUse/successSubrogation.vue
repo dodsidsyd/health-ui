@@ -1,5 +1,13 @@
 <template>
-  <BaseBody>
+  <BaseBody
+    :show-back-button="true"
+    page-title="대리청구 안내"
+    logo-type="text"
+    :has-notification="true"
+    :has-reward="false"
+    :has-add-text-left="true"
+    class="pb-60"
+  >
     <h2 style="font-size: 25px; font-weight: bold">대리청구 서비스 가입을<br />완료했어요</h2>
     <div
       style="

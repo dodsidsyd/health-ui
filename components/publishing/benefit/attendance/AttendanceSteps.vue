@@ -324,13 +324,13 @@ const updateItemAppearance = (day: number) => {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 10rem;
+    background-image: url('~/assets/images/benefit/img-point-coin.png');
+    /* 동전 회전 애니메이션 추가 */
+    backface-visibility: hidden;
     @media (max-width: 375px) {
       font-size: 1.6rem;
       background-size: 8.5rem;
     }
-    background-image: url('~/assets/images/benefit/img-point-coin.png');
-    /* 동전 회전 애니메이션 추가 */
-    backface-visibility: hidden;
   }
   .completed + .step-point {
     animation: coin-spin-dynamic 1s ease-in-out;
