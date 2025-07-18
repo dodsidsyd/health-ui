@@ -121,6 +121,9 @@ const handleImageError = () => (imageError.value = true)
   & + .community-box {
     border-top: 1px solid #eee;
   }
+  &.blind-box {
+    padding: 2.4rem 0;
+  }
   a {
     display: block;
     padding: 2.4rem 0;

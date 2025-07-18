@@ -24,7 +24,9 @@
         z-index: 10;
       "
     >
-      평균 {{ averageHeartRate }}%
+      <span v-if="!heartRateBoolean">나 {{ mainData }}원</span>
+      <span> 평균 {{ averageHeartRate }}%</span>
+
       <svg
         v-if="averageHeartRate >= 81"
         class="tooltip-arrow"
@@ -74,6 +76,7 @@ const chartRef = ref(null)
 
 // Props로 심박수 데이터 받기
 const props = defineProps({
+  heartRateBoolean: { type: Boolean, default: true },
   heartRateData: {
     type: Array,
     // eslint-disable-next-line vue/require-valid-default-prop
@@ -86,7 +89,30 @@ const props = defineProps({
   minHeartRate: {
     type: Number,
     default: 0
+  },
+  // 높이 설정 옵션들
+  height: {
+    type: [Number, String],
+    default: 100 // 기본 높이
   }
+})
+
+// 높이 계산
+const chartHeight = computed(() => {
+  // props.height가 직접 지정된 경우 우선 사용
+  if (props.height !== 100) {
+    return props.height
+  }
+
+  // size props로 높이 결정
+  const sizeMap = {
+    small: 60,
+    medium: 100,
+    large: 150,
+    xl: 200
+  }
+
+  return sizeMap[props.size] || 100
 })
 
 // 심박수 데이터에서 평균값 계산
@@ -132,6 +158,7 @@ const series = computed(() => {
 
   const averagePointSeries = {
     name: '평균',
+    height: chartHeight.value,
     data: [
       {
         x: averagePointTime,
@@ -260,6 +287,15 @@ function updateTooltipPosition() {
   tooltipPosition.x = xPosition + (plotRect.left - containerRect.left)
   tooltipPosition.y = yPosition + (plotRect.top - containerRect.top)
 }
+
+// 높이 변경 시 차트 업데이트
+watch(chartHeight, () => {
+  nextTick(() => {
+    setTimeout(() => {
+      updateTooltipPosition()
+    }, 100)
+  })
+})
 
 // 심박수 데이터 변경 시 툴팁 위치 업데이트
 watch([averageHeartRate, () => props.heartRateData], () => {

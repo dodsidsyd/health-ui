@@ -10,7 +10,7 @@
         :data-vital="item.vital"
         :style="{
           height: getBarHeight(item.vital),
-          animationDelay: `${index * 0.1}s`
+          animationDelay: `${index * 0.05}s`
         }"
       ></span>
     </div>

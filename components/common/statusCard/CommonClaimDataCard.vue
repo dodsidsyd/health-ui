@@ -1,55 +1,55 @@
 <template>
-  <div class="status-card" :class="{ 'no-data': !hasData }">
+  <div class="claimData-card" :class="{ 'no-data': !hasData }">
     <div class="flex flex-row">
-      <div :class="['flex flex-col', { 'gap-8': mainData && !text }, { 'gap-4': !mainData && text }]">
+      <div class="flex flex-col">
         <p class="tit">{{ title }}</p>
         <strong v-if="mainData && mainData.trim() && hasData" class="data-text">{{ mainData }}</strong>
-        <span v-if="!hasData" class="badge gray">데이터없음</span>
         <span v-if="text && text.trim()" class="text">{{ text }}</span>
       </div>
-      <i :class="['icon', `ico-${cardType}`]" aria-label="hidden"></i>
+      <div class="icon" @click="toggleTooltip">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M9.99919 13.75V13.783M8.125 7.69166C8.125 6.63657 8.96447 5.78125 10 5.78125C11.0355 5.78125 11.875 6.63657 11.875 7.69166C11.875 8.74675 11.0355 9.60207 10 9.60207C10 9.60207 9.99919 10.1723 9.99919 10.8757M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z"
+            stroke="#2B2B2B"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <div class="tooltip" v-show="isTooltipOpen">
+          <button type="button" class="c-tooltip-close-btn" aria-label="닫기" @click.stop="closeTooltip"></button>
+          <slot name="tooltip" v-if="$slots.tooltip"></slot>
+          <div class="tooltext">{{ tooltipContent || '내용내용내용' }}</div>
+        </div>
+      </div>
     </div>
 
     <!-- chart가 true일 때: 슬롯 영역 표시 -->
     <div v-if="chart" class="chart-area">
-      <slot></slot>
+      <slot> </slot>
     </div>
 
-    <!-- chart가 false일 때: 서브 제목 + 서브 데이터 + 이모지 영역 표시 -->
+    <!-- chart가 false일 때: 서브 제목 + 서브 데이터 -->
     <div v-else class="flex flex-row space-between">
-      <div v-if="hasSubContent" class="flex flex-col">
-        <p v-if="subTitle && subTitle.trim()" class="sub-title">{{ subTitle }}</p>
-        <strong v-if="subData && subData.trim()" class="sub-data-text">{{ subData }}</strong>
-        <strong v-if="subNum" class="sub-num">{{ NumFormat }}개</strong>
-      </div>
-
-      <div v-if="smartRingStatus && smartRingStatus.trim()" class="smartRing-status">{{ smartRingStatus }}</div>
-      <i
-        v-if="computedEmojiType && computedEmojiType.trim()"
-        :class="['emoji', computedEmojiType]"
-        aria-label="hidden"
-      ></i>
+      <p class="my-data">
+        나는<span>{{ myData }}</span>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
+const isTooltipOpen = ref(false)
 // Props 타입 정의
 interface Props {
   title?: string
   text?: string
   mainData?: string
-  cardType?: string //  card 상단 icon 종류 :
   chart?: boolean // 차트 모드 여부 (기본값: false)
   hasData?: boolean // 데이터 존재 여부 (기본값: true)
-  // chart = false일 때 사용되는 props
-  subTitle?: string // 서브 제목 (chart = false일 때 사용)
-  subData?: string // 서브 데이터 (chart = false일 때 사용)
-  smartRingStatus?: string // 스마트링 일때 상태 카드
-  subNum: string
-  emojiType?: string // 이모지 타입 (chart = false일 때 사용) emoji 종류 : good, bad, dislike, sleep, normal, cheerup, celebrate, love
+  myData?: string
+  tooltipContent?: string
 }
 
 // Props 기본값 설정
@@ -57,13 +57,10 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   text: '',
   mainData: '',
-  cardType: '',
   chart: false, // 기본값은 서브 데이터 모드
   hasData: true, // 기본값은 데이터 있음
-  subTitle: '',
-  subData: '',
-  smartRingStatus: '',
-  emojiType: ''
+  myData: '??',
+  tooltipContent: ''
 })
 
 const NumFormat = computed(() => {
@@ -80,10 +77,18 @@ const hasSubContent = computed(() => {
 const computedEmojiType = computed(() => {
   return !props.hasData ? 'sleep' : props.emojiType
 })
+
+const toggleTooltip = () => {
+  isTooltipOpen.value = !isTooltipOpen.value
+}
+
+const closeTooltip = () => {
+  isTooltipOpen.value = false
+}
 </script>
 
 <style lang="scss" scoped>
-.status-card {
+.claimData-card {
   overflow: hidden;
   padding: 2rem;
   border-radius: 2rem;
@@ -121,33 +126,24 @@ const computedEmojiType = computed(() => {
   }
 
   .tit {
+    margin-bottom: 0.8rem;
     font-weight: 500;
+    line-height: 1.9rem;
     color: #555;
   }
 
   .text {
+    margin-top: 0.2rem;
     font-size: 1.4rem;
     font-weight: 500;
     line-height: 2rem;
     color: #959595;
-  }
-
-  .sub-title {
-    font-size: 1.4rem;
-    line-height: 2rem;
-    font-weight: 500;
-    color: #959595;
-  }
-
-  .sub-data-text {
-    line-height: 2.2rem;
-    color: #555;
   }
 
   .data-text {
     font-size: 2rem;
     line-height: 2.6rem;
-    color: #2b2b2b;
+    color: #4c7ff7;
 
     &.no-data-text {
       color: #999;
@@ -155,16 +151,17 @@ const computedEmojiType = computed(() => {
     }
   }
 
-  .smartRing-status {
-    font-weight: 700;
-    color: #555;
-    font-size: 1.6rem;
-  }
-
-  .sub-num {
-    font-size: 2rem;
-    line-height: 2.6rem;
-    color: #2b2b2b;
+  .my-data {
+    overflow: hidden;
+    padding: 0.4rem 0.8rem;
+    background: #4f5561;
+    border-radius: 1.2rem;
+    font-size: 1.2rem;
+    color: #fff;
+    span {
+      display: inline-block;
+      margin-left: 0.3rem;
+    }
   }
 
   .icon {
@@ -177,22 +174,28 @@ const computedEmojiType = computed(() => {
     flex-shrink: 0;
   }
 
-  .emoji {
-    display: block;
-    margin-left: auto;
-    position: relative;
-    width: 4rem;
-    height: 4rem;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-  }
-
   // 차트 영역 스타일
   .chart-area {
     flex: 1;
     min-height: 0;
     margin-top: 1rem;
+  }
+  .tooltip {
+    display: flex;
+    position: absolute;
+    top: 5rem;
+    left: 1.5rem;
+    width: calc(100% - 3rem);
+    min-height: 1rem;
+    height: max-content;
+    z-index: 100;
+    padding: 0.8rem;
+    background: #fff;
+    border-radius: 0.8rem;
+    border: 1px solid #eee;
+  }
+  .tooltext {
+    font-size: 1.4rem;
   }
 }
 </style>

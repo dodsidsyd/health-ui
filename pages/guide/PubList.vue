@@ -100,6 +100,7 @@ interface PageItemData {
     | 'payment'
     | 'guide'
     | 'lottery'
+    | 'smartRing'
   status?: 'completed' | 'ing' | 'pending' | '' | undefined // status를 optional로 만들고 빈 문자열 및 undefined 허용
 }
 
@@ -131,7 +132,8 @@ const sectionTabs = [
   { title: '결제', key: 'payment' },
   { title: '포인트스토어', key: 'pointStore' },
   { title: '가이드', key: 'guide' },
-  { title: '리워드보관함', key: 'lottery' }
+  { title: '리워드보관함', key: 'lottery' },
+  { title: '스마트링', key: 'smartRing' }
 ]
 
 // BoxedTabs를 위한 상태 탭 데이터
@@ -1298,6 +1300,31 @@ const pageListData: PageItemData[] = [
     category: '가이드',
     section: 'guide',
     status: 'ing'
+  },
+  // 스마트링
+  {
+    title: '스마트링 소개',
+    description: '스마트링 소개/최초',
+    path: '/smartRing/introSmartRing',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 권한',
+    description: '스마트링 소개/최초',
+    path: '/smartRing/smartRingPermission',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '신체 정보 입력',
+    description: '스마트링 소개/최초',
+    path: '/smartRing/smartRingBodyInfo',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
   }
 ]
 
@@ -1363,7 +1390,8 @@ const getSectionText = (section: string) => {
     login: '로그인 섹션',
     community: '커뮤니티',
     common: '공통',
-    guide: '가이드'
+    guide: '가이드',
+    smartRing: '스마트링'
   }
   return sectionMap[section] || section
 }

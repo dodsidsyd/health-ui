@@ -17,14 +17,18 @@
   <BottomModal
     :is-visible="isShowModal"
     title="선택"
-    confirm-button-text="네, 같아요"
-    cancel-button-text="아니요, 달라요"
+    confirm-button-text="확인"
+    :is-show-cancel-button="false"
     @close="isShowModal = false"
     @cancel="clickDiff"
     @confirm="clickSame"
   >
     <template #content>
-      <div>피보험자(치료 받은 분)와<br />수익자(보험금 받는 분)가 같은가요?</div>
+      <div class="select-modal-tit">피보험자(치료 받은 분)와<br />수익자(보험금 받는 분)가 같은가요?</div>
+      <div class="radio-wrap flex gap-8">
+        <Radio id="rdo1" name="rdo1" custom-style="button" aria-label="아니요, 달라요" />
+        <Radio id="rdo2" name="rdo1" checked custom-style="button" aria-label="네, 같아요" />
+      </div>
     </template>
   </BottomModal>
 </template>
@@ -32,6 +36,7 @@
 <script setup lang="ts">
 import BaseBody from '~/components/layout/BaseBody.vue'
 import BaseFooter from '~/components/layout/BaseFooter.vue'
+import Radio from '~/components/publishing/input/radio.vue'
 import { BottomModal } from '@lemonhc/fo-ui/components/modal'
 
 const isShowModal = ref(false)
@@ -48,4 +53,21 @@ const clickNext = () => {
   isShowModal.value = true
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.select-modal-tit {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.6rem;
+  text-align: left;
+}
+.radio-wrap {
+  display: flex;
+  flex-direction: row;
+  > * {
+    flex: 1 1 auto;
+  }
+  :deep(.c-label) {
+    width: 100%;
+  }
+}
+</style>

@@ -57,7 +57,11 @@
 
     <!-- 현명한 보험정보 탭 컨텐츠 -->
     <div v-else-if="activeLineTab === 'insu'">
-      <InsuContent />
+      <!-- 일반 사용자용 컨텐츠 -->
+      <InsuGeneralContent v-if="userType === 'general'" />
+
+      <!-- 설계자용 컨텐츠 -->
+      <InsuPlannerContent v-else-if="userType === 'Planner'" />
     </div>
   </StickyTabsContainer>
 </template>
@@ -75,11 +79,12 @@ import CardLink from '~/components/publishing/community/hospital/CardLink.vue'
 import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
 import CommContent from '~/components/publishing/community/hospital/CommContent.vue'
 import ClaimContent from '~/components/publishing/community/hospital/ClaimContent.vue'
-import InsuContent from '~/components/publishing/community/hospital/InsuContent.vue'
+import InsuGeneralContent from '~/components/publishing/community/hospital/InsuGeneralContent.vue'
+import InsuPlannerContent from '~/components/publishing/community/hospital/InsuPlannerContent.vue'
 
 const activeLineTab = ref('comm')
 const patient = ref(false)
-
+const userType = ref('Planner')
 interface infoSlide {
   id: number
   href: string
@@ -118,7 +123,7 @@ const emit = defineEmits<{
 const lineTabs = ref<Tab[]>([
   { title: '소통하기', key: 'comm', to: '' },
   { title: '똑똑한 청구생활', key: 'claim' },
-  { title: '현명한 보험정보', key: 'info' }
+  { title: '현명한 보험정보', key: 'insu' }
 ])
 const noticeList = [{ id: 1, label: '안내', type: 'info', text: '공지 내용이 들어가요. 공지 내용이 들어가요' }]
 // LineTabs 이벤트 핸들러

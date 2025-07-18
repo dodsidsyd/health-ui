@@ -11,9 +11,7 @@
     <!-- ToDo: 로딩중 -->
     <div class="mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          진단서 사본 서류를 첨부해 주세요
-        </span>
+        <span class="text"> 진단서 사본 서류를 첨부해 주세요 </span>
       </h1>
     </div>
     <FlexSection>
@@ -36,28 +34,47 @@
       <div class="wrap-attached-file">
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
         <button class="btn-delete-attached">
           <img class="img" src="/assets/images/insu/img-attached-file.png" alt="첨부파일" />
+          <!-- 첨부파일 삭제버튼 dom 요소로 변경 -->
+          <i class="ico-delete" title="첨부파일 삭제"></i>
         </button>
       </div>
     </FlexSection>
-    
+
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="다음" class="lg w-full medium btn-sticky" :disabled="hasSelectedHospitals" @click="clickBottomModal" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="다음"
+        class="lg w-full medium btn-sticky"
+        :disabled="hasSelectedHospitals"
+        @click="clickBottomModal"
+      />
     </ButtonGroup>
   </BaseBody>
   <BottomModal
@@ -69,8 +86,23 @@
   >
     <template #content>
       <div class="wrap-radio-btn">
-        <RadioImg id="rdo1" name="rdo1" checked custom-style="button has-icon" text="카메라 촬영" :icon-src="iconCamera" icon-alt="아이콘:카메라 촬영" />
-        <RadioImg id="rdo2" name="rdo1" custom-style="button has-icon" text="앨범에서 선택" :icon-src="iconAlbum" icon-alt="아이콘:앨범에서 선택" />
+        <RadioImg
+          id="rdo1"
+          name="rdo1"
+          checked
+          custom-style="button has-icon"
+          text="카메라 촬영"
+          :icon-src="iconCamera"
+          icon-alt="아이콘:카메라 촬영"
+        />
+        <RadioImg
+          id="rdo2"
+          name="rdo1"
+          custom-style="button has-icon"
+          text="앨범에서 선택"
+          :icon-src="iconAlbum"
+          icon-alt="아이콘:앨범에서 선택"
+        />
       </div>
     </template>
   </BottomModal>
@@ -127,7 +159,7 @@ const bottomModalProps = ref({
       padding-right: 1.6rem;
     }
     &:not(:first-child) {
-      border-left: 0.1rem solid #EEEEEE;
+      border-left: 0.1rem solid #eeeeee;
       padding-left: 1.6rem;
     }
     .img-attach {
@@ -150,8 +182,8 @@ const bottomModalProps = ref({
   width: 100%;
   padding: 1.8rem;
   border-radius: 0.8rem;
-  background-color:#F9F9F9;
-  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #E2E2E2);
+  background-color: #f9f9f9;
+  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #e2e2e2);
   [type='file'] {
     display: none;
   }
@@ -159,7 +191,7 @@ const bottomModalProps = ref({
 .wrap-attached-file {
   margin-top: 0.8rem;
   padding: 2rem;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   border-radius: 1.2rem;
   display: flex;
   flex-wrap: wrap;
@@ -169,7 +201,7 @@ const bottomModalProps = ref({
     flex: 0 0 9.7rem;
     position: relative;
     border-radius: 0.8rem;
-    border: 0.1rem solid #E2E2E2;
+    border: 0.1rem solid #e2e2e2;
     width: 9.7rem;
     overflow: hidden;
     .img {
@@ -177,8 +209,8 @@ const bottomModalProps = ref({
       height: 100%;
       object-fit: cover;
     }
-    &::after {
-      content: '';
+    .ico-delete {
+      display: block;
       width: 1.8rem;
       height: 1.8rem;
       position: absolute;

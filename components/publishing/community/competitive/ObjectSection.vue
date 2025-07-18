@@ -66,7 +66,6 @@
 import { ref, computed } from 'vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
-import AverageStatusCard from '~/components/common/statusCard/AverageStatusCard.vue'
 import CommonStatusCard from '~/components/common/statusCard/CommonStatusCard.vue'
 import CompareBarStatusCard from '~/components/common/statusCard/CompareBarStatusCard.vue'
 import AverageCurve from '~/components/publishing/community/competitive/AverageCurve.vue'

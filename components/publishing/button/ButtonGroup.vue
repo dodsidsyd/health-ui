@@ -30,6 +30,7 @@ const gapStyle = gapValue ? { gap: `${gapValue / 10}rem` } : {}
     }
   }
   &.is-fixed {
+    z-index: 100;
     :deep(.c-btn) {
       border-radius: 0;
     }

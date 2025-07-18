@@ -4,7 +4,10 @@
       <div class="qna-mark">Q</div>
       <div>
         <span class="question-category"> 회원</span>
-        <h3>장기미이용 회원은 다시 서비스를 이용할 수 있나요?</h3>
+        <h3>
+          장기미이용 회원은 다시 서비스를 이용할 수 있나요장기미이용 회원은 다시 서비스를 이용할 수 있나요장기미이용
+          회원은 다시 서비스를 이용할 수 있나요장기미이용 회원은 다시 서비스를 이용할 수 있나요?
+        </h3>
       </div>
       <span class="toggle-icon" :class="{ open: isOpen }"></span>
     </div>
@@ -37,6 +40,12 @@ export default {
 <style lang="scss" scoped>
 .accordion-item {
   overflow: hidden;
+  &:has(.is-open) {
+    h3 {
+      -webkit-line-clamp: none;
+      line-clamp: none;
+    }
+  }
   &:last-child {
     .accordion-header {
       border-bottom: 0;
@@ -56,7 +65,7 @@ export default {
   h3 {
     padding-right: 1.2rem;
     line-height: 2rem;
-    @include mixin.ellipsis;
+    @include mixin.multi-ellipsis($clamp: 2);
   }
   .question-category {
     color: #555;
@@ -99,6 +108,7 @@ export default {
   width: 2.4rem;
   height: 2.4rem;
   margin-left: auto;
+  flex: 0 0 auto;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10L12.0008 14.58L17 10' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
     center / contain no-repeat;
   transition: transform 0.25s ease;
