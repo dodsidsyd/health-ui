@@ -540,7 +540,9 @@
   vertical-align: middle;
   line-height: 140%;
   @include mixin.rippleEffectPrimary;
-
+  &.confirm {
+    @include mixin.rippleEffectWhite;
+  }
   .text {
     color: inherit;
     font-size: inherit;

@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table :class="tableClass">
     <colgroup>
       <col v-for="(col, colIdx) in tableData.cols" :key="'col' + colIdx" :style="{ width: col.width }" />
     </colgroup>
@@ -24,7 +24,8 @@
           :rowspan="cell.rowspan || 1"
           :colspan="cell.colspan || 1"
         >
-          {{ cell.text }}
+          <component :is="cell.content" v-if="cell.content" />
+          <template v-else>{{ cell.text }}</template>
         </component>
       </tr>
     </tbody>
@@ -35,7 +36,8 @@
 import { defineProps } from 'vue'
 
 interface TableCell {
-  text: string
+  text?: string
+  content?: VNode
   rowspan?: number
   colspan?: number
   type?: string
@@ -51,15 +53,25 @@ interface TableData {
 
 const props = defineProps<{
   tableData: TableData
+  tableClass?: string
 }>()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 table {
   position: relative;
   table-layout: fixed;
   border-collapse: collapse;
   width: 100%;
+  &.text-left {
+    th,
+    td {
+      text-align: left;
+    }
+    th {
+      vertical-align: top;
+    }
+  }
   &::before {
     content: '';
     position: absolute;
@@ -72,7 +84,6 @@ table {
   th,
   td {
     padding: 1.2rem;
-    text-align: left;
     color: #555;
     font-size: 1.4rem;
     line-height: 2rem;

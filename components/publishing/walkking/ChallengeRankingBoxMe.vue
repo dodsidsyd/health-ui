@@ -68,6 +68,7 @@ const props = withDefaults(
   gap: 1.2rem;
   margin: -0.1rem -0.8rem 0;
   padding: 1.6rem;
+  padding-left: 0.8rem;
   border-radius: 1.2rem;
   border: 0.1rem solid #e2e2e2;
   background: #fff;
@@ -85,6 +86,7 @@ const props = withDefaults(
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 5.2rem;
   .rangking {
     width: 3.2rem;
     height: 3.2rem;
@@ -168,6 +170,7 @@ const props = withDefaults(
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  text-align: left;
   .user-name {
     margin-bottom: 0.4rem;
     font-weight: 700;

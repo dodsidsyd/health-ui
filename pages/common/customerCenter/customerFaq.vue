@@ -1,6 +1,6 @@
 <template>
   <BaseBody page-title="자주 묻는 질문" :show-back-button="true">
-    <InputText inp-type="search" placeholder="키워드를 입력해주세요."></InputText>
+    <InputText inp-type="search" placeholder="키워드를 입력해주세요." />
 
     <!-- 고정될 탭 영역 -->
     <div class="sticky-tabs-container mt-16">

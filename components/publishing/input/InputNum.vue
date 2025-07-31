@@ -2,20 +2,20 @@
   <div class="c-input">
     <div class="c-inpType">
       <label v-if="label" :for="inputId" class="c-label">{{ label }}</label>
-      <div class="c-inp-el">
-        <button class="calCost minus">minus</button>
+      <div :class="['c-inp-el', { 'no-line': noLine, lg: props.size === 'lg', sm: props.size === 'sm' }]">
+        <button type="button" class="calCost minus" @click="decreaseValue">minus</button>
         <input
-          :name="name"
           :id="inputId"
+          :name="name"
           :placeholder="placeholder"
-          :value="modelValue"
+          :value="inputValue"
           :readonly="readonly"
           :disabled="disabled"
           :class="['c-inp', $attrs.class, { 't-right': unitR }, { 'is-invalid': isInvalid }]"
           @input="onInput"
         />
         <span class="input-unit right">{{ unitR }}</span>
-        <button class="calCost plus" @click="onButtonClick">plus</button>
+        <button type="button" class="calCost plus" @click="increaseValue">plus</button>
       </div>
       <p v-if="isInvalid" class="feedback error">
         <span class="text">메세지를 입력하세요</span>
@@ -39,7 +39,12 @@ const props = defineProps({
   unitR: { type: String, default: '원' },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  isInvalid: { type: Boolean, default: false }
+  isInvalid: { type: Boolean, default: false },
+  noLine: { type: Boolean, default: false },
+  step: { type: Number, default: 1 },
+  min: { type: Number, default: 0 },
+  max: { type: Number, default: Infinity },
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -56,17 +61,35 @@ watch(
 )
 
 function onInput(e: Event) {
-  inputValue.value = (e.target as HTMLInputElement).value
+  const value = (e.target as HTMLInputElement).value
+  inputValue.value = value
+  emit('update:modelValue', value)
 }
 
-function clearInput() {
-  inputValue.value = ''
-  emit('update:modelValue', '')
+function increaseValue() {
+  console.log('increaseValue called', props.readonly, props.disabled)
+  if (props.readonly || props.disabled) return
+
+  const currentValue = parseFloat(inputValue.value) || 0
+  const newValue = Math.min(currentValue + props.step, props.max)
+  const formattedValue = newValue.toString()
+
+  console.log('Increase:', currentValue, '->', newValue)
+  inputValue.value = formattedValue
+  emit('update:modelValue', formattedValue)
 }
 
-function onButtonClick() {
-  inputValue.value = ''
-  emit('update:modelValue', '')
+function decreaseValue() {
+  console.log('decreaseValue called', props.readonly, props.disabled)
+  if (props.readonly || props.disabled) return
+
+  const currentValue = parseFloat(inputValue.value) || 0
+  const newValue = Math.max(currentValue - props.step, props.min)
+  const formattedValue = newValue.toString()
+
+  console.log('Decrease:', currentValue, '->', newValue)
+  inputValue.value = formattedValue
+  emit('update:modelValue', formattedValue)
 }
 </script>
 
@@ -95,6 +118,12 @@ function onButtonClick() {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;
@@ -111,6 +140,16 @@ function onButtonClick() {
       border-color: #e2e2e2;
       background-color: #f4f4f4;
       color: #959595;
+    }
+
+    &.no-line {
+      border: 0;
+      padding: 0;
+      &:hover,
+      &:focus-within {
+        background: transparent;
+        border-color: transparent;
+      }
     }
 
     .c-inp {
@@ -150,11 +189,11 @@ function onButtonClick() {
       @include mixin.rippleEffectPrimary;
 
       &.minus {
-        margin-right: 1.2rem;
+        margin-right: 1rem;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Crect width='24' height='24' rx='4' fill='%23EEEEEE'/%3E%3Cpath d='M16.8002 12L7.2002 12' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
       }
       &.plus {
-        margin-left: 1.2rem;
+        margin-left: 1rem;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Crect width='24' height='24' rx='4' fill='%23EEEEEE'/%3E%3Cpath d='M12.0002 7.19995L12.0002 16.8M16.8002 12L7.2002 12' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
       }
     }

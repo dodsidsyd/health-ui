@@ -1,6 +1,6 @@
 <template>
   <BaseBody>
-    <DevOnly>커뮤니티-홈</DevOnly>
+    <DevOnly>커뮤니티-홈 </DevOnly>
   </BaseBody>
 </template>
 

@@ -191,6 +191,18 @@ function onChange(e: Event) {
       }
     }
   }
+  &.left-label {
+    .c-label {
+      &::after {
+        content: attr(aria-label);
+        margin-left: 0;
+        margin-right: 0.8rem;
+      }
+    }
+    .icon {
+      order: 1;
+    }
+  }
   .c-label {
     min-width: auto;
     &::after {

@@ -23,7 +23,5 @@ import WeCommSection from '~/components/publishing/community/competitive/WeCommS
 import FamousSection from '~/components/publishing/community/competitive/FamousSection.vue'
 import NewsSection from '~/components/publishing/community/competitive/NewsSection.vue'
 import BestSection from '~/components/publishing/community/competitive/BestSection.vue'
-
-// 두 번째 BoxedTabs
 </script>
 <style scoped lang="scss"></style>

@@ -1,8 +1,18 @@
 <template>
   <div class="c-input">
     <div class="c-inpType">
-      <label v-if="label" :for="inputId" class="c-label">{{ label }}</label>
-      <div class="c-inp-el">
+      <label v-if="label" :for="inputId" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">
+        <template v-if="hasRequiredMark">
+          <span v-for="(part, index) in labelParts" :key="index">
+            <span v-if="part === '*'" class="required-mark">*</span>
+            <span v-else>{{ part }}</span>
+          </span>
+        </template>
+        <template v-else>
+          {{ label }}
+        </template>
+      </label>
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
           :name="name"
           :id="inputId"
@@ -58,13 +68,15 @@ import DatePickerModal from '~/components/common/modal/DatePickerModal.vue'
 const props = defineProps({
   label: { type: String, default: '' },
   name: { type: String, default: 'calendar' },
+  labelClass: { type: String, default: '' },
   placeholder: { type: String, default: 'YYYY.MM.DD' },
   placeholder2: { type: String, default: 'YYYY.MM.DD' },
   fromDate: { type: String, default: '' },
   toDate: { type: String, default: '' },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  isInvalid: { type: Boolean, default: false }
+  isInvalid: { type: Boolean, default: false },
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:fromDate', 'update:toDate', 'validation-error'])
@@ -77,6 +89,17 @@ const internalFromDate = ref(props.fromDate)
 const internalToDate = ref(props.toDate)
 
 const isShowDatePickerModal = ref(false)
+
+// 라벨에 * 표시가 있는지 확인
+const hasRequiredMark = computed(() => {
+  return props.label.includes('*')
+})
+
+// 라벨을 * 기준으로 분리
+const labelParts = computed(() => {
+  if (!hasRequiredMark.value) return []
+  return props.label.split(/([*])/).filter(part => part !== '')
+})
 
 // Props 변경 감지하여 내부 상태 동기화
 watch(
@@ -154,7 +177,8 @@ const datepickerProps = computed(() => ({
   disabledCancelButton: false,
   disabledConfirmButton: false,
   autoClose: false,
-  initialDate: getInitialDate()
+  initialDate: getInitialDate(),
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 }))
 
 // 모달에 전달할 초기 날짜 가져오기
@@ -277,6 +301,12 @@ watch([internalFromDate, internalToDate], ([newFrom, newTo]) => {
   & + .c-inp-el {
     margin-left: 0;
   }
+  .required-mark {
+    color: #f14960; // 빨간색으로 * 표시
+    font-weight: 400;
+    display: inline-block;
+    margin-left: 0.4rem;
+  }
 }
 
 .c-inpType {
@@ -289,6 +319,12 @@ watch([internalFromDate, internalToDate], ([newFrom, newTo]) => {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;

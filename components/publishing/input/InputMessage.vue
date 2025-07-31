@@ -1,7 +1,7 @@
 <template>
   <div class="c-input">
     <div class="c-inpType">
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
           :id="inputId"
           v-model="inputValue"
@@ -32,12 +32,14 @@ interface Props {
   name?: string
   placeholder?: string
   modelValue?: string
+  size?: 'lg' | 'sm' | 'normal'
 }
 
 const props = withDefaults(defineProps<Props>(), {
   name: '',
   placeholder: '메시지를 입력해주세요.',
-  modelValue: ''
+  modelValue: '',
+  size: 'normal'
 })
 
 // Emits 정의
@@ -90,6 +92,12 @@ const hasValue = computed(() => {
     background-color: #f4f4f4;
     border-color: #f4f4f4;
     border-radius: 0.8rem;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     .c-inp {
       flex: 1 1 auto;
       color: #2b2b2b;

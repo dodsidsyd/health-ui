@@ -1,128 +1,89 @@
 <template>
-  <BaseBody >
-    <div>
-      <div>소속 보험사 또는 GA를 선택해 주세요</div>
-      <button
-        style="border-bottom: 1px solid gray; padding: 1rem 3rem"
-        :style="selectedTab === 'ga' ? 'border-bottom: 3px solid blue' : ''"
-        @click="clickTab('ga')"
-      >
-        GA
-      </button>
-      <button
-        style="border-bottom: 1px solid gray; padding: 1rem 3rem"
-        :style="selectedTab === 'insuranceCompany' ? 'border-bottom: 3px solid blue' : ''"
-        @click="clickTab('insuranceCompany')"
-      >
-        보험사
-      </button>
-      <div style="padding: 1rem">
-        <div v-if="selectedTab === 'ga'" style="display: flex; flex-direction: column; gap: 1rem">
-          <input
-            type="text"
-            style="padding: 0.25rem; border: 1px solid gainsboro"
-            placeholder="GA명이나 주소를 검색해주세요"
-          />
+  <BaseBody>
+    <h2>보험사를 선택해 주세요</h2>
+    내 보험
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem">
+      <button class="c-btn xl" @click="clickInsurance">DB손해</button>
+      <button class="c-btn xl" @click="clickInsurance">DB손해</button>
+      <button class="c-btn xl" @click="clickInsurance">DB손해</button>
+    </div>
 
-          <div
-            v-for="item in gaList"
-            :key="item.id"
-            style="display: flex; align-items: center; gap: 3rem; border-top: 1px solid gainsboro"
-            @click="clickAgency(item)"
-          >
-            <div style="padding: 0.75rem 0">
-              <div>{{ item.label }}</div>
-              <div>{{ item.address }}</div>
-            </div>
-            <div><i class="ri-arrow-right-s-line"></i></div>
-          </div>
+    <hr />
 
-          <div style="padding: 1rem; border: 1px solid gainsboro; text-align: center">
-            <div>소속된 GA가 없나요?</div>
-            <button style="border: 1px solid gray; padding: 0.25rem" @click="clickRegisterGA">직접 찾기</button>
-          </div>
-        </div>
-        <div v-else>
-          <div></div>
-        </div>
+    <div style="margin-top: 1rem">
+      <div style="display: flex">
+        <div style="border: 1px solid gray; padding: 1rem">손해보험</div>
+        <div style="border: 1px solid gray; padding: 1rem">생명보험</div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-bottom: 1rem; margin-top: 1rem">
+        <button class="c-btn xl" @click="clickInsurance">DB손해</button>
+        <button class="c-btn xl" @click="clickInsurance">DB손해</button>
+        <button class="c-btn xl" @click="clickInsurance">DB손해</button>
       </div>
     </div>
   </BaseBody>
+
+  <BottomModal
+    :is-visible="isShowAgreeModal"
+    title="보험사 약관 동의"
+    :is-show-cancel-button="false"
+    confirm-button-text="다음"
+    @close="isShowAgreeModal = false"
+    @confirm="clickNext"
+  >
+    <template #content>
+      <div>KB 손해보험</div>
+      <div>약관전체 동의</div>
+      <div @click="showDetailTerm">수정.이용에 관한 사항 ></div>
+      <div @click="showDetailTerm">국내 제공에 관한 사항 ></div>
+    </template>
+  </BottomModal>
+
+  <FullModal
+    :is-visible="isShowDetailTerm"
+    title="보험사 약관 동의"
+    :is-show-cancel-button="false"
+    confirm-button-text="동의하기"
+    @close="isShowDetailTerm = false"
+    @confirm="clickAgreeTerm"
+  >
+    <template #content>
+      <div>
+        <span>1. 수집.이용에 관한 사항</span>
+        <span>제1조(목적)</span>
+        <span>보험약관내용..........................</span>
+      </div>
+    </template>
+  </FullModal>
 </template>
 
 <script setup lang="ts">
-import { ConfirmModal } from '@lemonhc/fo-ui/components/modal'
+import { /*ConfirmModal*/ BottomModal, FullModal } from '@lemonhc/fo-ui/components/modal'
 import BaseBody from '~/components/layout/BaseBody.vue'
 
-const selectedTab = ref('ga')
-const gaList = ref([
-  {
-    id: 1,
-    label: 'GA1',
-    type: 'ga',
-    address: '서울 영등포구 국제금융로 66길 33 여의도동'
-  },
-  {
-    id: 2,
-    label: 'GA2',
-    type: 'ga',
-    address: '서울 영등포구 국제금융로 66길 33 여의도동'
-  },
-  {
-    id: 3,
-    label: 'GA3',
-    type: 'ga',
-    address: '서울 영등포구 국제금융로 66길 33 여의도동'
-  }
-])
+const isShowAgreeModal = ref(false)
+const isShowDetailTerm = ref(false)
 
-const insuranceCompany = ref([
-  {
-    id: 1,
-    label: 'insuComp1',
-    type: 'insuComp',
-    logo: ''
-  },
-  {
-    id: 2,
-    label: 'insuComp12',
-    type: 'insuComp',
-    logo: ''
-  },
-  {
-    id: 3,
-    label: 'insuComp13',
-    type: 'insuComp',
-    logo: ''
-  }
-])
-
-const clickTab = (type: 'ga' | 'insuranceCompany') => {
-  selectedTab.value = type
+const clickInsurance = () => {
+  isShowAgreeModal.value = !isShowAgreeModal.value
 }
 
-const clickAgency = async (item: any) => {
-  const modalContent = `
-    <div>
-      <div>
-        <i class="ri-information-line"></i>
-      </div>
-      <div>[${item.type}] ${item.label}</div>
-      <div>보험설계사용 서비스에 가입하시겠어요?</div>
-    </div>`
-
-  ConfirmModal.open({
-    isVisible: true,
-    html: modalContent,
-    confirmButtonText: '가입하기',
-    isShowCancelButton: false
-  }).then(res => {
-    console.log('eeee', res)
-  })
+const showDetailTerm = () => {
+  isShowDetailTerm.value = !isShowDetailTerm.value
 }
 
-const clickRegisterGA = () => {
-  navigateTo('/insu/claim/subrogation/requestGARegister')
+const clickAgreeTerm = () => {
+  isShowDetailTerm.value = !isShowDetailTerm.value
+}
+
+const clickNext = () => {
+  // 서류없이 청구
+  return navigateTo('/insu/claim/inputDefaultInfoData')
+  // // 사진찍어 청구 && 본인 방문
+  // return navigateTo('/insu/claim/inputDefaultInfoData')
+  // // 사진찍어 청구 && 최초청구일 경우: 가족 방문
+  // return navigateTo('/insu/claim/picture/inputFamilyData')
 }
 </script>
 

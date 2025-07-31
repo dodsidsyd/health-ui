@@ -1,5 +1,5 @@
 <template>
-  <div class="post-detail-hashtag-wrap">
+  <div class="hashtag-wrap">
     <span v-for="(tag, index) in hashtags" :key="index" class="hashtag-item">
       {{ tag }}
     </span>
@@ -19,7 +19,7 @@ const props = defineProps({
 </script>
 
 <style scoped lang="scss">
-.post-detail-hashtag-wrap {
+.hashtag-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;

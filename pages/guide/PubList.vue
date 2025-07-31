@@ -84,6 +84,7 @@ interface PageItemData {
   section:
     | 'insu'
     | 'walkingKing'
+    | 'smartRing'
     | 'login'
     | 'signup'
     | 'findId'
@@ -100,7 +101,8 @@ interface PageItemData {
     | 'payment'
     | 'guide'
     | 'lottery'
-    | 'smartRing'
+    | 'calorieIntake'
+
   status?: 'completed' | 'ing' | 'pending' | '' | undefined // status를 optional로 만들고 빈 문자열 및 undefined 허용
 }
 
@@ -116,6 +118,7 @@ const sectionTabs = [
   { title: '전체', key: 'all' },
   { title: '보험 (청구의신)', key: 'insu' },
   { title: '걷기왕', key: 'walkingKing' },
+  { title: '스마트링', key: 'smartRing' },
   { title: '로그인', key: 'login' },
   { title: '회원가입', key: 'signup' },
   { title: '아이디찾기', key: 'findId' },
@@ -123,7 +126,6 @@ const sectionTabs = [
   { title: '프로필설정', key: 'setProfile' },
   { title: '전체메뉴', key: 'wholeMenu' },
   { title: '회원프로필 ', key: 'commonProfile' },
-  { title: '설정', key: 'setting' },
   { title: '설정', key: 'setting' },
   { title: 'DM', key: 'DirectMessage' },
   { title: '커뮤니티', key: 'community' },
@@ -133,7 +135,7 @@ const sectionTabs = [
   { title: '포인트스토어', key: 'pointStore' },
   { title: '가이드', key: 'guide' },
   { title: '리워드보관함', key: 'lottery' },
-  { title: '스마트링', key: 'smartRing' }
+  { title: '일일섭취칼로리', key: 'calorieIntake' }
 ]
 
 // BoxedTabs를 위한 상태 탭 데이터
@@ -336,6 +338,14 @@ const pageListData: PageItemData[] = [
     status: ''
   },
   {
+    title: 'MY병원찾기 결과 없음',
+    description: 'MY병원찾기 결과 없음',
+    path: '/insu/claim/paperless/failedFindHospitals',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
     title: '병원선택 통원',
     description: '통원',
     path: '/insu/claim/paperless/selectTreatmentHospital',
@@ -371,6 +381,14 @@ const pageListData: PageItemData[] = [
     title: '보험사 선택',
     description: '보험사 선택',
     path: '/insu/claim/paperless/selectInsuranceCompany',
+    category: '보험청구',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '가족정보 입력',
+    description: '가족정보 입력',
+    path: '/insu/claim/paperless/inputFamilyInfo',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -589,16 +607,64 @@ const pageListData: PageItemData[] = [
     path: '/insu/claim/subrogation/serviceNotInUse/successSubrogation',
     category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
     section: 'insu',
-    status: 'ing'
+    status: ''
+  },
+  {
+    title: 'GA 등록요청',
+    description: 'GA 등록요청',
+    path: '/insu/claim/subrogation/serviceNotInUse/registGA',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '설계사정보(대리인) 입력',
+    description: '설계사정보(대리인) 입력',
+    path: '/insu/claim/subrogation/serviceNotInUse/registDesigner',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서브메인',
+    description: '서브메인',
+    path: '/insu/claim/subrogation/serviceNotInUse',
+    category: '보험금 대리청구 가입(설계사, 설계사 대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '피보험자 목록 - 고객목록-고객',
+    description: '피보험자 목록 - 고객목록-고객',
+    path: '/insu/claim/subrogation/serviceInUse/insuredManagement',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '피보험자 목록 - 고객목록-고객',
+    description: '피보험자 목록 - 고객목록-고객',
+    path: '/insu/claim/subrogation/serviceInUse/insuredManagementByGeneral',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '피보험자 정보입력',
+    description: '피보험자 정보입력',
+    path: '/insu/claim/subrogation/serviceInUse/addInsuredData',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
   },
   // 걷기왕 섹션
   {
     title: '걷기왕 홈',
-    description: '걷기왕 메인 화면',
-    path: '/walkingKing',
+    description: '걷기왕 subHome 화면',
+    path: '/walkingKing/subHome',
     category: '건강관리',
     section: 'walkingKing',
-    status: 'ing'
+    status: ''
   },
   {
     title: '챌린지 전체 - 개인',
@@ -781,6 +847,23 @@ const pageListData: PageItemData[] = [
     title: '걷기왕-챌린지-참가자프로필',
     description: '팀정보변경',
     path: '/walkingKing/teamChallengeParticipantProfile',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  // 걷기왕 프라이빗 게임
+  {
+    title: '걷기왕 프라이빗 게임',
+    description: '걷기왕 프라이빗 걷기게임',
+    path: '/walkingKing/privateGameHome',
+    category: '건강관리',
+    section: 'walkingKing',
+    status: ''
+  },
+  {
+    title: '걷기왕 프라이빗 게임-게임 만들기',
+    description: '걷기왕 프라이빗 걷기게임-게임 만들기',
+    path: '/walkingKing/privateGameCreate',
     category: '건강관리',
     section: 'walkingKing',
     status: ''
@@ -1218,12 +1301,102 @@ const pageListData: PageItemData[] = [
     section: 'pointStore',
     status: ''
   },
+  {
+    title: '레몬포인트 스토어',
+    description: '레몬포인트 스토어',
+    path: '/common/point/pointStoreChallengeItem',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  {
+    title: '레몬포인트 결제',
+    description: '레몬포인트 결제',
+    path: '/common/point/makePaymentBuy',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  // 일일섭취칼로리
+  {
+    title: '일일섭취칼로리 - 섭취음식',
+    description: '섭취음식',
+    path: '/common/calorieIntake/foodIntake',
+    category: '일일섭취칼로리',
+    section: 'calorieIntake',
+    status: ''
+  },
+  {
+    title: '일일섭취칼로리 - 식사기록',
+    description: '식사기록',
+    path: '/common/calorieIntake/mealRecord',
+    category: '일일섭취칼로리',
+    section: 'calorieIntake',
+    status: ''
+  },
 
   // 커뮤니티 섹션
   {
+    title: '커뮤니티 홈',
+    description: '커뮤니티 홈',
+    path: '/community/',
+    category: '커뮤니티',
+    section: 'community',
+    status: ''
+  },
+  {
     title: '마음일기',
-    description: '마음일기 목록 및 상세 화면',
+    description: '마음일기 메인 ',
     path: '/community/diary',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '마음일기 전체 목록',
+    description: '마음일기 전체 목록',
+    path: '/community/diary/list',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '마음일기 생성화면',
+    description: '마음일기 생성화면 ',
+    path: '/community/diary/create',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '마음일기 이모지선택',
+    description: '마음일기 이모지선택 ',
+    path: '/community/diary/emojiPicker',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '마음일기',
+    description: '마음일기 상세화면 ',
+    path: '/community/diary/[diaryId]',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+  {
+    title: '마음일기 수정화면',
+    description: '마음일기 수정화면 ',
+    path: '/community/diary/[diaryId]/edit',
+    category: '커뮤니티',
+    section: 'community',
+    status: 'ing'
+  },
+
+  {
+    title: '커뮤니티 둘러보기',
+    description: '커뮤니티 둘러보기',
+    path: '/community/explore',
     category: '커뮤니티',
     section: 'community',
     status: 'ing'
@@ -1234,7 +1407,7 @@ const pageListData: PageItemData[] = [
     path: '/community/[community]/type/competition',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '커뮤니티 상세',
@@ -1242,7 +1415,7 @@ const pageListData: PageItemData[] = [
     path: '/community/[community]/type/hospital',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '커뮤니티 상세',
@@ -1250,7 +1423,7 @@ const pageListData: PageItemData[] = [
     path: '/community/[community]/type/insu',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '게시글 상세',
@@ -1302,6 +1475,70 @@ const pageListData: PageItemData[] = [
     status: 'ing'
   },
   // 스마트링
+  {
+    title: '스마트링 서브메인',
+    description: '스마트링 서브메인',
+    path: '/smartRing/',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 활력지수',
+    description: '스마트링 활력지수',
+    path: '/smartRing/vitalityByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 수면지수',
+    description: '스마트링 수면지수',
+    path: '/smartRing/sleepByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 스트레스지수',
+    description: '스마트링 스트레스지수',
+    path: '/smartRing/stressByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 심박수지수',
+    description: '스마트링 심박수지수',
+    path: '/smartRing/heartRateByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 심박변이도지수',
+    description: '스마트링 심박변이도지수',
+    path: '/smartRing/heartRateVariabilityByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 체온지수',
+    description: '스마트링 체온지수',
+    path: '/smartRing/TemperatureByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
+  {
+    title: '스마트링 산소포화도지수',
+    description: '스마트링 산소포화도지수',
+    path: '/smartRing/oxygenSaturationByDate',
+    category: '스마트링',
+    section: 'smartRing',
+    status: ''
+  },
   {
     title: '스마트링 소개',
     description: '스마트링 소개/최초',
@@ -1387,11 +1624,11 @@ const getSectionText = (section: string) => {
   const sectionMap = {
     insu: '보험(청구의신)',
     walkingKing: '걷기왕',
+    smartRing: '스마트링',
     login: '로그인 섹션',
     community: '커뮤니티',
     common: '공통',
-    guide: '가이드',
-    smartRing: '스마트링'
+    guide: '가이드'
   }
   return sectionMap[section] || section
 }

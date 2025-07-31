@@ -4,7 +4,7 @@
       <label v-if="label" :for="inputId" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">{{
         label
       }}</label>
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <div class="custom-select search">
           <Select
             v-model="selectedOption"
@@ -67,7 +67,8 @@ const props = defineProps({
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
-  customSearchOptions: { type: Array as () => SearchOption[], default: () => [] }
+  customSearchOptions: { type: Array as () => SearchOption[], default: () => [] },
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue', 'search', 'change'])
@@ -177,7 +178,12 @@ function onSearch() {
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
     overflow: hidden; // 내용이 넘치지 않도록
-
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;

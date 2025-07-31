@@ -1,14 +1,26 @@
 <template>
   <BaseBody :has-search="true" page-title="건신 커뮤니티" @search="handleSearch">
     <LineTabs :active-key="activeLineTab" :tabs="tabs" />
+
+    <EmojiSection />
+    <DailyQuoteSection />
+    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <CurrentMoodSection />
+    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <MoodDiarySection />
   </BaseBody>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRoute } from '#app'
+import { useRoute } from 'vue-router'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
+
+import EmojiSection from '~/components/publishing/community/diary/EmojiSection.vue'
+import DailyQuoteSection from '~/components/publishing/community/diary/DailyQuoteSection.vue'
+import CurrentMoodSection from '~/components/publishing/community/diary/CurrentMoodSection.vue'
+import MoodDiarySection from '~/components/publishing/community/diary/MoodDiarySection.vue'
 
 const route = useRoute()
 const activeLineTab = ref('diary')

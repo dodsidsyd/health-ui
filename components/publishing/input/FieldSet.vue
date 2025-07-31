@@ -22,6 +22,8 @@
           :disabled="disabled"
           :maxlength="maxLength"
           @input="onInput"
+          @focus="$emit('focus')"
+          @blur="$emit('blur')"
         ></textarea>
       </div>
       <div v-if="countArea" class="group_feedback">
@@ -49,9 +51,9 @@ const props = defineProps({
   labelSize: { type: String, default: '1.2rem' },
   labelClass: { type: String, default: '' } // 라벨 추가 CSS 클래스
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
 
-const inputId = props.name
+const inputId = 'textField'
 const opened = ref(false)
 const selected = ref('')
 
@@ -103,6 +105,7 @@ function onInput(e: Event) {
     textarea {
       background-color: transparent;
       height: 100%;
+      font-size: 1.6rem;
     }
   }
   .feedback {

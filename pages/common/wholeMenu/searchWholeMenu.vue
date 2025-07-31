@@ -9,19 +9,25 @@
 
     <FlexSection>
       <div class="fz-18 bold">서비스</div>
-      <KeywordList />
+      <!-- <KeywordList /> -->
+      <!-- 검색 결과가 없습니다. -->
+      <EmptyResult />
     </FlexSection>
 
     <hr class="hr-section ml-n20 mr-n20" />
     <FlexSection>
       <div class="fz-18 bold mb-16">커뮤니티</div>
-      <CommunityListResult />
+      <!-- <CommunityListResult /> -->
+      <!-- 검색 결과가 없습니다. -->
+      <EmptyResult />
     </FlexSection>
 
     <hr class="hr-section ml-n20 mr-n20" />
     <FlexSection>
       <div class="fz-18 bold mb-16">커뮤니티 게시글</div>
-      <CommunityDetailResult />
+      <!-- <CommunityDetailResult /> -->
+      <!-- 검색 결과가 없습니다. -->
+      <EmptyResult />
     </FlexSection>
   </BaseBody>
 </template>
@@ -35,6 +41,8 @@ import FlexSection from '~/components/page/FlexSection'
 import KeywordList from '~/components/publishing/wholeMenu/KeywordList.vue'
 import CommunityListResult from '~/components/publishing/wholeMenu/CommunityListResult.vue'
 import CommunityDetailResult from '~/components/publishing/wholeMenu/CommunityDetailResult.vue'
+
+import EmptyResult from '~/components/publishing/wholeMenu/EmptyResult.vue'
 
 const keywordTabs = ref<BoxTab[]>([
   { title: '걷기왕', key: 'all', to: '/common/wholeMenu/searchWholeMenu?keyword=걷기왕' },

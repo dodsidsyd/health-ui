@@ -2,10 +2,12 @@
   <div class="community-box" v-if="!item.isBlind">
     <NuxtLink to="#">
       <FlexColDiv class="gap-8">
+        <!-- 작성자 정보 -->
         <FlexRowDiv v-if="item.writer" class="writer-box">
           <div class="img"><img class="img" :src="writerImageUrl" alt="작성자 이미지" @error="handleImageError" /></div>
           <span class="name">{{ item.writer }}</span>
         </FlexRowDiv>
+        <!-- 배지/카테고리  -->
         <div v-if="item.badge?.length" class="flex flex-row gap-8">
           <span
             v-for="(b, i) in item.badge"
@@ -20,6 +22,7 @@
             {{ c.label }}
           </span>
         </div>
+        <!-- 본문 내용 -->
         <FlexRowDiv class="info-box">
           <FlexColDiv class="info">
             <strong class="tit">{{ item.tit }}</strong>
@@ -35,7 +38,7 @@
             <span class="like-num">{{ item.likeNum ?? 0 }}</span>
             <span class="view-num">조회 {{ item.viewNum ?? 0 }}</span>
             <span class="reply-num">댓글 {{ item.replyNum ?? 0 }}</span>
-            <span class="date-num">{{ item.dateNum }} 전</span>
+            <span v-show="item.dateNum" class="date-num">{{ item.dateNum }} 전</span>
           </template>
           <template v-else-if="typeFormat === 'type2'">
             <div class="profile-img">
@@ -53,11 +56,28 @@
               </svg>
               <span class="score">{{ item.rating ?? '0.0' }}</span>
             </span>
-            <span class="date-num">{{ item.dateNum }} 전</span>
+            <span v-show="item.dateNum" class="date-num">{{ item.dateNum }} 전</span>
           </template>
         </div>
       </FlexColDiv>
     </NuxtLink>
+    <!-- 댓글 미리보기 영역 -->
+    <div v-if="expertComment" class="comment-preview">
+      <div class="comment-item">
+        <FlexRowDiv class="comment-header">
+          <div class="comment-author-info">
+            <div class="comment-author-img">
+              <img :src="getCommentAuthorImage(expertComment)" alt="댓글 작성자" />
+            </div>
+            <span class="comment-author">{{ expertComment.author }}</span>
+            <span class="comment-level">Lv.{{ expertComment.level }}</span>
+            <span class="expert-badge">전문가</span>
+          </div>
+          <span class="comment-date" v-show="expertComment.dateNum">{{ expertComment.dateNum }} 전</span>
+        </FlexRowDiv>
+        <p class="comment-text">{{ expertComment.text }}</p>
+      </div>
+    </div>
   </div>
 
   <div v-else class="community-box blind-box">
@@ -74,6 +94,16 @@ import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 interface LabelItem {
   label: string
   type?: 'blue' | ''
+}
+
+interface Comment {
+  id: number
+  author: string
+  authorImageUrl?: string
+  text: string
+  dateNum: string
+  level: number
+  isExpert?: boolean // 전문가 여부 추가
 }
 
 interface CommItem {
@@ -95,6 +125,7 @@ interface CommItem {
   nickname?: string
   profileImageUrl?: string
   rating?: number
+  comments?: Comment[]
 }
 
 const props = withDefaults(
@@ -114,6 +145,14 @@ const writerImageUrl = computed(() =>
   props.item.writerImageUrl ? `/_nuxt/assets/images/${props.item.writerImageUrl}` : ''
 )
 const handleImageError = () => (imageError.value = true)
+
+const expertComment = computed(() => {
+  return props.item.comments?.find(comment => comment.isExpert === true)
+})
+
+const getCommentAuthorImage = (comment: any) => {
+  return comment?.authorImageUrl ? `/_nuxt/assets/images/${comment.authorImageUrl}` : '/default-avatar.png'
+}
 </script>
 <style scoped lang="scss">
 .community-box {
@@ -305,6 +344,71 @@ const handleImageError = () => (imageError.value = true)
     &.type2 {
       align-items: center;
       gap: 0;
+    }
+  }
+
+  // 댓글
+  .comment-preview {
+    margin-top: -1.2rem;
+    margin-bottom: 2.4rem;
+    .comment-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      padding: 1.2rem 2rem;
+      border-radius: 1.2rem;
+      background: #f6f9ff;
+    }
+    .comment-header {
+      justify-content: space-between;
+    }
+    .comment-author-info {
+      display: flex;
+      align-items: center;
+      .comment-author-img {
+        overflow: hidden;
+        width: 2.4rem;
+        height: 2.4rem;
+        margin-right: 1.2rem;
+        border-radius: 50%;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .comment-author {
+        margin-right: 0.4rem;
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 2rem;
+        color: #555;
+      }
+      .comment-level {
+        margin-right: 0.6rem;
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 2rem;
+        color: #959595;
+      }
+      .expert-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.4rem;
+        background: #eee;
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.4rem;
+        color: #555;
+      }
+    }
+    .comment-date {
+      font-size: 1.3rem;
+      font-weight: 500;
+      line-height: 1.8rem;
+      color: #959595;
     }
   }
 }

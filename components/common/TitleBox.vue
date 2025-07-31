@@ -1,15 +1,20 @@
 <template>
   <div :class="['title-box', titleBoxClass, { center: center }]">
-    <strong :class="['title', titleClass]">{{ title }}</strong>
+    <p v-if="isTitle" v-html="htmlTitle" :class="['title', titleClass]"></p>
+    <template v-else-if="customTitle">
+      <slot name="content"></slot>
+    </template>
+    <strong v-else :class="['title', titleClass]">{{ title }}</strong>
+
     <Button
       v-if="isShowLink"
       btn-type="text"
       :element-type="elementType"
       :aria-label="ariaLabel"
-      icon="ico-greater-than"
+      :icon="icon"
       icon-position="right"
       :class="['xs', linkClass]"
-      :icon-size="16"
+      :icon-size="24"
       :link-href="linkHref"
       :is-link="true"
     />
@@ -31,16 +36,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue'
 import Button from '~/components/publishing/button/Button.vue'
 const props = withDefaults(
   defineProps<{
     title: string
+    htmlTitle?: string
     titleClass: string
     titleBoxClass?: string
     linkHref?: string
     ariaLabel: string
+    icon?: string
     linkClass?: string
+    isTitle?: boolean
+    customTitle?: boolean
     isShowLink?: boolean
     isShowStar?: boolean
     elementType?: 'button' | 'a'
@@ -52,6 +60,10 @@ const props = withDefaults(
   }>(),
   {
     titleBoxClass: '',
+    isTitle: false,
+    customTitle: false,
+    htmlTitle: '',
+    icon: 'ico-greater-than',
     isShowLink: false,
     isShowStar: false,
     elementType: 'button',
@@ -74,6 +86,10 @@ const props = withDefaults(
     display: inline-block;
     font-size: 2rem;
     line-height: 2.6rem;
+    font-weight: 700;
+    .top {
+      color: #4c7ff7;
+    }
   }
   .text {
     font-weight: 500;

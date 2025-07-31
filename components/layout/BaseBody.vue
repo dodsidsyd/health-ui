@@ -28,14 +28,20 @@ interface Props {
   notificationCount?: number
   chatCount?: number
   isCenterTitle?: boolean
+  titleCenter?: boolean
   pageType?: string
   hasAddText?: boolean
   addText?: string
+  addTextIcon?: string
   hasAddTextLeft?: boolean
   addTextLeft?: string
   hasCloseBtn?: boolean // 전체화면 모달창 닫기 버튼
   addTextClickEnabled?: boolean // addTextClick 활성화 여부
   isTransparent?: boolean // 투명 배경 여부
+  whiteLogo?: boolean // 화이트 로고 여부
+  hasInsu?: boolean // 청구의신 my병원
+  insuStatus?: 'unregistered' | 'needUpdate' | 'registered' // MY병원 상태
+  hasMyInfo?: boolean // 내정보 영역 표시 여부
 }
 
 const props = defineProps<Props>()
@@ -44,14 +50,14 @@ const props = defineProps<Props>()
 const { setHeaderConfig } = useHeader()
 
 // addTextClick 상태를 inject로 받아오기
-const addTextClickEnabled = inject('addTextClickEnabled', ref(false))
+const injectedAddTextClickEnabled = inject('addTextClickEnabled', ref(false))
 
 // addTextClick 상태를 computed로 처리 (프롭스 우선)
 const finalAddTextClickEnabled = computed(() => {
   if (props.addTextClickEnabled !== undefined) {
     return props.addTextClickEnabled
   }
-  return addTextClickEnabled.value
+  return injectedAddTextClickEnabled.value
 })
 
 // 헤더 설정 함수
@@ -76,20 +82,33 @@ const updateHeader = async () => {
   if (props.notificationCount !== undefined) headerConfig.notificationCount = props.notificationCount
   if (props.chatCount !== undefined) headerConfig.chatCount = props.chatCount
   if (props.isCenterTitle !== undefined) headerConfig.isCenterTitle = props.isCenterTitle
+  if (props.titleCenter !== undefined) headerConfig.titleCenter = props.titleCenter
   if (props.pageType) headerConfig.pageType = props.pageType
   if (props.hasAddText !== undefined) headerConfig.hasAddText = props.hasAddText
   if (props.addText) headerConfig.addText = props.addText
+  if (props.addTextIcon) headerConfig.addTextIcon = props.addTextIcon
+  if (props.hasMenu !== undefined) headerConfig.hasMenu = props.hasMenu
   if (props.hasAddTextLeft !== undefined) headerConfig.hasAddTextLeft = props.hasAddTextLeft
   if (props.addTextLeft) headerConfig.addTextLeft = props.addTextLeft
   if (props.hasCloseBtn !== undefined) headerConfig.hasCloseBtn = props.hasCloseBtn
   if (finalAddTextClickEnabled.value !== undefined) headerConfig.addTextClickEnabled = finalAddTextClickEnabled.value
   if (props.isTransparent !== undefined) headerConfig.isTransparent = props.isTransparent
+  if (props.whiteLogo !== undefined) headerConfig.whiteLogo = props.whiteLogo
+  if (props.hasInsu !== undefined) headerConfig.hasInsu = props.hasInsu
+  if (props.insuStatus !== undefined) headerConfig.insuStatus = props.insuStatus
+  if (props.hasMyInfo !== undefined) headerConfig.hasMyInfo = props.hasMyInfo
 
   if (Object.keys(headerConfig).length > 0) {
     await setHeaderConfig(headerConfig)
   }
 
-  console.log('headerConfig:', headerConfig)
+  // 디버깅용 로그 간소화
+  if (props.hasInsu) {
+    console.log('BaseBody - headerConfig updated:', {
+      hasInsu: headerConfig.hasInsu,
+      insuStatus: headerConfig.insuStatus
+    })
+  }
 }
 
 // 즉시 실행 + 지연 실행 조합

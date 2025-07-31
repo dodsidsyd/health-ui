@@ -125,7 +125,7 @@ const handleProceedClick = () => {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .single-action-section {
   margin-top: 30px; /* Space above this new section */
   width: 100%; /* Take full width of parent */
@@ -199,41 +199,40 @@ const handleProceedClick = () => {
   margin: 1rem;
   width: 100%; /* Ensures it takes full width of its parent */
   max-width: 400px; /* Optional: Sets a max width for desktop for better aesthetics */
+  .resident-id-label {
+    display: block; /* Makes the label take its own line */
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+    color: #555;
+    font-size: 12px;
+  }
+  .resident-id-inputs {
+    display: flex; /* Uses flexbox for horizontal alignment */
+    align-items: center; /* Vertically aligns items */
+    gap: 10px; /* Space between inputs and hyphen */
+    .resident-id-input {
+      flex: 1; /* Allows inputs to grow and shrink */
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+      min-width: 0; /* Allows shrinking below content size */
+      &::placeholder {
+        color: #bbb;
+      }
+    }
+    .resident-id-hyphen {
+      font-size: 18px;
+      color: #555;
+      font-weight: bold;
+    }
+  }
 }
 
-.resident-id-label {
-  display: block; /* Makes the label take its own line */
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #333;
-  font-size: 16px;
-}
 
-.resident-id-inputs {
-  display: flex; /* Uses flexbox for horizontal alignment */
-  align-items: center; /* Vertically aligns items */
-  gap: 10px; /* Space between inputs and hyphen */
-}
 
-.resident-id-input {
-  flex: 1; /* Allows inputs to grow and shrink */
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-  min-width: 0; /* Allows shrinking below content size */
-}
 
-.resident-id-input::placeholder {
-  color: #bbb;
-}
-
-.resident-id-hyphen {
-  font-size: 18px;
-  color: #555;
-  font-weight: bold;
-}
 .action-buttons-container {
   display: flex; /* Arranges buttons horizontally */
   justify-content: flex-start; /* Centers the buttons in the container */

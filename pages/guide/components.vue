@@ -39,6 +39,8 @@
 
     <hr style="margin-top: 40px" />
     <div style="margin-top: 40px; margin-bottom: 40px">
+      <InputLabelText label="'라벨 텍스트'" />
+      <InputLabelText label="'라벨 텍스트'" :required="true" />
       <FieldSet />
       <FieldSet is-valid />
       <FieldSet disabled />
@@ -66,7 +68,7 @@
           { value: 'kakao.com', label: 'kakao.com' }
         ]"
       />
-      
+
       <div class="resident-id-form-group">
         <label for="resident-id-front" class="resident-id-label">주민등록번호</label>
         <div class="resident-id-inputs">
@@ -93,7 +95,10 @@
           />
         </div>
       </div>
+      <!-- 셀렉트박스 invalid feedback 추가 -->
       <Select
+        :is-invalid="!selectedValue"
+        valid-text="카테고리를 선택해주세요"
         :custom-opts="[
           { value: 'gmail.com', label: 'gmail.com' },
           { value: 'naver.com', label: 'naver.com' }
@@ -104,8 +109,10 @@
       <InputCalendar />
 
       <InputCalendarFromTo />
+      타이머
       <InputTimer />
       <InputText inp-type="search" />
+
       <Select
         inp-type="search"
         :custom-opts="[
@@ -233,7 +240,7 @@
         <Button
           btn-type="text"
           element-type="button"
-          aria-label="텍스트버튼명"
+          aria-label="텍스트버튼명20-fz16"
           icon="ico-greater-than"
           icon-position="right"
           :icon-size="20"
@@ -246,7 +253,7 @@
         <Button
           btn-type="text"
           element-type="button"
-          aria-label="텍스트버튼명"
+          aria-label="텍스트버튼명16-fz14"
           icon="ico-greater-than"
           icon-position="right"
           class="xs"
@@ -260,7 +267,7 @@
         <Button
           btn-type="text"
           element-type="button"
-          aria-label="텍스트버튼명"
+          aria-label="텍스트버튼명16-fz12"
           icon="ico-greater-than"
           icon-position="right"
           class="xxs"
@@ -313,10 +320,11 @@ import Button from '~/components/publishing/button/Button.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import InputPhone from '~/components/publishing/input/InputPhone.vue'
 import InputMail from '~/components/publishing/input/InputMail.vue'
+import InputLabelText from '~/components/publishing/input/InputLabelText.vue'
 
 import Select from '~/components/publishing/input/Select.vue'
 import InputCalendar from '~/components/publishing/input/InputCalendar.vue'
-import InputCalendarFromTo from '~/components/publishing/input/InputCalendarFromTo.vue'
+// import InputCalendars from '~/components/publishing/input/InputCalendars.vue'
 import InputTimer from '~/components/publishing/input/InputTimer.vue'
 import InputNum from '~/components/publishing/input/InputNum.vue'
 import InputSearch from '~/components/publishing/input/InputSearch.vue'
@@ -381,7 +389,7 @@ const residentIdBack = ref('')
     position: relative;
     &.required {
       &::after {
-        content: "*";
+        content: '*';
         font-size: 1.2rem;
         display: inline-block;
         margin-left: 0.3rem;

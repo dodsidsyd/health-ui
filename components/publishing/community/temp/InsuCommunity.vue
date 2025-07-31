@@ -61,7 +61,7 @@
       <InsuGeneralContent v-if="userType === 'general'" />
 
       <!-- 설계자용 컨텐츠 -->
-      <InsuPlannerContent v-else-if="userType === 'Planner'" />
+      <InsuPlannerContent v-else-if="userType === 'planner'" />
     </div>
   </StickyTabsContainer>
 </template>
@@ -84,7 +84,7 @@ import InsuPlannerContent from '~/components/publishing/community/hospital/InsuP
 
 const activeLineTab = ref('comm')
 const patient = ref(false)
-const userType = ref('Planner')
+const userType = ref('general')
 interface infoSlide {
   id: number
   href: string

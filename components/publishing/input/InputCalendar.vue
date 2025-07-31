@@ -2,7 +2,7 @@
   <div class="c-input">
     <div class="c-inpType">
       <label v-if="label" :for="inputId" class="c-label">{{ label }}</label>
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
           :name="name"
           :id="inputId"
@@ -45,7 +45,8 @@ const props = defineProps({
   modelValue: { type: String, default: '' },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  isInvalid: { type: Boolean, default: false }
+  isInvalid: { type: Boolean, default: false },
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -58,18 +59,22 @@ const internalValue = ref(props.modelValue)
 const isShowDatePickerModal = ref(false)
 
 // Props 변경 감지하여 내부 상태 동기화
-watch(() => props.modelValue, (newValue) => {
-  internalValue.value = newValue
-}, { immediate: true })
+watch(
+  () => props.modelValue,
+  newValue => {
+    internalValue.value = newValue
+  },
+  { immediate: true }
+)
 
 // 날짜 형식 파싱 (YYYY.MM.DD 또는 YYYY-MM-DD)
 const parseDate = (dateStr: string): Date | null => {
   if (!dateStr) return null
-  
+
   // YYYY.MM.DD 또는 YYYY-MM-DD 형식 지원
   const cleanedDate = dateStr.replace(/\./g, '-')
   const date = new Date(cleanedDate)
-  
+
   return isNaN(date.getTime()) ? null : date
 }
 
@@ -130,21 +135,21 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
     console.log('❌ 날짜가 선택되지 않았습니다')
     return
   }
-  
+
   const formattedDate = formatDate(selectedDate)
-  
+
   // 날짜 업데이트 (내부 상태 + emit)
   updateValue(formattedDate)
-  
+
   isShowDatePickerModal.value = false
-  
+
   // DOM 업데이트 대기 후 input 요소에 값이 제대로 반영되었는지 확인
   await nextTick()
-  
+
   console.log(`📅 날짜 선택: ${formattedDate}`)
   console.log('📅 Date 객체:', selectedDate)
   console.log('📅 내부 상태:', internalValue.value)
-  
+
   // input 요소의 실제 값 확인
   const inputElement = document.getElementById(inputId) as HTMLInputElement
   if (inputElement) {
@@ -178,6 +183,12 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;

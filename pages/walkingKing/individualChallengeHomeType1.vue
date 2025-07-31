@@ -14,6 +14,7 @@
       />
       <Checkbox id="checkBox1" aria-label="종료된 챌린지 보기" :checked="true" class="ml-auto" />
     </FlexRowDiv>
+
     <div v-if="activeLineTab === 'whole'">
       <BoxedTabs
         :tabs="sectionTabs"
@@ -21,6 +22,7 @@
         variant="fill-type"
         @tab-change="handleSectionChange"
       />
+
       <ChallengeHistoryWrap>
         <ChallengeHistoryItem date="25.07">
           <WalkingChallengeProcessing />
@@ -36,6 +38,8 @@
       </ChallengeHistoryWrap>
     </div>
     <div v-else-if="activeLineTab === 'my'">
+      <EmptyNoticeIndexItem :title="'걷기왕 챌린지 참가 내역이 없습니다.'" />
+      <!-- 
       <FlexColDiv class="gap-20">
         <WalkingChallengeProcessing />
         <WalkingChallenge :have-rank="false" />
@@ -43,6 +47,7 @@
         <WalkingChallenge :have-rank="false" />
         <WalkingChallengeDisabled :have-rank="false" />
       </FlexColDiv>
+       -->
     </div>
   </BaseBody>
 </template>
@@ -53,6 +58,7 @@ import BoxedTabs from '~/components/tabbar/BoxedTabs.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import Select from '~/components/publishing/input/Select.vue'
 import Checkbox from '~/components/publishing/input/check.vue'
+import EmptyNoticeIndexItem from '~/components/publishing/common/customerCenter/EmptyNoticeIndexItem.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import WalkingChallenge from '~/components/publishing/commonProfile/WalkingChallenge.vue'

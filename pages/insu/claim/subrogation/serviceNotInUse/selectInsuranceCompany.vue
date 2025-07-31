@@ -11,20 +11,16 @@
     <client-only>
       <div class="mt-24">
         <h1 class="c-tit">
-          <span class="text">
-            소속 보험사 또는 GA를<br />선택해 주세요
-          </span>
+          <span class="text"> 소속 보험사 또는 GA를<br />선택해 주세요 </span>
         </h1>
       </div>
-      <LineTabs :tabs="tabs" />
+      <LineTabs :tabs="tabs" class="mb-20" />
+
+      <InputText inp-type="search" :placeholder="'GA명이나 주소를 검색해 주세요.'" />
+
       <div class="wrap-total-count">총 <strong>4</strong>건을 찾았어요.</div>
       <div class="wrap-insurance-list">
-        <button 
-          v-for="item in insuranceList" 
-          :key="item.id"
-          class="item"
-          @click="clickAgency(item)"
-        >
+        <button v-for="item in insuranceList" :key="item.id" class="item" @click="clickAgency(item)">
           <div class="wrap-info">
             <div class="name-insurance">{{ item.label }}</div>
             <div class="address-insurance">{{ item.address }}</div>
@@ -33,7 +29,13 @@
         </button>
       </div>
       <ButtonGroup class="is-fixed">
-        <Button btn-type="primary" element-type="button" aria-label="소속된 GA를 찾을 수 없으신가요?" class="lg w-full medium btn-sticky" @click="clickRegisterInsuComp()" />
+        <Button
+          btn-type="primary"
+          element-type="button"
+          aria-label="소속된 GA를 찾을 수 없으신가요?"
+          class="lg w-full medium btn-sticky"
+          @click="clickRegisterInsuComp()"
+        />
       </ButtonGroup>
     </client-only>
   </BaseBody>
@@ -45,12 +47,14 @@ import BaseBody from '~/components/layout/BaseBody.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
+
+import InputText from '~/components/publishing/input/InputText.vue'
 // import { useAsyncData } from '#app'
 
 const activeLineTab = ref('accountInfo')
 const tabs = ref<Tab[]>([
   { title: 'GA', to: '/insu/claim/subrogation/serviceNotInUse/selectInsuranceCompany' },
-  { title: '보험사', to: '/insu/claim/subrogation/serviceNotInUse/insurance' },
+  { title: '보험사', to: '/insu/claim/subrogation/serviceNotInUse/insurance' }
 ])
 
 definePageMeta({
@@ -136,7 +140,7 @@ onMounted(() => {
   }
 }
 .wrap-insurance-list {
-  border-top: 0.1rem solid #EEEEEE;
+  border-top: 0.1rem solid #eeeeee;
   margin: 0 -2rem;
   padding: 0 2rem;
   .item {
@@ -146,7 +150,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     &:not(:first-child) {
-      border-top: 0.1rem solid #EEEEEE;
+      border-top: 0.1rem solid #eeeeee;
     }
     .wrap-info {
       margin-left: 0.4rem;

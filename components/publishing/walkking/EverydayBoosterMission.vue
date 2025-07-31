@@ -1,6 +1,6 @@
 <template>
   <div class="booster-wrap">
-    <div :class="['everyday-booster-box', { hidden: isHidden }]" @click="showBooster">
+    <!-- <div :class="['everyday-booster-box', { hidden: isHidden }]" @click="showBooster">
       <div class="mission-box">
         <div class="circle-progressbar-box">
           <svg>
@@ -16,7 +16,7 @@
         </div>
         <h5>매일 부스터 미션!!</h5>
       </div>
-    </div>
+    </div> -->
     <button :class="['booster-box', { visible: isVisible }]" @click="hideBooster">
       <LottieAnimation
         src="/animations/booster.json"
@@ -77,12 +77,14 @@ const hideBooster = () => {
 .booster-wrap {
   z-index: 100;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  // left: 50%;
+  // transform: translateX(-50%);
+  right: 2rem;
   bottom: 0.8rem;
   gap: 1.6rem;
+  width: calc(100% - 4rem);
 }
 .everyday-booster-box {
   width: 20rem;

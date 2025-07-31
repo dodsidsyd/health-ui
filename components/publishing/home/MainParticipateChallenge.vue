@@ -48,6 +48,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
+import dummyImage1 from '~/assets/images/home/img-challenge-main.svg'
+import dummyImage2 from '~/assets/images/home/img-private-game.svg'
 
 // 슬라이드 데이터 타입 정의
 interface ChallengeSlide {
@@ -71,8 +73,6 @@ interface ChallengeSlide {
 interface Props {
   slides?: ChallengeSlide[]
 }
-import dummyImage1 from '~/assets/images/home/img-challenge-main.svg'
-import dummyImage2 from '~/assets/images/home/img-private-game.svg'
 
 // 배경 패턴 생성 공통 함수
 const generateBackgroundPattern = (colorHex: string): string => {

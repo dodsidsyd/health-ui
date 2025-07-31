@@ -9,9 +9,9 @@
                 showSearchBtn: 검색 버튼 표시 여부 
             -->
       <BaseHeader
-        v-if="showHeader"
+        v-if="headerOptions.showHeader"
         :title="headerTitle"
-        :show-back-button="showBackButton"
+        :show-back-button="headerOptions.showBackButton"
         :back-ground="headerOptions.backGround"
         :logo-type="headerOptions.logoType"
         :logo-type-with-back="headerOptions.logoTypeWithBack"
@@ -32,10 +32,15 @@
         :is-center-title="headerOptions.isCenterTitle"
         :has-add-text="headerOptions.hasAddText"
         :add-text="headerOptions.addText"
+        :add-text-click-enabled="headerOptions.addTextClickEnabled"
         :has-add-text-left="headerOptions.hasAddTextLeft"
         :add-text-left="headerOptions.addTextLeft"
         :has-close-btn="headerOptions.hasCloseBtn"
         :is-transparent="headerOptions.isTransparent"
+        :white-logo="headerOptions.whiteLogo"
+        :has-insu="headerOptions.hasInsu"
+        :insu-status="headerOptions.insuStatus"
+        :has-my-info="headerOptions.hasMyInfo"
         @go-back="handleGoBack"
         @close="handleClose"
         @toggle-sidebar="handleToggleSidebar"
@@ -115,6 +120,7 @@ const headerOptions = ref({
   // 추가 텍스트 옵션
   hasAddText: false,
   addText: '',
+  addTextClickEnabled: false,
   hasAddTextLeft: false,
   addTextLeft: '',
 
@@ -122,45 +128,43 @@ const headerOptions = ref({
   hasCloseBtn: false,
 
   // 투명 배경 옵션
-  isTransparent: false
+  isTransparent: false,
+
+  // 화이트 로고 옵션
+  whiteLogo: false,
+
+  // 청구의신 my 병원
+  hasInsu: false,
+  insuStatus: 'unregistered',
+
+  // 커뮤니티 마이프로필
+  hasMyInfo: false
 })
 
 // 페이지에서 사용할 수 있도록 provide
 provide('setHeaderOptions', (options: Partial<typeof headerOptions.value>) => {
-  console.log('\n=== setHeaderOptions called in default.vue ===')
-  console.log('Before update - headerOptions.value:', headerOptions.value)
-  console.log('Received options:', options)
-
-  // showBackButton 상세 로그
-  if (options.showBackButton !== undefined) {
-    console.log('🔴 Setting showBackButton to:', options.showBackButton, '(type:', typeof options.showBackButton, ')')
-  }
-  if (options.pageTitle) {
-    console.log('🟢 Setting pageTitle to:', options.pageTitle)
-  }
-  if (options.logoType) {
-    console.log('🟢 Setting logoType to:', options.logoType)
-  }
-
   // 즉시 업데이트
   Object.assign(headerOptions.value, options)
 
   // nextTick을 사용해 다음 프레임에서 한 번 더 업데이트 (안전장치)
   nextTick(() => {
     Object.assign(headerOptions.value, options)
-    console.log('After nextTick update - headerOptions.value:', headerOptions.value)
   })
 
-  console.log('After immediate update - headerOptions.value:', headerOptions.value)
-  console.log('=== end setHeaderOptions ===')
+  // 디버깅용 로그 간소화
+  if (options.hasInsu || options.insuStatus) {
+    console.log('Header options updated:', {
+      hasInsu: options.hasInsu,
+      insuStatus: options.insuStatus,
+      pageTitle: options.pageTitle
+    })
+  }
 })
 
 // 라우트 변경 감지하여 헤더 상태 리셋
 watch(
   () => route.path,
   newPath => {
-    console.log('Route changed to:', newPath)
-
     // 헤더 옵션 초기화 (기본값으로 리셋)
     headerOptions.value = {
       showHeader: true,
@@ -179,6 +183,7 @@ watch(
       hasSetting: false,
       hasSearch: false,
       hasChat: false,
+      hasScrap: false,
       hasShare: false,
       hasMenu: false,
       notificationCount: 0,
@@ -186,10 +191,15 @@ watch(
       isCenterTitle: false,
       hasAddText: false,
       addText: '',
+      addTextClickEnabled: false,
       hasAddTextLeft: false,
       addTextLeft: '',
       hasCloseBtn: false,
-      isTransparent: false
+      isTransparent: false,
+      whiteLogo: false,
+      hasInsu: false,
+      insuStatus: 'unregistered',
+      hasMyInfo: false
     }
   },
   { immediate: false }
@@ -199,7 +209,6 @@ watch(
 const headerTitle = computed(() => {
   // 페이지에서 사용자 정의 제목이 있으면 우선 사용
   if (headerOptions.value.pageTitle) {
-    console.log('headerTitle from pageTitle:', headerOptions.value.pageTitle)
     return headerOptions.value.pageTitle
   }
 
@@ -214,7 +223,7 @@ const headerTitle = computed(() => {
       case '/common/home':
         routeTitle = '건강의신'
         break
-      case '/walkingKing':
+      case '/walkingKing/subHome':
         routeTitle = '걷기왕'
         break
       case '/community':
@@ -240,8 +249,12 @@ const showTabbar = computed(() => {
   // BaseTabbar가 표시될 페이지 경로들
   const tabbarPages = [
     '/common/home',
+    '/walkingKing/subHome',
     '/walkingKing/individualChallengeHomeType1',
+    '/walkingKing/privateGameHome',
     '/community',
+    '/community/diary',
+    '/community/familycare',
     '/insu',
     '/common/wholeMenu'
   ]
@@ -318,7 +331,7 @@ const handleAddTextClick = () => {
 const tabs = [
   { path: '/common/home', icon: 'c-home', label: '홈' },
   {
-    path: '/walkingKing',
+    path: '/walkingKing/subHome',
     icon: 'c-walkiing-king',
     label: '걷기왕'
   },

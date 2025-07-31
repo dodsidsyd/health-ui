@@ -7,12 +7,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// Props 정의
+export type BadgeColorType =
+  | 'default'
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'purple'
+  | 'brown'
+  | 'gray'
+  | 'deepRed'
 interface Props {
-  color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown' | 'gray' | 'deepRed'
-  variant?: 'solid' | 'outline' | 'soft'
+  color?: BadgeColorType
+  variant?: 'solid' | 'outline' | 'soft' | 'round'
 }
-
 const props = withDefaults(defineProps<Props>(), {
   color: 'default',
   variant: 'soft'
@@ -136,6 +145,35 @@ const badgeClasses = computed(() => {
     &.badge-solid {
       color: white;
       background: #919191;
+    }
+  }
+  &.badge-round {
+    padding: 0.3rem 0.8rem;
+    border-radius: 1.1rem;
+    line-height: 1.7rem;
+    &.badge-blue {
+      color: #002988;
+      background-color: #e0e9ff;
+    }
+    &.badge-green {
+      color: #314a00;
+      background-color: #e2edbb;
+    }
+    &.badge-yellow {
+      color: #5d4a00;
+      background-color: #faeaa9;
+    }
+    &.badge-orange {
+      color: #b42800;
+      background-color: #ffdab7;
+    }
+    &.badge-red {
+      color: #850000;
+      background-color: #ffc6c6;
+    }
+    &.badge-purple {
+      color: #17009c;
+      background-color: #dcd5ff;
     }
   }
 }

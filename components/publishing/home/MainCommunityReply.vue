@@ -9,13 +9,6 @@
       <div
         :ref="el => setSliderRef(el, sliderIndex)"
         class="community-reply-swiper"
-        @touchstart="e => handleTouchStart(e, sliderIndex)"
-        @touchmove="e => handleTouchMove(e, sliderIndex)"
-        @touchend="() => handleTouchEnd(sliderIndex)"
-        @mousedown="e => handleMouseDown(e, sliderIndex)"
-        @mousemove="e => handleMouseMove(e, sliderIndex)"
-        @mouseup="() => handleMouseUp(sliderIndex)"
-        @mouseleave="() => handleMouseUp(sliderIndex)"
         :style="{
           transform: `translateX(${dragOffsets[sliderIndex] || 0}px)`,
           transition: isTransitioning[sliderIndex]
@@ -24,6 +17,13 @@
               ? 'none'
               : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }"
+        @touchstart="e => handleTouchStart(e, sliderIndex)"
+        @touchmove="e => handleTouchMove(e, sliderIndex)"
+        @touchend="() => handleTouchEnd(sliderIndex)"
+        @mousedown="e => handleMouseDown(e, sliderIndex)"
+        @mousemove="e => handleMouseMove(e, sliderIndex)"
+        @mouseup="() => handleMouseUp(sliderIndex)"
+        @mouseleave="() => handleMouseUp(sliderIndex)"
       >
         <div
           v-for="(item, itemIndex) in slider"
@@ -31,11 +31,12 @@
           class="community-item"
           :class="{
             'blue-type': item.type === 'blue-type',
-            new: item.type === 'new'
+            new: item.type === 'new',
+            more: item.type === 'more'
           }"
         >
           <nuxt-link :to="item.link || 'javascript:void(0)'" @click="e => handleLinkClick(e, sliderIndex, item)">
-            <i class="icon-wrap">
+            <i class="icon-wrap" v-if="item.type !== 'more'">
               <img :src="item.icon" alt="" />
             </i>
             {{ item.text }}
@@ -49,11 +50,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue'
 
+import dummyIcon from '~/assets/images/home/ico-dummy.svg'
+import dummyIcon2 from '~/assets/images/home/ico-dummy2.svg'
+
 // Props 정의
 interface CommunityItem {
   id: string | number
   text: string
-  type?: 'blue-type' | 'new' | 'default'
+  type?: 'blue-type' | 'new' | 'more' | 'default' // 더보기 타입 추가
   link?: string
   icon?: string
 }
@@ -62,9 +66,6 @@ interface Props {
   sliders?: CommunityItem[][]
   rightMargin?: number // 마지막 드래그 종료 시 우측 여백 (px)
 }
-
-import dummyIcon from '~/assets/images/home/ico-dummy.svg'
-import dummyIcon2 from '~/assets/images/home/ico-dummy2.svg'
 
 const props = withDefaults(defineProps<Props>(), {
   rightMargin: 40,
@@ -77,7 +78,8 @@ const props = withDefaults(defineProps<Props>(), {
     [
       { id: 4, text: '새로운 댓글 3개', type: 'new', link: '', icon: dummyIcon },
       { id: 5, text: '새로운 댓글 3개', type: 'default', link: '', icon: dummyIcon },
-      { id: 6, text: '추가 댓글 7개', type: 'default', link: '', icon: dummyIcon }
+      { id: 6, text: '추가 댓글 7개', type: 'default', link: '', icon: dummyIcon },
+      { id: 'more-1', text: '더보기', type: 'more', link: 'javascipt:void(0)' } // 5개 이상일 경우 추가
     ],
     [
       { id: 7, text: '오늘의 한마디 : 내가 가장 행복한 순간', type: 'default', link: '', icon: dummyIcon },
@@ -437,6 +439,18 @@ defineExpose({
             right: 0.6rem;
             top: 0rem;
             z-index: 2;
+          }
+        }
+
+        &.more {
+          > a {
+            font-size: 0;
+            width: 5.2rem;
+            height: 5.2rem;
+            background-size: 2.4rem;
+            background-repeat: no-repeat;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M11.9998 4.80078L11.9998 19.2008M19.1998 12.0008L4.7998 12.0008' stroke='%23555555' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-position: center;
           }
         }
 

@@ -367,6 +367,40 @@ hr ~ hr {
       left: 0;
       width: 2.4rem;
       height: 2.4rem;
+      &.ico-bell-on {
+        transform-origin: 50% 0%;
+        animation-name: shake;
+        animation-duration: 1s;
+      }
+      @keyframes shake {
+        0% {
+          transform: rotate(0deg);
+        }
+        10% {
+          transform: rotate(10deg);
+        }
+        20% {
+          transform: rotate(-10deg);
+        }
+        30% {
+          transform: rotate(5deg);
+        }
+        40% {
+          transform: rotate(-5deg);
+        }
+        50% {
+          transform: rotate(2deg);
+        }
+        60% {
+          transform: rotate(-2deg);
+        }
+        70% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
     }
   }
 }

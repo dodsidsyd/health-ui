@@ -214,7 +214,7 @@ function onKeypadClick(key: number | string) {
 }
 
 const clickFindHospitals = () => {
-  navigateTo('/insu/SuccessFIndHospitals')
+  navigateTo('/insu/claim/successFindHospitals')
 }
 
 // 주민등록번호 앞자리 입력이 6글자 완료되면 모달 열기

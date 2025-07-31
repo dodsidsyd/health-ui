@@ -8,15 +8,14 @@
     @click="btnevtClick"
     :style="buttonStyle"
   >
+    <img v-if="imageSrc && iconPosition === 'left'" :src="imageSrc" alt="버튼 이미지" class="btn-image" />
     <!-- 아이콘이 텍스트 앞에 있을 때 -->
     <i
       v-if="icon && iconPosition === 'left'"
-      :class="`${icon}`"
+      :class="`icon ${icon}`"
       :style="{
-        width: `${iconSize}px`,
-        height: `${iconSize}px`,
-        marginRight: '4px',
-        backgroundPosition: 'center'
+        ...iconStyle,
+        marginRight: '4px'
       }"
       aria-hidden="true"
     ></i>
@@ -27,12 +26,10 @@
     <!-- 아이콘이 텍스트 뒤에 있을 때 -->
     <i
       v-if="icon && iconPosition === 'right'"
-      :class="`${icon}`"
+      :class="`icon ${icon}`"
       :style="{
-        width: `${iconSize}px`,
-        height: `${iconSize}px`,
-        marginLeft: '4px',
-        backgroundPosition: 'center'
+        ...iconStyle,
+        marginLeft: '4px'
       }"
       aria-hidden="true"
     ></i>
@@ -62,6 +59,10 @@ const props = defineProps({
     type: Number,
     default: 18 // 아이콘 크기
   },
+  iconColor: {
+    type: String,
+    default: '' // 아이콘 색상
+  },
   ariaLabel: {
     type: String,
     default: '' // 접근성 레이블
@@ -90,6 +91,14 @@ const props = defineProps({
   borderRadius: {
     type: Number,
     default: ''
+  },
+  imageSrc: {
+    type: String,
+    default: ''
+  },
+  imageSize: {
+    type: Number,
+    default: 24
   }
 })
 
@@ -98,6 +107,32 @@ const emit = defineEmits(['click'])
 
 // 버튼 클래스 계산
 const buttonClass = computed(() => [`btn-${props.btnType}`])
+
+// 아이콘 색상 계산
+const iconStyle = computed(() => {
+  const style: Record<string, string> = {
+    width: `${props.iconSize}px`,
+    height: `${props.iconSize}px`,
+    backgroundPosition: 'center'
+  }
+
+  if (props.iconColor) {
+    // Hex 색상인지 확인 (#으로 시작하는지)
+    if (props.iconColor.startsWith('#')) {
+      // Hex 색상을 CSS filter로 변환
+      const hex = props.iconColor.replace('#', '')
+      const r = parseInt(hex.substr(0, 2), 16)
+      const g = parseInt(hex.substr(2, 2), 16)
+      const b = parseInt(hex.substr(4, 2), 16)
+      style.filter = `brightness(0) saturate(100%) invert(${r / 255}) sepia(${g / 255}) saturate(${b / 255})`
+    } else {
+      // 기존 방식 (0-1 사이의 값)
+      style.filter = `brightness(0) saturate(100%) invert(${props.iconColor})`
+    }
+  }
+
+  return style
+})
 
 // 버튼 스타일 계산
 const buttonStyle = computed(() => {
@@ -118,7 +153,7 @@ const defaultSlotText = computed(() => {
     line: 'Button',
     link: 'Link'
   }
-  return defaultTextMap[props.btnType as keyof typeof defaultTextMap] || 'Button'
+  return defaultTextMap[props.btnType as keyof typeof defaultTextMap] || ''
 })
 
 // 클릭 핸들러
@@ -162,6 +197,13 @@ const btnevtClick = (event: MouseEvent) => {
         color: rgba(149, 149, 149, 1);
       }
     }
+  }
+  .btn-image {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: block;
+    border-radius: 50%;
+    margin-right: 0.4rem;
   }
   // has border
   &.btn-sticky {
@@ -226,6 +268,19 @@ const btnevtClick = (event: MouseEvent) => {
     }
     &.hasDashed {
       outline: 1px dashed #e2e2e2;
+    }
+    &.gray {
+      .text {
+        color: #555;
+      }
+    }
+    &.beg-selected {
+      background-color: #fff9df;
+      outline: 1px solid #fbc700;
+    }
+    &.gift-selected {
+      background-color: #e7f4ff;
+      outline: 1px solid #4c7ff7;
     }
   }
   &.btn-text {

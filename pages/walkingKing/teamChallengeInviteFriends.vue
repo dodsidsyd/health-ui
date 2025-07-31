@@ -12,22 +12,32 @@
     </FlexColDiv>
     <ButtonGroup asymmetric class="is-fixed">
       <Button btn-type="secondary" element-type="button" aria-label="취소" class="lg btn-sticky" />
-      <Button btn-type="primary" element-type="button" aria-label="초대하기" class="lg btn-sticky" />
+      <Button btn-type="primary" element-type="button" aria-label="초대하기" class="lg btn-sticky" @click="goBack" />
     </ButtonGroup>
   </BaseBody>
+  <BottomToastSlot v-model="showToast" type="success" :duration="3000">
+    <p>챌린지 초대가 발송되었습니다.</p></BottomToastSlot
+  >
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import BottomToastSlot from '~/components/common/bottomToastSlot.vue'
 import FriendsCheckBox from '~/components/publishing/walkking/FriendsCheckBox.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
-import FlexSection from '~/components/page/FlexSection.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
-import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
+const showToast = ref(false) // 토스트 표시 상태
 const checkboxes = ref(Array(8).fill(false))
+const router = useRouter()
+const goBack = () => {
+  showToast.value = true
+  setTimeout(() => {
+    showToast.value = false
+    router.back()
+  }, 1000)
+}
 </script>
 
 <style scoped lang="scss"></style>

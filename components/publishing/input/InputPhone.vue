@@ -4,7 +4,7 @@
       <label v-if="label" :for="inputId" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">{{
         label
       }}</label>
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <div class="custom-select phone">
           <Select
             v-model="selectedCarrier"
@@ -73,7 +73,8 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
   customCarriers: { type: Array as () => CarrierOption[], default: () => [] },
-  userName: { type: String, default: '홍길동' } // 토스트에 표시할 사용자 이름
+  userName: { type: String, default: '홍길동' }, // 토스트에 표시할 사용자 이름
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue', 'change', 'verify'])
@@ -143,7 +144,15 @@ function onButtonClick() {
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
     overflow: hidden; // 내용이 넘치지 않도록
-
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
+    @include mixin.media-max-width(414) {
+      padding-right: 0.8rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;
@@ -179,6 +188,9 @@ function onButtonClick() {
         cursor: not-allowed;
         color: #959595;
       }
+      @include mixin.media-max-width(414) {
+        letter-spacing: -0.1rem;
+      }
     }
 
     .custom-select {
@@ -191,6 +203,11 @@ function onButtonClick() {
         min-width: 10rem;
         max-width: 13rem; // 최대 너비 제한
         // transparent prop으로 Select 컴포넌트가 자체적으로 투명 스타일 적용
+        @include mixin.media-max-width(414) {
+          min-width: 8rem;
+          margin-right: 0;
+          font-size: 1.3rem;
+        }
       }
     }
 
@@ -206,9 +223,13 @@ function onButtonClick() {
       font-size: 1.4rem;
       flex-shrink: 0; // 버튼은 축소되지 않도록
       @include mixin.rippleEffectPrimary;
-
       @include mixin.media-max-width(420) {
         width: 6.5rem;
+        font-size: 1.3rem;
+      }
+      @include mixin.media-max-width(414) {
+        width: 5.6rem;
+        margin-left: 0;
         font-size: 1.3rem;
       }
     }

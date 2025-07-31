@@ -30,6 +30,8 @@ interface HeaderOptions {
   hasChat?: boolean
   hasShare?: boolean
   hasMenu?: boolean
+  hasInsu?: boolean
+  insuStatus?: 'unregistered' | 'needUpdate' | 'registered'
 
   // 카운트 옵션
   notificationCount?: number
@@ -44,9 +46,11 @@ interface HeaderOptions {
   addTextLeft?: string
   // 전체화면 모달 옵션
   hasCloseBtn?: boolean
-  
+
   // 배경 투명도 옵션
   isTransparent?: boolean
+  // 화이트 로고 옵션
+  whiteLogo?: boolean
 }
 
 export const useHeader = () => {

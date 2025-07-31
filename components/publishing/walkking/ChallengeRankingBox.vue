@@ -1,5 +1,5 @@
 <template>
-  <div :class="['ranking-wrap', { me: type === 'me' }]">
+  <div class="ranking-wrap">
     <div class="ranking-box">
       <span
         class="rangking"
@@ -49,7 +49,7 @@ const fullImagePath = computed(() => {
 const props = withDefaults(
   defineProps<{
     rank: string
-    changed?: 'up' | 'down' | ''
+    changed?: string
     changedRank?: string
     src?: string
     isShowChange?: boolean
@@ -58,7 +58,6 @@ const props = withDefaults(
     userLocation?: string
     totalClass?: string
     totalNum?: string
-    type?: boolean
   }>(),
   {
     src: 'img-profile.svg',
@@ -69,8 +68,7 @@ const props = withDefaults(
     userName: '',
     userLocation: '',
     totalClass: '',
-    totalNum: '',
-    type: false
+    totalNum: ''
   }
 )
 
@@ -86,8 +84,7 @@ const totalNumFormat = computed(() => {
   align-items: center;
   justify-content: space-between;
   gap: 1.2rem;
-  padding: 1.6rem 0;
-  padding: 1.6rem 0.8rem;
+  padding: 1.6rem 0.8rem 1.6rem 0;
   border-bottom: 0.1rem solid #eee;
   @media (max-width: 375px) {
     gap: 0.8rem;
@@ -102,6 +99,7 @@ const totalNumFormat = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 5.2rem;
   .rangking {
     width: 3.2rem;
     height: 3.2rem;
@@ -167,6 +165,7 @@ const totalNumFormat = computed(() => {
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  text-align: left;
   .user-name {
     margin-bottom: 0.4rem;
     font-weight: 700;

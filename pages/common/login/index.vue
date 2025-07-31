@@ -16,10 +16,13 @@
         valid-text="비밀번호 벨리데이터 메시지"
         placeholder="비밀번호를 입력해 주세요."
       />
-      <Checkbox id="remember-login" custom-style="small" aria-label="로그인 상태 유지" />
 
-      <div class="mt-28">
+      <div>
         <Button btn-type="primary" element-type="button" aria-label="로그인" class="md medium" />
+        <p class="guide-txt">
+          건강의 신은 기본으로 자동로그인을 제공합니다.<br />
+          안전한 사용을 위해 개인 기기에서만 이용 바랍니다.
+        </p>
         <div class="find-btn-wrap flex flex-row">
           <NuxtLink to="" class="link">아이디 찾기</NuxtLink>
           <NuxtLink to="" class="link">비밀번호 재설정</NuxtLink>
@@ -34,8 +37,6 @@
 <script setup lang="ts">
 import BaseBody from '~/components/layout/BaseBody.vue'
 import Input from '~/components/publishing/input/InputText.vue'
-import Checkbox from '~/components/publishing/input/check.vue'
-
 import Button from '~/components/publishing/button/Button.vue'
 </script>
 <style scoped lang="scss">
@@ -75,5 +76,13 @@ import Button from '~/components/publishing/button/Button.vue'
   bottom: 1.6rem;
   left: 0;
   text-align: center;
+}
+.guide-txt {
+  margin: 1.6rem auto 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.8rem;
+  color: #959595;
 }
 </style>

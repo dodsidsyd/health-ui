@@ -12,7 +12,7 @@
           {{ label }}
         </template>
       </label>
-      <div class="c-inp-el">
+      <div :class="['c-inp-el', { invalid: isInvalid, lg: props.size === 'lg', sm: props.size === 'sm' }]">
         <div class="custom-select custom" @click="openBottomModal">
           <div :class="['select-display', { 'placeholder-selected': !selectedLabel }]">
             {{ selectedLabel || selectPlaceholder }}
@@ -21,7 +21,9 @@
         </div>
       </div>
     </div>
-
+    <p v-if="isInvalid" class="feedback error">
+      <span class="text">{{ validText }}</span>
+    </p>
     <!-- Teleport BottomModal to body for independence -->
     <Teleport to="body">
       <BottomModal
@@ -31,8 +33,8 @@
         :is-show-cancel-button="isShowCancelBtn"
         :is-show-confirm-button="isShowConfirmBtn"
         :is-show-close-button="isShowCloseBtn"
-        :cancel-button-text="confirmButtonText"
-        :confirm-button-text="cancelButtonText"
+        :cancel-button-text="cancelButtonText"
+        :confirm-button-text="confirmButtonText"
         :class="modalClasses"
         role="dialog"
         :aria-label="modalTitle || '옵션 선택'"
@@ -77,6 +79,7 @@ const props = defineProps({
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
+  validText: { type: String, default: '셀렉트박스 유효성 에러 메시지' }, // 유효성 검사 메시지 추가
   inpType: { type: String, default: '' },
   transparent: { type: Boolean, default: false },
   isShowCloseBtn: { type: Boolean, default: true },
@@ -84,7 +87,8 @@ const props = defineProps({
   isShowConfirmBtn: { type: Boolean, default: true },
   cancelButtonText: { type: String, default: '취소' },
   confirmButtonText: { type: String, default: '확인' },
-  customOpts: { type: Array as () => OptionType[], default: () => [] } // camelCase로 통일
+  customOpts: { type: Array as () => OptionType[], default: () => [] }, // camelCase로 통일
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
@@ -365,12 +369,18 @@ onUnmounted(() => {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus {
       background: #f6f9ff;
       border-color: #4c7ff7;
     }
-    &:has(.c-inp.is-invalid) {
+    &.invalid {
       border-color: #f14960;
     }
     &:has(.c-inp:read-only) {
@@ -455,6 +465,9 @@ onUnmounted(() => {
         @media (max-width: 420px) {
           font-size: 1.4rem;
           min-width: 8rem;
+        }
+        @include mixin.media-max-width(414) {
+          font-size: 1.3rem;
         }
 
         &.placeholder-selected {

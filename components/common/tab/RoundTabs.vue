@@ -80,6 +80,7 @@ const tabClick = (index: number) => {
       .tab-text {
         position: relative;
         z-index: 2;
+        line-height: 2rem;
       }
 
       .tab-active-bar {

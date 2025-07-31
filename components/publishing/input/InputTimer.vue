@@ -2,10 +2,10 @@
   <div class="c-input">
     <div class="c-inpType">
       <label v-if="label" :for="inputId" class="c-label">{{ label }}</label>
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
-          :name="name"
           :id="inputId"
+          :name="name"
           :placeholder="placeholder"
           :value="modelValue"
           :readonly="readonly"
@@ -16,7 +16,7 @@
         <span class="input-timer">{{ formattedTime }}</span>
       </div>
       <p v-if="isInvalid" class="feedback error">
-        <span class="text">메세지를 입력하세요</span>
+        <span class="text">{{ errorMessage }}</span>
       </p>
     </div>
   </div>
@@ -30,6 +30,7 @@ interface OptionType {
 }
 
 const props = defineProps({
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' },
   label: { type: String, default: '' },
   name: { type: String, default: '' },
   placeholder: { type: String, default: '입력하세요' },
@@ -37,7 +38,8 @@ const props = defineProps({
   timer: { type: Boolean, default: true },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  isInvalid: { type: Boolean, default: false }
+  isInvalid: { type: Boolean, default: false },
+  errorMessage: { type: String, default: '메세지를 입력하세요' }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -119,6 +121,12 @@ function onInput(e: Event) {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;

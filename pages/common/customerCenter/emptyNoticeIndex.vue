@@ -1,6 +1,6 @@
 <template>
   <BaseBody page-title="공지사항" :show-back-button="true">
-    <InputText inp-type="search" placeholder="키워드를 입력해주세요."></InputText>
+    <InputText inp-type="search" placeholder="키워드를 입력해주세요." />
     <TotalCountBtnType :count="0" class="mg-21y" />
     <EmptyNoticeIndexItem />
   </BaseBody>

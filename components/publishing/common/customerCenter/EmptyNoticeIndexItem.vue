@@ -2,17 +2,27 @@
   <div class="empty-notice-wrap">
     <div class="empty-notice-box">
       <div class="empty-image"></div>
-      <p>No Data 메시지 영역입니다.</p>
-      <span>No Data 메시지 영역입니다.</span>
+      <p>{{ title }}</p>
+      <span><slot name="sub-text"></slot></span>
+      <div>
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'No Data 메시지 영역입니다.'
+  }
+})
+</script>
 
 <style lang="scss" scoped>
 .empty-notice-wrap {
-  position: relative;
+  // position: relative;
   flex: 1;
   .empty-notice-box {
     position: absolute;
@@ -23,6 +33,7 @@
     width: 100%;
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
   .empty-image {
     width: 8rem;

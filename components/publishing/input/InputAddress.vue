@@ -4,7 +4,7 @@
       <label v-if="label" :for="inputId" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">{{
         label
       }}</label>
-      <div class="c-inp-el c-inp-address">
+      <div class="c-inp-el c-inp-address" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
           :id="inputId1"
           :type="type"
@@ -26,7 +26,7 @@
           @click="onAddressSearch"
         />
       </div>
-      <div class="c-inp-el">
+      <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
           :id="inputId2"
           :type="type"
@@ -79,7 +79,8 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
   validText: { type: String, default: '상세주소를 입력해 주세요.' }, // 유효성 검사 메시지
-  customOpts: { type: Array as () => OptionType[], default: () => [] }
+  customOpts: { type: Array as () => OptionType[], default: () => [] },
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -228,6 +229,12 @@ function onAddressSearch() {
     background: #fff;
     border-radius: 0.8rem;
     border: 1px solid #e2e2e2;
+    &.lg {
+      height: 5.6rem;
+    }
+    &.sm {
+      height: 4rem;
+    }
     &:hover,
     &:focus-within {
       background: #f6f9ff;

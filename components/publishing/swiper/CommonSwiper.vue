@@ -4,14 +4,19 @@
       <swiper-container
         ref="swiperContainerRef"
         :pagination="paginationEnabled"
+        :pagination-type="paginationType"
         :navigation="navigation"
         :scrollbar="scrollbarEnabled"
         :autoplay="autoplayEnabled"
         :slides-per-view="slidesPerView"
         :space-between="spaceBetween"
+        :slides-offset-before="slidesOffsetBefore"
+        :slides-offset-after="slidesOffsetAfter"
         :loop="loopEnabled"
         @swiperinit="onSwiperInit"
         @slidechange="onSlideChange"
+        @swiperslidechange="onSlideChange"
+        @slidechangetransitionend="onSlideChange"
       >
         <swiper-slide v-for="(slide, index) in slides" :key="index">
           <!-- 슬롯이 있는 경우 슬롯 사용 -->
@@ -62,7 +67,7 @@ const props = defineProps({
   },
   slideType: {
     type: String,
-    default: 'text', // 'text', 'image', 'custom'
+    default: 'text',
     validator: value => ['text', 'image', 'custom'].includes(value)
   },
   slidesPerView: {
@@ -73,6 +78,8 @@ const props = defineProps({
     type: Number,
     default: 30
   },
+  slidesOffsetBefore: { type: Number, default: 0 },
+  slidesOffsetAfter: { type: Number, default: 0 },
   navigation: {
     type: Boolean,
     default: true
@@ -80,6 +87,11 @@ const props = defineProps({
   pagination: {
     type: [Boolean, Object],
     default: true
+  },
+  paginationType: {
+    type: String,
+    default: 'bullets', // 'bullets', 'fraction', 'progressbar'
+    validator: value => ['bullets', 'fraction', 'progressbar'].includes(value)
   },
   scrollbar: {
     type: [Boolean, Object],
@@ -115,7 +127,7 @@ const emit = defineEmits(['update:currentIndex', 'swiper-init', 'slide-change'])
 
 // Variables
 const swiperContainerRef = ref(null)
-const swiper = useSwiper(swiperContainerRef)
+const swiper = ref(null)
 const currentIndex = ref(0)
 const isAutoplayActive = ref(false)
 
@@ -150,13 +162,35 @@ const autoplayEnabled = computed(() => {
 // Methods
 const onSwiperInit = event => {
   console.log('Swiper initialized:', event.detail[0])
+  swiper.value = event.detail[0]
   isAutoplayActive.value = !!props.autoplay
   emit('swiper-init', event.detail[0])
+
+  // Swiper 인스턴스에 직접 이벤트 리스너 추가
+  if (swiper.value) {
+    swiper.value.on('slideChange', () => {
+      console.log('Direct swiper slideChange event')
+      const newIndex = swiper.value.realIndex !== undefined ? swiper.value.realIndex : swiper.value.activeIndex
+      console.log('Direct event - New slide index:', newIndex)
+      currentIndex.value = newIndex
+      emit('slide-change', swiper.value)
+
+      // customPagination이 활성화된 경우에만 스타일 재적용
+      if (props.customPagination) {
+        setTimeout(() => {
+          addCustomPaginationStyles()
+        }, 50)
+      }
+    })
+  }
 }
 
 const onSlideChange = event => {
+  console.log('Slide change event:', event)
   const swiperInstance = event.detail[0]
-  currentIndex.value = swiperInstance.realIndex || swiperInstance.activeIndex
+  const newIndex = swiperInstance.realIndex !== undefined ? swiperInstance.realIndex : swiperInstance.activeIndex
+  console.log('New slide index:', newIndex)
+  currentIndex.value = newIndex
   emit('update:currentIndex', currentIndex.value + 1)
   emit('slide-change', swiperInstance)
 }
@@ -164,12 +198,66 @@ const onSlideChange = event => {
 const toggleAutoplay = () => {
   if (swiper.value) {
     if (isAutoplayActive.value) {
-      // Autoplay 정지 로직 (swiper-container에서는 다를 수 있음)
+      if (swiper.value.autoplay && swiper.value.autoplay.stop) {
+        swiper.value.autoplay.stop()
+      }
       isAutoplayActive.value = false
     } else {
-      // Autoplay 시작 로직
+      if (swiper.value.autoplay && swiper.value.autoplay.start) {
+        swiper.value.autoplay.start()
+      }
       isAutoplayActive.value = true
     }
+  }
+}
+
+// Custom Pagination 스타일 적용 함수
+const addCustomPaginationStyles = () => {
+  if (!props.customPagination) return
+
+  console.log('Applying custom pagination styles...')
+
+  // pagination 컨테이너 찾기
+  const selectors = ['.swiper-pagination', 'swiper-container .swiper-pagination', '.custom-swiper .swiper-pagination']
+
+  let paginationContainer = null
+
+  for (const selector of selectors) {
+    paginationContainer = document.querySelector(selector)
+    if (paginationContainer) {
+      console.log(`Found pagination with selector: ${selector}`)
+      break
+    }
+  }
+
+  if (paginationContainer) {
+    // customPagination 옵션에 따른 스타일 적용
+    const paginationStyle = typeof props.customPagination === 'object' ? props.customPagination : {}
+
+    const defaultStyles = {
+      position: 'relative',
+      marginTop: '2rem',
+      padding: '1rem 2rem',
+      background: 'rgba(255, 255, 255, 0.9)',
+      borderRadius: '2rem',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      border: '1px solid rgba(76, 127, 247, 0.2)',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      transition: 'all 0.3s ease',
+      zIndex: '10'
+    }
+
+    // 사용자 정의 스타일과 기본 스타일 병합
+    const finalStyles = { ...defaultStyles, ...paginationStyle }
+
+    // 스타일 적용
+    Object.assign(paginationContainer.style, finalStyles)
+
+    console.log('Applied custom pagination styles')
   }
 }
 
@@ -177,7 +265,6 @@ const toggleAutoplay = () => {
 watch(
   () => props.slides,
   () => {
-    // 슬라이드 변경 시 swiper 업데이트
     if (swiper.value) {
       setTimeout(() => {
         currentIndex.value = 0
@@ -188,8 +275,17 @@ watch(
 )
 
 onMounted(() => {
-  // 초기화 후 autoplay 상태 설정
   isAutoplayActive.value = !!props.autoplay
+
+  setTimeout(() => {
+    emit('slide-change', { activeIndex: 0, realIndex: 0 })
+  }, 100)
+
+  // customPagination이 활성화된 경우에만 스타일 적용
+  if (props.customPagination) {
+    setTimeout(() => addCustomPaginationStyles(), 300)
+    setTimeout(() => addCustomPaginationStyles(), 600)
+  }
 })
 </script>
 
@@ -292,39 +388,45 @@ button.pause:hover {
 }
 </style>
 
-<!-- Swiper Container 전역 스타일 -->
+<!-- customPagination이 활성화된 경우에만 적용되는 전역 스타일 -->
 <style>
-/* Swiper pagination bullet 커스텀 */
-swiper-container::part(bullet) {
-  background-color: #e8e8e8;
-  width: 0.8rem;
-  height: 0.8rem;
-  opacity: 1;
-  margin: 0 0.4rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+/* customPagination이 true인 경우에만 적용 */
+.custom-pagination-enabled .swiper-pagination {
+  position: relative !important;
+  margin-top: 2rem !important;
+  padding: 1rem 2rem !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 2rem !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(76, 127, 247, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transition: all 0.3s ease !important;
+  z-index: 10 !important;
 }
 
-/* Swiper pagination active bullet 커스텀 */
-swiper-container::part(bullet-active) {
-  background-color: #4f5561;
-  transform: scale(1.2);
+.custom-pagination-enabled .swiper-pagination:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Swiper navigation 버튼 커스텀 */
-swiper-container::part(button-prev),
-swiper-container::part(button-next) {
-  color: #007bff;
-  font-size: 1.8rem;
-  font-weight: bold;
+.custom-pagination-enabled .swiper-pagination-bullet {
+  background-color: #d1d5db !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  opacity: 0.5 !important;
+  margin: 0 0.5rem !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
 }
 
-/* Swiper scrollbar 커스텀 */
-swiper-container::part(scrollbar) {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-swiper-container::part(scrollbar-drag) {
-  background: #007bff;
+.custom-pagination-enabled .swiper-pagination-bullet-active {
+  background-color: #4c7ff7 !important;
+  opacity: 1 !important;
+  transform: scale(1.3) !important;
 }
 </style>

@@ -884,6 +884,13 @@ article {
   }
 }
 
+.l-page[data-page='ServiceNotInUse'] {
+  background: #f4f4f4;
+  .cbody {
+    background: #f4f4f4;
+  }
+}
+
 .l-page[data-page='Benefit'] {
   background: #f9f9f9;
   .cbody {

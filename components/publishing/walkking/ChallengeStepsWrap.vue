@@ -7,12 +7,16 @@
         <span class="time">16:15 기준</span>
       </div>
     </div>
-    <div class="boxes-wrap">
+    <div class="boxes-wrap" :class="customClass">
       <slot></slot>
     </div>
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  customClass: { type: String, default: '' }
+})
+</script>
 
 <style lang="scss" scoped>
 .steps-wrap {
@@ -42,5 +46,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8rem;
+  &.column2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>

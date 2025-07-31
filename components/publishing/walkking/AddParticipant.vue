@@ -1,9 +1,16 @@
 <template>
-  <div class="participant-profile-wrap">
+  <div class="participant-profile-wrap" @click="inviteFriends">
     <button class="img-box"></button>
     <p class="user-name">추가</p>
   </div>
 </template>
+
+<script setup lang="ts">
+const emit = defineEmits(['invite-friends'])
+const inviteFriends = () => {
+  emit('invite-friends')
+}
+</script>
 <style lang="scss" scoped>
 .participant-profile-wrap {
   display: flex;

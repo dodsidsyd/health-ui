@@ -15,7 +15,7 @@
         v-if="percentage > 0 && !noData"
         d="M 45 190 A 100 100 0 1 1 215 190"
         fill="none"
-        :stroke="progressColor"
+        :stroke="computedProgressColor"
         stroke-width="17"
         stroke-linecap="round"
         :stroke-dasharray="archLength"
@@ -27,7 +27,7 @@
     <div class="center-score-info" v-if="showEmoji">
       <div class="emoji" :class="emojiClass"></div>
       <strong class="score">{{ noData ? '-' : percentage }}점</strong>
-      <button type="button" class="vital-tooltip">활력 점수</button>
+      <button type="button" class="vital-tooltip" @click="handleTooltipClick">활력 점수</button>
     </div>
   </div>
 </template>
@@ -42,12 +42,18 @@ interface Props {
   noData?: boolean // no data 상태
 }
 
+interface Emits {
+  (e: 'tooltip-click'): void
+}
+
 const props = withDefaults(defineProps<Props>(), {
   percentage: 0,
   progressColor: '#4C7FF7',
   showEmoji: true,
   noData: false
 })
+
+const emit = defineEmits<Emits>()
 
 // 아치의 길이 계산 (실제 SVG path 길이 사용)
 const archLength = ref(0)
@@ -82,18 +88,44 @@ const emojiClass = computed(() => {
   return 'bad'
 })
 
+// percentage에 따른 progressColor 계산
+const computedProgressColor = computed(() => {
+  if (props.noData) return '#E0E0E0' // no data 상태
+
+  const score = props.percentage
+
+  // props로 전달된 progressColor가 있으면 우선 사용
+  if (props.progressColor && props.progressColor !== '#4C7FF7') {
+    return props.progressColor
+  }
+
+  // percentage에 따른 색상 자동 계산
+  if (score >= 91) return '#4C7FF7' //
+  if (score >= 81) return '#4C7FF7' //
+  if (score >= 71) return '#F4C58B' //
+  if (score >= 61) return '#FF8A65' //
+  return '#FF5252' //
+})
+
 // stroke-dashoffset 계산
 const dashOffset = computed(() => {
   const progress = Math.max(0, Math.min(100, props.percentage))
   // 시작점부터 진행률에 따라 채워지도록 수정
   return archLength.value - (archLength.value * progress) / 100
 })
+
+// tooltip 클릭 핸들러
+const handleTooltipClick = () => {
+  console.log('📈 CircleLineVitalChart - tooltip 클릭')
+  emit('tooltip-click')
+}
 </script>
 
 <style scoped lang="scss">
 .circle-vital-chart {
   position: relative;
   width: 26rem;
+  margin: 0 auto;
   .center-score-info {
     position: absolute;
     left: 0;
@@ -121,11 +153,18 @@ const dashOffset = computed(() => {
     }
     .vital-tooltip {
       font-size: 1.6rem;
-      font-size: 500;
+      font-weight: 500;
       color: #555;
       display: flex;
       gap: 0 0.2rem;
       align-items: center;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      
+      &:hover {
+        color: #4c7ff7;
+      }
+      
       &:after {
         content: '';
         display: block;
@@ -135,12 +174,17 @@ const dashOffset = computed(() => {
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
+        transition: opacity 0.2s ease;
+      }
+      
+      &:hover:after {
+        opacity: 0.7;
       }
     }
   }
-  // 진행률 변화 애니메이션
+  // 진행률 변화 애니메이션 (더 빠르고 부드럽게)
   .progress-arch {
-    transition: stroke-dashoffset 0.5s ease-in-out;
+    transition: stroke-dashoffset 0.3s ease-out;
   }
 }
 </style>

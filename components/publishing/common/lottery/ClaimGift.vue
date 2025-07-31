@@ -18,6 +18,7 @@
 import { defineProps } from 'vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import InputNum from '~/components/publishing/input/InputNum.vue'
+
 const props = defineProps({
   imageName: { type: String, default: '' },
   brandName: { type: String, default: '브랜드' },
@@ -30,6 +31,7 @@ const props = defineProps({
   margin-top: 1.6rem;
   .gift-detail-box {
     display: flex;
+    align-items: flex-start;
     margin-bottom: 1.6rem;
     img {
       width: 8.8rem;
