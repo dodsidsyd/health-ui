@@ -86,6 +86,7 @@
       align-items: center;
       text-align: center;
       vertical-align: middle;
+      padding-bottom: 0;
     }
   }
   // 전체 화면 (기본 설정 - FullModal 컴포넌트용 스타일은 하단에 별도 정의)
@@ -143,12 +144,21 @@
     }
     .c-modal-inner {
       z-index: calc(var(--c-modal-z-index) + 1);
-      min-width: 17.5rem;
-      max-width: calc(100% - 2rem);
+      // min-width: 22.5rem;
+      // max-width: calc(100% - 2rem);
+      // min-width: calc(100% - 4rem);
+      min-width: 30rem;
+      max-width: calc(100% - 4rem);
       max-height: calc(100% - 2rem);
       transform: translateY(0);
       opacity: 1;
       animation: modalPosition 0.2s ease forwards;
+    }
+    @media (min-width: 750px) {
+      .c-modal-inner {
+        // min-width: 22.5rem;
+        max-width: calc(100% - 2rem);
+      }
     }
     // 활성화시 하단 위치
     &.bottom {
@@ -762,7 +772,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: none;
+      background-color: none;
       border: none;
       cursor: pointer;
 
@@ -827,12 +837,16 @@
     height: 7.2rem;
   }
   .c-modal-body {
-    padding: 0 2rem;
+    padding: 0 2rem 5.6rem;
     background-color: #e7f4ff;
   }
   .c-modal-footer {
     background-color: vars.$white;
     padding: 0.8rem 1.6rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     .dm-footer-input {
       display: flex;
       flex: 1;

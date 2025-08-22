@@ -71,11 +71,21 @@ const handleCompleted = () => {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  position:relative;
   overflow: hidden;
   padding: 2.4rem 2rem 2rem;
   border-radius: 2rem;
   background: #f4f4f4;
-
+  &:after {
+    display:block;
+    content:'';
+    position:absolute;
+    top:2.4rem;
+    right:2rem;
+    width:6.75rem;
+    height:7.5rem;
+    background:url()
+  }
   .title {
     font-size: 1.8rem;
     line-height: 2.5rem;

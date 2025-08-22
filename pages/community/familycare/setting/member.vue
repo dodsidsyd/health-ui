@@ -1,9 +1,18 @@
 <template>
-  <BaseBody>
-    <DevOnly>커뮤니티-패밀리 케어-멤버리스트/편집하기</DevOnly>
+  <BaseBody
+    :show-back-button="true"
+    page-title="멤버 리스트"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    :add-text="'저장하기'"
+  >
+    <ManageMemberList />
   </BaseBody>
 </template>
 
 <script setup lang="ts">
 import BaseBody from '~/components/layout/BaseBody.vue'
+import ManageMemberList from '~/components/publishing/community/familyCare/ManageMemberList.vue'
 </script>
+
+<style scoped lang="scss"></style>

@@ -9,7 +9,11 @@
     class="pb-60"
   >
     <div class="wrap-success-main">
-      <img class="img-complete" src="/assets/images/insu/subrogation/img-completed.png" alt="대리청구 서비스 가입 완료" />
+      <img
+        class="img-complete"
+        src="/assets/images/insu/subrogation/img-completed.png"
+        alt="대리청구 서비스 가입 완료"
+      />
       <h2 class="tit">대리청구 서비스 가입을<br />완료했어요</h2>
     </div>
     <div class="wrap-success-adv">
@@ -17,8 +21,20 @@
         <div class="tit">가입 고객을 위한 선물</div>
         <div class="tit-sub">대리청구 <strong>무제한 이용!</strong><br />보험 영업 지원 혜택까지!!</div>
       </div>
-      <Button btn-type="primary" element-type="button" aria-label="구독 신청하고 혜택받기" class="mt-16 lg w-full medium"  @click="movePage" />
-      <Button btn-type="text" element-type="button" aria-label="나중에 이용하기" class="btn-line hasLine xs" @click="movePage" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="구독 신청하고 혜택받기"
+        class="mt-16 w-full medium"
+        @click="movePage"
+      />
+      <Button
+        btn-type="text"
+        element-type="button"
+        aria-label="나중에 이용하기"
+        class="btn-line hasLine xs"
+        @click="movePage"
+      />
       <!-- <button style="padding: 0.75rem; background-color: #4299e1; color: white; border-radius: 0.75rem">
         구독 신청하고 혜택 받기
       </button> -->
@@ -59,7 +75,7 @@ const movePage = () => {
 .wrap-success-adv {
   padding: 2.4rem 2rem 2rem;
   border-radius: 1.2rem;
-  background: url('/assets/images/insu/subrogation/img-success-bg.png') top 0.8rem right no-repeat #E8EEFA;
+  background: url('/assets/images/insu/subrogation/img-success-bg.png') top 0.8rem right no-repeat #e8eefa;
   background-size: auto;
   .adv-info {
     .tit {
@@ -72,7 +88,7 @@ const movePage = () => {
       font-weight: 700;
       line-height: 130%;
       strong {
-        color: #4C7FF7;
+        color: #4c7ff7;
       }
     }
   }

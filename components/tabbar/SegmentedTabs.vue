@@ -174,7 +174,7 @@ const updateTabStyles = () => {
     position: relative;
     width: 100%;
     border-radius: 0.6rem;
-    padding: 0.3rem 0;
+    // padding: 0.3rem 0;
     gap: 0;
     .tab-link {
       display: inline-flex;
@@ -229,7 +229,7 @@ const updateTabStyles = () => {
   .segmented-tabs {
     .tabs-container {
       .tab-link {
-        padding: 1.2rem 0.8rem;
+        padding: 1.2rem 0.6rem;
       }
     }
   }

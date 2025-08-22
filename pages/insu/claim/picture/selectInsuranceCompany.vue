@@ -3,16 +3,14 @@
     :show-back-button="true"
     page-title="사진찍어 청구"
     logo-type="text"
-    :has-notification="false"
+    :has-notification="true"
     :has-reward="false"
     :has-add-text-left="true"
     class="pb-36"
   >
     <div class="agree-wrap flex flex-col gap-10 mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          보험사를 선택해주세요.
-        </span>
+        <span class="text"> 보험사를 선택해주세요. </span>
       </h1>
     </div>
     <FlexSection class="mt-32">
@@ -75,19 +73,39 @@
           <Checkbox id="checkBox1" v-model="checkbox1" custom-style="button agree-all" aria-label="약관전체 동의" />
           <ul class="agree-list">
             <li class="item" @click="showDetailTerm">
-              <Checkbox id="checkBox2" v-model="checkbox2" custom-style="small non-border" aria-label="수집 · 이용에 관한 사항" />
+              <Checkbox
+                id="checkBox2"
+                v-model="checkbox2"
+                custom-style="small non-border"
+                aria-label="수집 · 이용에 관한 사항"
+              />
               <i class="icon-arrow-right"></i>
             </li>
             <li class="item" @click="showDetailTerm">
-              <Checkbox id="checkBox3" v-model="checkbox3" custom-style="small non-border" aria-label="국내 제공에 관한 사항" />
+              <Checkbox
+                id="checkBox3"
+                v-model="checkbox3"
+                custom-style="small non-border"
+                aria-label="국내 제공에 관한 사항"
+              />
               <i class="icon-arrow-right"></i>
             </li>
             <li class="item" @click="showDetailTerm">
-              <Checkbox id="checkBox4" v-model="checkbox4" custom-style="small non-border" aria-label="국외 제3자 제공에 관한 사항" />
+              <Checkbox
+                id="checkBox4"
+                v-model="checkbox4"
+                custom-style="small non-border"
+                aria-label="국외 제3자 제공에 관한 사항"
+              />
               <i class="icon-arrow-right"></i>
             </li>
             <li class="item" @click="showDetailTerm">
-              <Checkbox id="checkBox5" v-model="checkbox5" custom-style="small non-border" aria-label="조회에 관한 사항" />
+              <Checkbox
+                id="checkBox5"
+                v-model="checkbox5"
+                custom-style="small non-border"
+                aria-label="조회에 관한 사항"
+              />
               <i class="icon-arrow-right"></i>
             </li>
           </ul>
@@ -115,15 +133,9 @@
           <div class="semibold">제2조(용어의 정의)</div>
           본 약관에서 사용하는 용어의 정의는 다음과 같습니다.
           <ol class="num-type">
-            <li>
-              보험약관내용을 입력해주세요.
-            </li>
-            <li>
-              보험약관내용을 입력해주세요.
-            </li>
-            <li>
-              보험약관내용을 입력해주세요.
-            </li>
+            <li>보험약관내용을 입력해주세요.</li>
+            <li>보험약관내용을 입력해주세요.</li>
+            <li>보험약관내용을 입력해주세요.</li>
           </ol>
         </div>
       </div>
@@ -149,7 +161,7 @@ const activeRoundTab = ref('option1')
 // RoundTabs 데이터
 const roundTabs = ref<RoundTab[]>([
   { title: '손해보험', key: 'option1' },
-  { title: '생명보험', key: 'option2' },
+  { title: '생명보험', key: 'option2' }
 ])
 
 // RoundTabs 이벤트 핸들러
@@ -160,7 +172,6 @@ const onRoundTabChange = (key: string) => {
 
 const isShowAgreeModal = ref(false)
 const isShowDetailTerm = ref(false)
-
 
 const clickInsurance = () => {
   isShowAgreeModal.value = !isShowAgreeModal.value
@@ -192,13 +203,13 @@ const clickNext = () => {
 .section-tit {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #2B2B2B;
+  color: #2b2b2b;
 }
 .wrap-insurance-list {
   margin-top: 1.2rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-	grid-auto-columns: auto;
+  grid-auto-columns: auto;
   gap: 0.8rem;
   .item {
     padding: 1.8rem 1.6rem 1.4rem;
@@ -207,7 +218,7 @@ const clickNext = () => {
     gap: 0.4rem;
     align-items: center;
     border-radius: 0.8rem;
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
     .logo-insurance {
       width: 4rem;
       height: 4rem;
@@ -215,7 +226,7 @@ const clickNext = () => {
     .name-insurance {
       font-size: 1.4rem;
       font-weight: 500;
-      color: #2B2B2B;
+      color: #2b2b2b;
     }
   }
 }
@@ -266,14 +277,14 @@ const clickNext = () => {
       counter-reset: list-counter;
       padding-left: 0;
       margin: 0;
-  
+
       li {
         counter-increment: list-counter;
         position: relative;
         padding-left: 2.4rem;
         margin-bottom: 0.8rem;
         line-height: 1.6;
-  
+
         &::before {
           content: '(' counter(list-counter) ')';
           position: absolute;

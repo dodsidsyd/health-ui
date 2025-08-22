@@ -8,6 +8,7 @@
     <CurrentMoodSection />
     <hr class="hr-section mt-32 ml-n20 mr-n20" />
     <MoodDiarySection />
+    <DiaryFloating />
   </BaseBody>
 </template>
 
@@ -21,6 +22,7 @@ import EmojiSection from '~/components/publishing/community/diary/EmojiSection.v
 import DailyQuoteSection from '~/components/publishing/community/diary/DailyQuoteSection.vue'
 import CurrentMoodSection from '~/components/publishing/community/diary/CurrentMoodSection.vue'
 import MoodDiarySection from '~/components/publishing/community/diary/MoodDiarySection.vue'
+import DiaryFloating from '~/components/publishing/community/diary/DiaryFloating.vue'
 
 const route = useRoute()
 const activeLineTab = ref('diary')

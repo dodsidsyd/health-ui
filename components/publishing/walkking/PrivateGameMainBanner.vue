@@ -20,6 +20,15 @@
           <p>104:08:20</p>
         </div>
         <div class="animation-box">
+          <div class="message-box">
+            <div class="message">
+              <p>따라올테면 따라와봐!</p>
+              <p>내가 제일 잘 걸어!</p>
+              <p>걸어서 저하늘까지!</p>
+            </div>
+          </div>
+          <!-- LottieAnimation 추가 -->
+          <LottieAnimation src="/animations/shoeMotion.json" :speed="1.0" :loop="true" />
           <div class="rank-progress">
             <div class="current-bar" :style="{ width: currentBarWidth }"></div>
           </div>
@@ -116,6 +125,8 @@ const profileImgPath = computed(() => {
     }
   }
   .rank-progress {
+    position: absolute;
+    bottom: 0.3rem;
     width: 100%;
     height: 0.6rem;
     background-color: #e8eefa;
@@ -148,19 +159,87 @@ const profileImgPath = computed(() => {
   }
   .animation-box {
     position: relative;
-    margin: 10.6rem 0.4rem 0.2rem 0.4rem;
+    height: 10rem;
+    margin: 1.6rem 0.4rem 0.2rem 0.4rem;
     &::before {
       content: '';
       position: absolute;
       z-index: 10;
-      bottom: 0;
+      bottom: 0.2rem;
       right: -0.3rem;
       width: 2.4rem;
       height: 2.4rem;
       background: url(~/assets/images/walkingking/ico-flag.png) center / 2.4rem no-repeat;
     }
+    // lottie animation으로 변경
+    // &::after {
+    //   content: '';
+    //   position: absolute;
+    //   left: 50%;
+    //   bottom: 1rem;
+    //   transform: translateX(-50%);
+    //   width: 12rem;
+    //   height: 5.6rem;
+    //   background: url(~/assets/images/walkingking/img-walk.gif) center bottom -3.4rem / 100% no-repeat;
+    // }
+  }
+  .message-box {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 3.2rem;
+    padding: 0.6rem 1.2rem;
+    background: #0c0c0c;
+    border-radius: 0.6rem;
+    box-shadow: 0 0.4rem 0.9rem 0 rgba(2, 12, 34, 0.15);
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    color: #fff;
+    &::before {
+      content: '';
+      position: absolute;
+      top: calc(100% - 0.2rem);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0.9rem;
+      height: 0.8rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='8' viewBox='0 0 9 8' fill='none'%3E%3Cpath d='M1.36788 0H7.63212C8.24398 0 8.62935 0.658927 8.32938 1.19221L5.19726 6.76043C4.89142 7.30415 4.10858 7.30415 3.80274 6.76043L0.670617 1.19221C0.370646 0.658926 0.756017 0 1.36788 0Z' fill='%230C0C0C'/%3E%3C/svg%3E");
+    }
+  }
+  .message {
+    width: 12rem;
+    p {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      animation: show_and_hide 9s ease-in-out infinite;
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+      &:nth-child(2) {
+        animation-delay: 3s;
+      }
+      &:nth-child(3) {
+        animation-delay: 6s;
+      }
+    }
+    @keyframes show_and_hide {
+      0%,
+      33.33% {
+        opacity: 0;
+      }
+      16.66% {
+        opacity: 1;
+      }
+    }
   }
 }
+
 .privat-game-bottom-box {
   position: absolute;
   bottom: 0;
@@ -241,5 +320,12 @@ const profileImgPath = computed(() => {
     background-repeat: no-repeat;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='18' viewBox='0 0 48 18' fill='none'%3E%3Cpath d='M25.5606 17.6276C24.6288 18.1241 23.3711 18.1241 22.4394 17.6276L1.07785e-06 5.67085L1.2619e-06 3.5656C1.37995e-06 2.21521 1.41123 -2.58222e-07 3.99894 -3.19979e-08L44.6679 3.5234e-06C47.2556 3.74962e-06 47.3333 1.72297 47.9988 3.5656L48 5.67085L25.5606 17.6276Z' fill='%23BCDC85'/%3E%3C/svg%3E");
   }
+}
+:deep(.lottie-animation) {
+  position: absolute;
+  top: calc(50% + 3rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12rem;
 }
 </style>

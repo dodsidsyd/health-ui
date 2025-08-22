@@ -10,6 +10,7 @@
           class="c-inp"
           :placeholder="placeholder"
           @input="onInput"
+          @keydown="onKeyDown"
         />
         <!-- Clear button -->
         <button
@@ -57,6 +58,16 @@ const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   inputValue.value = target.value
   emit('update:modelValue', target.value)
+}
+
+// 엔터 키 이벤트 핸들러
+const onKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    if (inputValue.value.trim()) {
+      emit('enter', inputValue.value)
+    }
+  }
 }
 
 // 입력값 청소

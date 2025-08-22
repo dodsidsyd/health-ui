@@ -1,18 +1,21 @@
 <template>
-  <BaseBody :has-search="true" page-title="건신 커뮤니티" @search="handleSearch">
+  <BaseBody
+    :has-search="true"
+    page-title="건신 커뮤니티"
+    @search="handleSearch"
+    :has-profile="true"
+    @profile="handleProfile"
+  >
     <LineTabs :active-key="activeLineTab" :tabs="tabs" />
 
-    <MyCommunitiesSection 
-      :items="userCommunities"
-      @card-click="handleCommunityClick"
-    />
-    
+    <MyCommunitiesSection :items="userCommunities" @card-click="handleCommunityClick" />
+    <hr class="hr-section mt-0 ml-n20 mr-n20" />
     <TrendingTodaySection />
     <HelpfulReviewsSection />
     <WeeklyKeywordsSection />
-    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <hr class="hr-section mt-0 ml-n20 mr-n20" />
     <PopularCommunitiesSection />
-    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <hr class="hr-section mt-0 ml-n20 mr-n20" />
     <SuggestedPostsSection />
   </BaseBody>
 </template>
@@ -40,15 +43,15 @@ const tabs = ref<Tab[]>([
 
 // 사용자 커뮤니티 데이터
 const userCommunities = ref([
-  // { id: 1, text: '전체', src: '/community/home/ico-community-all.svg' },
-  // { id: 2, text: '걷기왕', src: '/community/home/ico-community-all.svg', isNew: true },
-  // { id: 3, text: '스마트링', src: '/community/home/ico-community-all.svg' },
-  // { id: 4, text: '청구의신', src: '/community/home/ico-community-all.svg', isNew: true },
-  // { id: 5, text: '레몬건강지수', src: '/community/home/ico-community-all.svg' },
-  // { id: 6, text: '건강/운동', src: '/community/home/ico-community-all.svg' },
-  // { id: 7, text: '체중관리', src: '/community/home/ico-community-all.svg' },
-  // { id: 8, text: '식단', src: '/community/home/ico-community-all.svg' },
-  // { id: 9, text: '마음건강', src: '/community/home/ico-community-all.svg' }
+  { id: 1, text: '전체', src: '/community/home/ico-community-all.svg' },
+  { id: 2, text: '걷기왕', src: '/community/home/ico-community-all.svg', isNew: true },
+  { id: 3, text: '스마트링', src: '/community/home/ico-community-all.svg' },
+  { id: 4, text: '청구의신', src: '/community/home/ico-community-all.svg', isNew: true },
+  { id: 5, text: '레몬건강지수', src: '/community/home/ico-community-all.svg' },
+  { id: 6, text: '건강/운동', src: '/community/home/ico-community-all.svg' },
+  { id: 7, text: '체중관리', src: '/community/home/ico-community-all.svg' },
+  { id: 8, text: '식단', src: '/community/home/ico-community-all.svg' },
+  { id: 9, text: '마음건강', src: '/community/home/ico-community-all.svg' }
 ])
 
 // 커뮤니티 클릭 핸들러
@@ -60,6 +63,10 @@ const handleCommunityClick = (item: any) => {
 // 검색 핸들러
 const handleSearch = (searchTerm: string) => {
   console.log('검색:', searchTerm)
+}
+
+const handleProfile = () => {
+  console.log('프로필 클릭')
 }
 
 // 메타 정보

@@ -42,7 +42,7 @@ const displayedLinks = computed(() => {
 <style scoped lang="scss">
 .tip-info {
   width: 100%;
-  padding: 2rem 2rem 0.4rem;
+  padding: 2.4rem 2rem 0.4rem;
   margin: 2rem 2rem 4rem;
   border: 1px solid #eee;
   border-radius: 2rem;
@@ -69,5 +69,9 @@ const displayedLinks = computed(() => {
       border-top: 1px solid #eee;
     }
   }
+}
+
+:deep(.hashtag-wrap) {
+  margin: 0;
 }
 </style>

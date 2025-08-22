@@ -4,7 +4,7 @@
     class="diary-fieldset"
     placeholder="편하게 마음속 이야기를 남겨보세요.&#10;마음일기는 나만 볼 수 있어요."
     :disabled="disabled"
-    :maxlength="9999"
+    :max-length="9999"
     @update:model-value="handleInput"
     @focus="$emit('focus')"
     @blur="$emit('blur')"
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import FieldSet from '~/components/publishing/input/FieldSet.vue'
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, watch } from 'vue'
 
 interface Props {
   modelValue: string
@@ -22,8 +22,8 @@ interface Props {
 
 interface Emits {
   'update:modelValue': [value: string]
-  'focus': []
-  'blur': []
+  focus: []
+  blur: []
 }
 
 const props = defineProps<Props>()
@@ -36,7 +36,17 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const handleResizeHeight = () => {
   if (textareaRef.value) {
     textareaRef.value.style.height = 'auto' // height 초기화
-    textareaRef.value.style.height = textareaRef.value.scrollHeight + 'px' + '!important'
+
+    // 텍스트가 없으면 min-height로 유지
+    if (!props.modelValue || props.modelValue.trim() === '') {
+      textareaRef.value.style.height = '5.8rem'
+      return
+    }
+
+    const scrollHeight = textareaRef.value.scrollHeight
+    const minHeight = 5 * 16 // 5rem을 px로 변환 (1rem = 16px)
+    const newHeight = Math.max(scrollHeight, minHeight)
+    textareaRef.value.style.height = newHeight + 'px'
   }
 }
 
@@ -47,6 +57,16 @@ const handleInput = (value: string) => {
     handleResizeHeight()
   })
 }
+
+// modelValue 변경 감지하여 높이 조절
+watch(
+  () => props.modelValue,
+  () => {
+    nextTick(() => {
+      handleResizeHeight()
+    })
+  }
+)
 
 // 컴포넌트 마운트 시 textarea 참조 설정
 onMounted(() => {
@@ -66,27 +86,29 @@ onMounted(() => {
   padding: 0;
   border: none;
   height: auto !important;
-  min-height: 8rem;
+  min-height: 5.8rem;
   max-height: none !important;
   display: block !important;
 }
 
 .diary-fieldset :deep(.c-texttype .c-inp-el) {
   height: auto !important;
-  min-height: 8rem;
+  min-height: 5.8rem;
 }
 
 .diary-fieldset :deep(.c-texttype .c-inp-el textarea) {
-  height: auto !important;
-  min-height: 8rem;
+  height: auto;
+  min-height: 5.8rem;
   max-height: none !important;
   resize: none;
-  overflow: hidden;
   line-height: 1.6;
   box-sizing: border-box;
   font-size: 1.8rem;
   line-height: 2.9rem;
   color: #555;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .diary-fieldset :deep(.c-texttype:hover) {

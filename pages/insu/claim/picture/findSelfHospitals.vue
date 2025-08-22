@@ -1,14 +1,14 @@
 <template>
   <BaseBody
     :show-back-button="true"
-    page-title="서류없이 청구"
+    page-title="사진찍어 청구"
     logo-type="text"
     :has-notification="true"
     :has-reward="false"
     :has-add-text-left="true"
     class="pb-36"
   >
-    <div class="flex flex-col gap-10 mt-40">
+    <div class="flex flex-col mt-24">
       <h1 class="c-tit">
         <span class="text"> 다녀온 병원을<br />검색해 주세요 </span>
         <Button
@@ -21,7 +21,7 @@
           @click="clickBottomModal"
         />
       </h1>
-      <div class="c-tit-sub">서류 없이도 청구 가능한 병원인지 알 수 있어요.</div>
+      <!-- <div class="c-tit-sub">서류 없이도 청구 가능한 병원인지 알 수 있어요.</div> -->
       <InputText class="search-hospital" inp-type="search" placeholder="병원 이름을 입력해 주세요." />
     </div>
 
@@ -223,9 +223,12 @@ const bottomModalProps = ref({
 .c-tit {
   display: flex;
   justify-content: space-between;
+  &:deep(.icon) {
+    margin-bottom: 0;
+  }
 }
 .search-hospital {
-  margin-top: 4rem;
+  margin-top: 3.2rem;
 }
 .wrap-recent-searches,
 .wrap-claim-type {

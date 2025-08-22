@@ -8,13 +8,7 @@ export interface FoodItem {
 }
 
 // 식사 타입 정의
-export type MealType = 
-  | 'breakfast' 
-  | 'morning-snack' 
-  | 'lunch' 
-  | 'afternoon-snack' 
-  | 'dinner' 
-  | 'night-snack'
+export type MealType = 'breakfast' | 'morning-snack' | 'lunch' | 'afternoon-snack' | 'dinner' | 'night-snack'
 
 // 식사 계획 타입 정의
 export interface MealPlan {
@@ -26,20 +20,20 @@ export interface MealPlan {
 
 // 기본 아이콘 매핑
 export const DEFAULT_ICON_MAP: Record<MealType, string> = {
-  'breakfast': 'ico-sun',
+  breakfast: 'ico-sun',
   'morning-snack': 'ico-apple',
-  'lunch': 'ico-sunSet',
+  lunch: 'ico-sunset',
   'afternoon-snack': 'ico-coffee',
-  'dinner': 'ico-crescent',
+  dinner: 'ico-crescent',
   'night-snack': 'ico-bat'
 }
 
 // 기본 제목 매핑
 export const DEFAULT_TITLE_MAP: Record<MealType, string> = {
-  'breakfast': '아침식사',
+  breakfast: '아침식사',
   'morning-snack': '오전 간식',
-  'lunch': '점심식사',
+  lunch: '점심식사',
   'afternoon-snack': '오후 간식',
-  'dinner': '저녁식사',
+  dinner: '저녁식사',
   'night-snack': '야간 간식'
 }

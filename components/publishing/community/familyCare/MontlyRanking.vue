@@ -21,6 +21,11 @@
       <template #default="{ slide }">
         <div class="item">
           <strong class="tit-item">{{ slide.title }}</strong>
+          <!-- data 없을 때 -->
+          <!-- <i class="no-data" title="데이터가 없습니다."
+            ><img src="/assets/images/insu/icon-empty.svg" alt="" class="img"
+          /></i> -->
+          <!-- data 있을때 -->
           <span v-if="slide.ranking" class="ranking">{{ slide.ranking }}</span>
           <p v-if="slide.steps" class="steps-average">
             평균<strong>{{ slide.steps.toLocaleString() }}</strong
@@ -110,11 +115,18 @@ const claimBestSlides = ref([
       flex: 0 0 auto;
       flex-direction: column;
       width: 100%;
-      height: 100%;
+      height: 12rem;
       border-radius: 2rem;
       background-color: #f4f4f4;
       padding: 2rem 1.6rem;
-
+      .no-data {
+        display: block;
+        .img {
+          width: 4.8rem;
+          height: 4.8rem;
+          margin: 1rem auto 0;
+        }
+      }
       .tit-item {
         font-size: 1.6rem;
         font-weight: 600;

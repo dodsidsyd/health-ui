@@ -31,6 +31,16 @@ const props = defineProps({
   margin: 0 -2rem;
   :deep(swiper-slide) {
     border-radius: 0;
+    padding-bottom: 100%;
+    .slide-image {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: auto !important;
+      max-width: 100%;
+      height: auto;
+    }
   }
 }
 </style>

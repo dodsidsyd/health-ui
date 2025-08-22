@@ -109,8 +109,6 @@ article {
       padding: 1rem 1rem 0;
     }
   }
-  &.disease {
-  }
 }
 
 // 그룹
@@ -174,8 +172,7 @@ article {
     }
   }
   // group foot
-  &_foot {
-  }
+
   // 버튼 그룹
   &_button {
     display: $flex;
@@ -603,8 +600,7 @@ article {
   }
 }
 // 비밀번호 변경
-.password_field {
-}
+
 /* E : Contents */
 
 /* S : Sidebar */
@@ -768,6 +764,10 @@ article {
     > .cbody:has(.btn-group.is-fixed) {
       padding-bottom: 6.8rem; // cfoot이 없을때
     }
+    > .cbody:has(.btn-group.talk-btns) {
+      padding-bottom: 5.6rem;
+      background: #e7f4ff;
+    }
     > section {
       width: 100%;
     }
@@ -816,8 +816,6 @@ article {
         bottom: 5.5rem;
         .c-toast-inner {
           margin-bottom: 0;
-        }
-        ~ .c-toast.bottom.is-show {
         }
       }
     }
@@ -897,7 +895,22 @@ article {
     background: #f9f9f9;
   }
 }
-
+.l-page[data-page='InsuredManagement'],
+.l-page[data-page='InsuredManagementByGeneral'],
+.l-page[data-page='InsuredManagementSearch'] {
+  background: #f4f4f4;
+  &.l-page[data-page='InsuredManagementSearch'] {
+    .cbody {
+      background: #f4f4f4;
+    }
+  }
+}
+.l-page[page-type='dark-bg'] {
+  padding-top: 0;
+  .cbody {
+    padding-top: 9.65rem;
+  }
+}
 @media (min-width: 500px) {
   .l-page[data-page='notfound'] {
     .desc {
@@ -924,7 +937,7 @@ article {
 }
 .c-tit-sub {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 0.4rem;
   @extend .fz-18;
   font-weight: 500;
@@ -933,6 +946,10 @@ article {
   margin-top: 1.6rem;
   .text {
     flex: 0 1 auto;
+  }
+  span {
+    display: contents;
+    color: #4c7ff7;
   }
 }
 .c-tit,
@@ -973,6 +990,13 @@ article {
 }
 .c-tit .icon {
   margin-bottom: 0.5rem;
+}
+.tit-form {
+  font-size: 1.2rem;
+  line-height: 130%;
+  color: #555555;
+  margin: 1.2rem 0 0.6rem;
+  text-align: left;
 }
 
 .date-dash {

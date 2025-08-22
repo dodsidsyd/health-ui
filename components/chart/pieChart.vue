@@ -44,6 +44,25 @@ const chartData = computed(() => props.data)
 // ApexCharts 시리즈 데이터
 const series = computed(() => chartData.value.map(item => item.value))
 
+// 기본 색상 팔레트 (ApexCharts 데모와 동일)
+const defaultColors = [
+  '#008FFB',
+  '#00E396',
+  '#FEB019',
+  '#FF4560',
+  '#775DD0',
+  '#546E7A',
+  '#26a69a',
+  '#D10CE8',
+  '#FF6B6B',
+  '#4ECDC4'
+]
+
+// 색상 계산 (색상이 제공되지 않았을 때 기본 색상 사용)
+const chartColors = computed(() =>
+  chartData.value.map((item, index) => item.color || defaultColors[index % defaultColors.length])
+)
+
 // ApexCharts 옵션
 const chartOptions = computed(() => ({
   chart: {
@@ -58,7 +77,7 @@ const chartOptions = computed(() => ({
     }
   },
   labels: chartData.value.map(item => item.label),
-  colors: chartData.value.map(item => item.color),
+  colors: chartColors.value,
   legend: {
     show: false // 커스텀 범례 사용
   },
@@ -74,7 +93,10 @@ const chartOptions = computed(() => ({
     },
     dropShadow: {
       enabled: false
-    }
+    },
+    textAnchor: 'middle',
+    position: 'center',
+    offset: 0
   },
   tooltip: {
     enabled: false // 마우스 오버 툴팁 비활성화
@@ -88,11 +110,13 @@ const chartOptions = computed(() => ({
       customScale: 1,
       offsetX: 0,
       offsetY: 0,
-      startAngle: -90,
-      endAngle: 270,
+      startAngle: 0,
+      endAngle: 360,
       dataLabels: {
-        offset: -20, // 라벨을 원형 중심쪽으로 이동
-        minAngleToShowLabel: 10
+        offset: -20,
+        minAngleToShowLabel: 10,
+        textAnchor: 'middle',
+        position: 'center'
       }
     }
   },
@@ -161,9 +185,10 @@ const chartOptions = computed(() => ({
 
       .legend-label {
         font-size: 1.4rem;
-        font-weight: 400;
+        font-weight: 500;
         line-height: 2rem;
         color: #959595;
+        white-space: nowrap;
       }
     }
   }

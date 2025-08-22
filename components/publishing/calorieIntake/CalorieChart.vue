@@ -103,10 +103,10 @@ const drawArc = (ctx, percent) => {
 
   const arcTargetStart = arcStart + arcAngle * (innerTargetStart / 100)
   const arcTargetEnd = arcStart + arcAngle * (innerTargetEnd / 100)
-  const arcGapStart1 = arcStart + arcAngle * (targetStartPct / 100)
-  const arcGapEnd1 = arcStart + arcAngle * ((targetStartPct + gap) / 100)
-  const arcGapStart2 = arcStart + arcAngle * ((targetEndPct - gap) / 100)
-  const arcGapEnd2 = arcStart + arcAngle * (targetEndPct / 100)
+  // const arcGapStart1 = arcStart + arcAngle * (targetStartPct / 100)
+  // const arcGapEnd1 = arcStart + arcAngle * ((targetStartPct + gap) / 100)
+  // const arcGapStart2 = arcStart + arcAngle * ((targetEndPct - gap) / 100)
+  // const arcGapEnd2 = arcStart + arcAngle * (targetEndPct / 100)
 
   const progressEnd = arcStart + arcAngle * (percent / 100)
 

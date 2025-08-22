@@ -10,6 +10,7 @@
           :key="'hc' + hcIdx"
           :rowspan="headerCell.rowspan || 1"
           :colspan="headerCell.colspan || 1"
+          :class="headerCell.class"
         >
           {{ headerCell.text }}
         </th>
@@ -23,6 +24,7 @@
           :key="'bc' + cIdx"
           :rowspan="cell.rowspan || 1"
           :colspan="cell.colspan || 1"
+          :class="cell.class"
         >
           <component :is="cell.content" v-if="cell.content" />
           <template v-else>{{ cell.text }}</template>
@@ -41,6 +43,7 @@ interface TableCell {
   rowspan?: number
   colspan?: number
   type?: string
+  class?: string
 }
 interface TableCol {
   width?: string

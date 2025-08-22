@@ -4,45 +4,53 @@
       <p class="point">Choice Pick</p>
       <TitleBox :center="true" title="도움되는 리뷰" class="mb-0" />
     </div>
-    <CommonSwiper
-      :slides="bannerList"
-      slide-type="custom"
-      :slides-per-view="'auto'"
-      :space-between="0"
-      :slides-offset-before="10"
-      :slides-offset-after="10"
-      :navigation="false"
-      :pagination="true"
-      :scrollbar="false"
-      :autoplay="false"
-      :show-slide-length="false"
-      :show-play-pause-button="false"
-    >
-      <!-- 커뮤니티 슬라이드 커스텀 템플릿 -->
-      <template #default="{ slide }">
-        <HelpfulReview
-          :key="slide.id"
-          :profile-image="slide.profileImgPath"
-          :review-title="slide.reviewTitle"
-          :review-text="slide.reviewText"
-          :nickname="slide.nickname"
-          :level="slide.level"
-          :cate="slide.cate"
-          :type="slide.type"
-          :to="slide.link"
-          :scope="slide.scope"
-          :aria-label="slide.label"
-          :banner-title="slide.title"
-          :banner-text="slide.description"
-        />
-      </template>
-    </CommonSwiper>
+
+    <!-- 데이터가 있을 때 -->
+    <template v-if="bannerList.length > 0">
+      <CommonSwiper
+        :slides="bannerList"
+        slide-type="custom"
+        :slides-per-view="'auto'"
+        :space-between="0"
+        :slides-offset-before="10"
+        :slides-offset-after="10"
+        :navigation="false"
+        :pagination="true"
+        :scrollbar="false"
+        :autoplay="false"
+        :show-slide-length="false"
+        :show-play-pause-button="false"
+      >
+        <!-- 커뮤니티 슬라이드 커스텀 템플릿 -->
+        <template #default="{ slide }">
+          <HelpfulReview
+            :key="slide.id"
+            :profile-image="slide.profileImgPath"
+            :review-title="slide.reviewTitle"
+            :review-text="slide.reviewText"
+            :nickname="slide.nickname"
+            :level="slide.level"
+            :cate="slide.cate"
+            :type="slide.type"
+            :to="slide.link"
+            :scope="slide.scope"
+            :aria-label="slide.label"
+            :banner-title="slide.title"
+            :banner-text="slide.description"
+          />
+        </template>
+      </CommonSwiper>
+    </template>
+
+    <!-- 데이터가 없을 때 -->
+    <EmptyState v-else empty-title="추천 리뷰가 없어요" href="/community" :button="true" white />
   </section>
 </template>
 <script setup lang="ts">
 import TitleBox from '~/components/common/TitleBox.vue'
 import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
 import HelpfulReview from '~/components/publishing/community/home/HelpfulReview.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 
 const bannerList = ref([
   {
@@ -114,7 +122,7 @@ const bannerList = ref([
 <style scoped lang="scss">
 .helpfulReview-section {
   background: #dbe5fd;
-  padding: 3.2rem 0 0;
+  padding: 3.2rem 0;
   &:before {
     display: none;
   }
@@ -124,7 +132,7 @@ const bannerList = ref([
   }
 
   :deep(::part(container)) {
-    padding: 1.2rem 0 4.4rem;
+    padding: 1.2rem 0 1.2rem;
   }
 
   :deep(::part(wrapper)) {
@@ -134,7 +142,7 @@ const bannerList = ref([
     display: flex;
     gap: 0.8rem;
     justify-content: center;
-    bottom: 3.2rem;
+    bottom: 0;
     height: 0.8rem;
   }
   :deep(swiper-container::part(bullet-active)) {
@@ -145,6 +153,10 @@ const bannerList = ref([
     background: #fff;
     margin: 0;
     opacity: 1;
+  }
+
+  .empty-state {
+    margin: 2.4rem 2rem 0;
   }
 }
 .title-wrap {

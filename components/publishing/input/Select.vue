@@ -607,6 +607,7 @@ onUnmounted(() => {
       font-weight: 500;
       color: #555555;
       text-align: left;
+      white-space: pre-wrap;
     }
 
     .check-icon {

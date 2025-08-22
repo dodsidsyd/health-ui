@@ -1,23 +1,27 @@
 <template>
   <section class="diary-detail-view">
     <FlexColDiv>
-      <div class="date-display mt-20">
+      <div class="date-display mt-20 mb-24">
         <span class="date-label">{{ pageTitle }}</span>
       </div>
     </FlexColDiv>
 
-    <FlexColDiv class="pt-24 pb-24">
+    <FlexColDiv class="">
       <div v-if="diary?.emoji?.src" class="emoji-box">
-        <p v-if="diary?.isDailyQuote" class="daily-quote-label">오늘 한마디</p>
-        <img :src="diary.emoji.src" :alt="diary.emoji.label" />
-        <!-- Daily-quote 모드일 때 특별한 형식 -->
-        <p
-          v-if="diary?.isDailyQuote"
-          class="daily-quote-question"
-          v-html="getCleanQuestion(diary.dailyQuoteQuestion || '')"
-        ></p>
-        <!-- 일반 모드일 때 기존 형식 -->
-        <p v-else>오늘 마음은 {{ diary.emoji.label }}!</p>
+        <!-- 오늘 한마디 모드일 때 특별한 형식 -->
+
+        <template v-if="diary?.isDailyQuote">
+          <div class="daily-quote-box">
+            <p class="daily-quote-label">오늘 한마디</p>
+            <p class="daily-quote-question" v-html="getCleanQuestion(diary.dailyQuoteQuestion || '')"></p>
+          </div>
+          <img :src="diary.emoji.src" :alt="diary.emoji.label" />
+          <p>오늘 마음은 {{ diary.emoji.label }}!</p>
+        </template>
+        <template v-else>
+          <img :src="diary.emoji.src" :alt="diary.emoji.label" />
+          <p>오늘 마음은 {{ diary.emoji.label }}!</p>
+        </template>
       </div>
 
       <FieldSet
@@ -30,12 +34,23 @@
 
       <!-- 이미지 표시 -->
       <div v-if="diary?.images && diary.images.length > 0" class="diary-images">
-        <div class="images-scroll">
-          <div v-for="(image, index) in diary.images" :key="index" class="diary-image">
-            <img :src="image" alt="다이어리 이미지" />
-          </div>
-        </div>
+        <CommonSwiper
+          :slides="diary.images"
+          slide-type="image"
+          v-bind="SWIPER_PRESETS.diaryDetail"
+          class="diary-image-swiper"
+        />
       </div>
+
+      <ButtonGroup class="is-fixed">
+        <Button
+          btn-type="primary"
+          element-type="a"
+          href="/community/diary/list"
+          aria-label="확인"
+          class="lg w-full medium btn-sticky"
+        />
+      </ButtonGroup>
     </FlexColDiv>
   </section>
 </template>
@@ -44,7 +59,9 @@
 import { computed } from 'vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FieldSet from '~/components/publishing/input/FieldSet.vue'
-
+import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
+import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
+import Button from '~/components/publishing/button/Button.vue'
 // 타입 정의
 interface Diary {
   id: number
@@ -59,6 +76,19 @@ interface Diary {
   isDailyQuote?: boolean
   dailyQuoteQuestion?: string
 }
+
+// CommonSwiper 프리셋 설정
+const SWIPER_PRESETS = {
+  diaryDetail: {
+    slidesPerView: 1,
+    spaceBetween: 10,
+    pagination: true,
+    navigation: false,
+    loop: false,
+    showSlideLength: false,
+    showPlayPauseButton: false
+  }
+} as const
 
 interface Props {
   diary: Diary | null
@@ -98,21 +128,19 @@ const diaryContent = computed(() => props.diary?.content || '')
 
 .date-display {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 0 0.4rem;
-  font-weight: 700;
+  justify-content: center;
 
   .date-label {
     font-size: 2rem;
-    line-height: 2.6rem;
     font-weight: 700;
+    text-align: center;
   }
 }
 
 .diary-fieldset {
-  margin-top: 2.4rem;
-  padding-top: 2.4rem;
+  margin: 1.6rem 0;
+  padding-top: 1.6rem;
   border-top: 0.1rem solid #e2e2e2;
   :deep(.c-texttype) {
     &:has(.c-textarea:disabled) {
@@ -143,10 +171,20 @@ const diaryContent = computed(() => props.diary?.content || '')
     font-weight: 700;
     line-height: 2.5rem;
   }
+}
+
+.daily-quote-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  overflow: hidden;
+  padding: 1.6rem 2rem;
+  background: #fcf1e9;
+  border-radius: 2rem;
 
   .daily-quote-label {
     display: inline-block;
-    margin: 0 auto;
     font-size: 1.4rem;
     font-weight: 600;
     color: #4776e5;
@@ -155,6 +193,10 @@ const diaryContent = computed(() => props.diary?.content || '')
     background-repeat: no-repeat;
     background-position: left center;
     padding-left: 2rem;
+  }
+
+  p {
+    text-align: left;
   }
 }
 
@@ -165,45 +207,61 @@ const diaryContent = computed(() => props.diary?.content || '')
 }
 
 .diary-images {
-  margin-top: 2.4rem;
+  margin: 0 -2rem;
 
-  .images-scroll {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding: 0.5rem 0;
-
-    &::-webkit-scrollbar {
-      height: 0.4rem;
+  .diary-image-swiper {
+    :deep(swiper-slide) {
+      padding-bottom: 100%;
+      border-radius: 0;
     }
-
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 0.2rem;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 0.2rem;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
-    }
-  }
-
-  .diary-image {
-    flex-shrink: 0;
-    width: 20rem;
-    height: 15rem;
-    border-radius: 1.2rem;
-    overflow: hidden;
-
-    img {
+    :deep(.slide-image) {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
+      max-width: 100%;
       object-fit: cover;
+    }
+
+    :deep(swiper-container)::part(pagination) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      bottom: 1.6rem;
+    }
+
+    :deep(swiper-container)::part(bullet) {
+      width: 0.8rem;
+      height: 0.8rem;
+      margin: 0;
+      background: #fff;
+      opacity: 0.3;
+    }
+
+    :deep(swiper-container)::part(bullet-active) {
+      background: #fff;
+      opacity: 1;
+      margin: 0;
     }
   }
 }
-</style> 
+
+// 하단 고정 버튼 스타일
+.is-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  border-top: 0.1rem solid #e2e2e2;
+
+  .btn-sticky {
+    width: 100%;
+    border-radius: 0.8rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
+</style>

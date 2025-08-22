@@ -18,7 +18,7 @@
     />
 
     <!-- 게시글 없음 상태 -->
-    <commNoItem v-if="commList.length === 0" />
+    <CommNoItem v-if="commList.length === 0" />
     <!-- 게시글 있음 상태 -->
     <div v-else class="content-wrapper">
       <ScrollableContents>
@@ -26,7 +26,7 @@
           <CommItem v-for="item in commList" :key="item.id" :item="item" :type="item.type" />
         </FlexSection>
       </ScrollableContents>
-      <commNoPermission v-if="!hasPermission" />
+      <CommNoPermission v-if="!hasPermission" />
     </div>
   </div>
 </template>
@@ -41,8 +41,8 @@ import ScrollableContents from '~/components/common/ScrollableContents.vue'
 
 import StarRating from '~/components/publishing/community/competitive/StarRating.vue'
 import CommItem from '~/components/publishing/community/common/CommItem.vue'
-import commNoPermission from '~/components/publishing/community/common/commNoPermission.vue'
-import commNoItem from '~/components/publishing/community/common/commNoItem.vue'
+import CommNoPermission from '~/components/publishing/community/common/CommNoPermission.vue'
+import CommNoItem from '~/components/publishing/community/common/CommNoItem.vue'
 
 const activeBoxTab = ref('all')
 const selectedPeriod = ref('new')

@@ -44,7 +44,7 @@ const mealPlans = ref<MealPlan[]>([
   {
     type: 'lunch',
     title: '점심식사',
-    iconClass: 'ico-sunSet',
+    iconClass: 'ico-sunset',
     foods: [{ id: 5, name: '우유', quantity: 1.0, weight: 200, calories: 130 }]
   },
   {

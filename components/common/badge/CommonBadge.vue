@@ -18,6 +18,7 @@ export type BadgeColorType =
   | 'brown'
   | 'gray'
   | 'deepRed'
+  | 'cobalt'
 interface Props {
   color?: BadgeColorType
   variant?: 'solid' | 'outline' | 'soft' | 'round'
@@ -127,6 +128,13 @@ const badgeClasses = computed(() => {
     &.badge-solid {
       color: white;
       background: #6449fc;
+    }
+  }
+  &.badge-cobalt {
+    color: #5782e7;
+    &.badge-solid {
+      color: white;
+      background: #5782e7;
     }
   }
 

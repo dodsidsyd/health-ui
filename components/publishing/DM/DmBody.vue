@@ -61,8 +61,8 @@
       </div>
     </article>
 
-    <!-- 본인 : mine 클래스 추가 -->
-    <article class="chat-message mine">
+    <!-- 발신자 : sender 클래스 추가 -->
+    <article class="chat-message sender">
       <div class="message-content">
         <div class="sender-wrap">
           <span class="profile-img"><img src="~/assets/images/img-community-01.png" alt="" /></span>
@@ -239,7 +239,7 @@
         color: #959595;
       }
     }
-    &.mine {
+    &.sender {
       padding-left: 3.8rem;
       .message-text {
         justify-content: flex-start;

@@ -1,5 +1,12 @@
 <template>
-  <BaseBody :show-back-button="true" :has-search="true" :page-title="pageTitle" @search="handleSearch">
+  <BaseBody
+    :show-back-button="true"
+    :has-search="true"
+    :has-write="true"
+    :has-profile="true"
+    :page-title="pageTitle"
+    @search="handleSearch"
+  >
     <!-- <DevOnly>커뮤니티-상세(경쟁형/병원형/청구의신형)</DevOnly> -->
     <CompetitionCommunity v-if="type === COMMUNITY_TYPE.COMPETITION" :community="communityData" />
     <HospitalCommunity v-else-if="type === COMMUNITY_TYPE.HOSPITAL" :community="communityData" />
@@ -10,11 +17,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import HospitalCommunity from '~/components/publishing/community/temp/HospitalCommunity.vue'
-import CompetitionCommunity from '~/components/publishing/community/temp/CompetitionCommunity.vue'
-import InsuCommunity from '~/components/publishing/community/temp/InsuCommunity.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
+import CompetitionCommunity from '~/components/publishing/community/temp/CompetitionCommunity.vue'
+import HospitalCommunity from '~/components/publishing/community/temp/HospitalCommunity.vue'
+import InsuCommunity from '~/components/publishing/community/temp/InsuCommunity.vue'
 
 const route = useRoute()
 const type = route.params.type as CommunityType
@@ -41,4 +49,9 @@ const pageTitle = computed(() => {
       return '커뮤니티'
   }
 })
+
+const handleSearch = (searchTerm: string) => {
+  console.log('검색어:', searchTerm)
+  // TODO: 검색 로직 구현
+}
 </script>

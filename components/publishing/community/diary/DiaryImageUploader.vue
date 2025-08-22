@@ -1,18 +1,21 @@
 <template>
   <div class="diary-image-uploader">
-    <!-- InputImage 컴포넌트 사용 -->
-    <InputImage
-      v-model="selectedFiles"
-      :multiple="true"
-      :max-files="maxImages"
-      :max-file-size="5 * 1024 * 1024"
-      :show-icon="true"
-      icon-type="ico-image"
-      icon-size="2.4rem"
-      @file-selected="handleFileSelected"
-      @file-removed="handleFileRemoved"
-      @error="handleError"
-    />
+         <!-- InputImage 컴포넌트 사용 -->
+     <InputImage
+       v-model="selectedFiles"
+       :multiple="true"
+       :max-files="maxImages"
+       :max-file-size="5 * 1024 * 1024"
+       :show-icon="true"
+       icon-type="ico-image"
+       icon-size="2.4rem"
+       :show-preview="false"
+       :current-image-count="props.modelValue.length"
+       :enable-limit-check="true"
+       @file-selected="handleFileSelected"
+       @file-removed="handleFileRemoved"
+       @error="handleError"
+     />
     <!-- 하단 등록 버튼 -->
     <div class="bottom-actions">
       <button type="button" class="register-btn" @click="$emit('register')">
@@ -48,34 +51,49 @@ const emit = defineEmits<Emits>()
 // File 객체들을 관리
 const selectedFiles = ref<File[]>([])
 
-// Base64 문자열들을 관리 (기존 modelValue와 호환)
-const selectedImages = ref<string[]>([])
-
-// modelValue와 selectedImages 동기화
+// modelValue와 selectedFiles 동기화
 watch(() => props.modelValue, (newValue) => {
-  selectedImages.value = [...newValue]
+  // Base64 문자열들을 File 객체로 변환 (실제로는 사용하지 않음)
+  selectedFiles.value = []
 }, { immediate: true })
-
-// selectedImages가 변경되면 부모에게 알림
-watch(selectedImages, (newValue) => {
-  emit('update:modelValue', [...newValue])
-}, { deep: true })
 
 // 파일이 선택되었을 때 처리
 const handleFileSelected = (files: File[]) => {
-  // Base64로 변환하여 selectedImages에 추가
-  files.forEach(file => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      selectedImages.value.push(e.target?.result as string)
-    }
-    reader.readAsDataURL(file)
+  // 현재 이미지 개수 + 새로 선택된 파일 개수 체크
+  const totalImages = props.modelValue.length + files.length
+  
+  if (totalImages > props.maxImages) {
+    emit('image-limit-exceeded')
+    return
+  }
+
+  // 모든 파일을 한 번에 Base64로 변환하여 부모에게 전달
+  const promises = files.map(file => {
+    return new Promise<string>((resolve) => {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        resolve(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    })
+  })
+
+  Promise.all(promises).then(base64DataArray => {
+    // 중복 방지를 위해 기존 이미지와 새 이미지를 합치되, 중복 제거
+    const currentImages = [...props.modelValue]
+    const newImages = base64DataArray.filter(newImage => 
+      !currentImages.some(existingImage => existingImage === newImage)
+    )
+    currentImages.push(...newImages)
+    emit('update:modelValue', currentImages)
   })
 }
 
 // 파일이 제거되었을 때 처리
 const handleFileRemoved = (index: number) => {
-  selectedImages.value.splice(index, 1)
+  const currentImages = [...props.modelValue]
+  currentImages.splice(index, 1)
+  emit('update:modelValue', currentImages)
 }
 
 // 에러 처리

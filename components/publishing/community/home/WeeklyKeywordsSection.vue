@@ -1,12 +1,16 @@
 <template>
-  <section>
+  <section class="weeklyKeywords-section">
     <TitleBox title="이번주 키워드" class="mb-16" />
-    <WeeklyKeywords :sliders="customSliders" :right-margin="50" title="커스텀 키워드" />
+    <template v-if="customSliders.length > 0">
+      <WeeklyKeywords :sliders="customSliders" :right-margin="50" title="커스텀 키워드" />
+    </template>
+    <EmptyState v-else empty-title="이번주 추천 키워드가 없어요" href="/community" :button="false" />
   </section>
 </template>
 <script setup lang="ts">
 import TitleBox from '~/components/common/TitleBox.vue'
 import WeeklyKeywords from '~/components/publishing/community/home/WeeklyKeywords.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 
 interface CommunityItem {
   id: string | number
@@ -25,4 +29,8 @@ const customSliders = [
   [{ id: 3, hashtags: ['키워드 10개', '4/3/3 3줄 노출'] }]
 ]
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.weeklyKeywords-section {
+  padding: 3.2rem 0;
+}
+</style>

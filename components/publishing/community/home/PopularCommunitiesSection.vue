@@ -3,7 +3,7 @@
     <TitleIconBox
       title="인기 커뮤니티"
       link-href="/community/explore"
-      icon="ico-link"
+      icon="arrow-type-black"
       element-type="a"
       :is-show-link="true"
       :is-img="true"
@@ -11,21 +11,25 @@
       src="/community/home/ico-popular.svg"
       class="space-between"
     />
-    <div class="community-list">
-      <CommunityLink
-        v-for="(item, index) in maxCommunityItems"
-        :key="item.id"
-        :url="item.url"
-        :community-img="item.communityImg"
-        :community-title="item.communityTitle"
-        :community-text="item.communityText"
-      />
-    </div>
+    <template v-if="communityList.length > 0">
+      <div class="community-list">
+        <CommunityLink
+          v-for="(item, index) in maxCommunityItems"
+          :key="item.id"
+          :url="item.url"
+          :community-img="item.communityImg"
+          :community-title="item.communityTitle"
+          :community-text="item.communityText"
+        />
+      </div>
+    </template>
+    <EmptyState v-else empty-title="인기 커뮤니티가 없어요" href="/community" :button="false" />
   </section>
 </template>
 <script setup lang="ts">
 import TitleIconBox from '~/components/common/TitleIconBox.vue'
 import CommunityLink from '~/components/publishing/community/home/CommunityLink.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 
 const communityList = ref([
   {
@@ -54,7 +58,7 @@ const maxCommunityItems = computed(() => communityList.value.slice(0, 3))
 </script>
 <style scoped lang="scss">
 .popularCommunities-section {
-  padding-top: 3.2rem;
+  padding: 3.2rem 0;
   &:before {
     display: none;
   }

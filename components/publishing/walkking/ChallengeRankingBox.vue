@@ -30,7 +30,10 @@
     </div>
 
     <div class="steps-box">
-      <p :class="['total-steps', totalClass]">{{ totalNumFormat }}</p>
+      <p :class="['total-steps', totalClass]">
+        {{ totalNumFormat }}
+        <span v-if="totalClass === 'cases'">건</span>
+      </p>
       <p v-if="isShowSteps" class="use-item-steps">26,300 걸음</p>
     </div>
   </div>

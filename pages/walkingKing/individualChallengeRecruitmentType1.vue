@@ -8,7 +8,13 @@
     :add-text-click-enabled="true"
     add-text="<span class='icon ico-menu'>메뉴 아이콘</span>"
   >
-    <RecruitmentindividualChallengeCard />
+    <!-- 08-06 남은 일자/깃발 색상/진행 상태  -->
+    <!-- :days-left="20" -->
+    <RecruitmentindividualChallengeCard
+      :days-left="'D-8'"
+      :limit-flag-text="'챌린지 진행중'"
+      :limit-flag-color="'#FDDD66'"
+    />
     <FlexColDiv class="gap-20 mt-24 mb-32">
       <RecruitmentGuidelines :type="'date'" :title="'모집기간'" :detail="'2025.05.15 ~ 챌린지 종료까지'" />
       <RecruitmentGuidelines :type="'method'" :title="'진행방식'" :detail="'팀전(4인)/무조건 많이 걷기'" />

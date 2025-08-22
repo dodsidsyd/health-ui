@@ -41,6 +41,7 @@ import Button from '~/components/publishing/button/Button.vue'
         display: block;
         width: 100%;
         height: 100%;
+        padding: 0;
       }
       .icon {
         width: 100%;

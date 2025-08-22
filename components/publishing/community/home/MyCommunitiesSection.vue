@@ -8,31 +8,27 @@
       </div>
     </template>
     <template v-else>
-      <BannerStacked v-if="notifications.length > 0"
-      :notifications="notifications"
-      @notification-click="handleNotificationClick"
-      @all-notifications-click="handleAllNotificationsClick"
-    />
-    <!-- 내 커뮤니티 섹션 -->
-    <TitleBox
-      title="내 커뮤니티"
-      titleClass=""
-      ariaLabel="내 커뮤니티"
-      text=""
-      :is-showLink="true"
-      element-type="a"
-      link-href="/community/explore/MyCommunityTab"
-      icon="ico-link"
-      class="mt-32"
-    />
-    
-    <!-- 커뮤니티 목록 -->
-    <MyCommunity 
-      :items="items" 
-      @card-click="handleCardClick"
-    />
+      <BannerStacked
+        v-if="notifications.length > 0"
+        :notifications="notifications"
+        @notification-click="handleNotificationClick"
+        @all-notifications-click="handleAllNotificationsClick"
+      />
+      <!-- 내 커뮤니티 섹션 -->
+      <TitleBox
+        title="내 커뮤니티"
+        titleClass=""
+        ariaLabel="내 커뮤니티"
+        text=""
+        :is-showLink="true"
+        element-type="a"
+        link-href="/community/explore/MyCommunityTab"
+        icon="arrow-type-black"
+        class="mt-32"
+      />
 
-    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+      <!-- 커뮤니티 목록 -->
+      <MyCommunity :items="items" @card-click="handleCardClick" />
     </template>
   </section>
 </template>
@@ -82,6 +78,31 @@ const notifications = ref([
     message: '내 게시글에 댓글이 달렸어요.',
     postId: 789,
     time: '15분 전'
+  },
+  {
+    id: 4,
+    type: 'comment' as const,
+    communityName: '건강정보',
+    communityType: 'health',
+    message: '내 게시글에 댓글이 달렸어요.',
+    postId: 123,
+    time: '5분 전'
+  },
+  {
+    id: 5,
+    type: 'reply' as const,
+    communityName: '운동정보',
+    message: '내 댓글에 답글을 남겼어요.',
+    postId: 456,
+    time: '10분 전'
+  },
+  {
+    id: 6,
+    type: 'comment' as const,
+    communityName: '보험상담',
+    message: '내 게시글에 댓글이 달렸어요.',
+    postId: 789,
+    time: '15분 전'
   }
 ])
 
@@ -122,33 +143,33 @@ const handleExploreClick = () => {
 
 <style scoped lang="scss">
 .my-community-section {
-  padding-top:3.2rem;
+  padding: 3.2rem 0;
   .community-banner {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    gap:.4rem;
-    position:relative;
-    overflow:hidden;
-    padding:1.6rem 2rem;
-    background:#E7F4FF;
-    border-radius:1.2rem;
+    gap: 0.4rem;
+    position: relative;
+    overflow: hidden;
+    padding: 1.6rem 2rem;
+    background: #e7f4ff;
+    border-radius: 1.2rem;
     &:after {
       display: block;
-      content:'';
-      position:absolute;
-      top:50%;
-      right:2.4rem;
-      transform:translateY(-50%);
-      width:5rem;
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 2.4rem;
+      transform: translateY(-50%);
+      width: 5rem;
       height: 5rem;
-      background:url('~/assets/images/community/home/ico-banner.svg') no-repeat center center / contain;
+      background: url('~/assets/images/community/home/ico-banner.svg') no-repeat center center / contain;
     }
     .community-banner-title {
-      line-height:2.2rem;
+      line-height: 2.2rem;
     }
     .community-banner-text {
-      font-size:1.4rem;
-      line-height:2rem;
+      font-size: 1.4rem;
+      line-height: 2rem;
     }
   }
 }

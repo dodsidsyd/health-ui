@@ -1,7 +1,7 @@
 <template>
   <div v-if="notifications.length" class="stacked-banner">
     <!-- 스택형 배너들 -->
-    <div class="banner-stack">
+    <div v-if="isBannerStackVisible" class="banner-stack">
       <div
         v-for="(notification, index) in visibleNotifications"
         :key="notification.id"
@@ -34,12 +34,6 @@
 
     <!-- 확장된 리스트 (아래로 펼쳐짐) -->
     <div v-if="isExpanded" class="expanded-list">
-      <div class="expanded-header">
-        <h3>최근 알림</h3>
-        <button @click="toggleExpanded" class="close-btn">
-          <i class="icon-chevron-up"></i>
-        </button>
-      </div>
       <div class="notification-list">
         <div
           v-for="notification in displayNotifications"
@@ -70,6 +64,10 @@
         >
           전체알림보기 <span class="count">+{{ notifications.length - 5 }}</span>
         </Button>
+
+        <button @click="handleCloseClick" class="close-btn">
+          <i class="icon-chevron-up"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -102,6 +100,7 @@ const emit = defineEmits<{
 }>()
 
 const isExpanded = ref(false)
+const isBannerStackVisible = ref(true) // 배너 스택 표시/숨김 상태
 const currentStackIndex = ref(0)
 let rollingInterval: NodeJS.Timeout | null = null
 
@@ -159,11 +158,20 @@ const handleBannerClick = (notification: Notification, index: number) => {
     // 다른 배너 클릭 시 해당 게시글로 이동
     emit('notificationClick', notification.postId)
   }
+
+  // 배너 클릭 시 banner-stack 숨기기
+  isBannerStackVisible.value = false
 }
 
-// 확장 토글
+// 확장 토글 함수
 const toggleExpanded = () => {
   isExpanded.value = !isExpanded.value
+}
+
+// close-btn 클릭 시 banner-stack 다시 보이기
+const handleCloseClick = () => {
+  isExpanded.value = false
+  isBannerStackVisible.value = true
 }
 
 // 확장 상태 변경 시 롤링 제어
@@ -320,12 +328,8 @@ const handleAllNotificationsClick = () => {
   }
 
   .expanded-list {
-    margin-top: 1.6rem;
+    margin-top: -1.6rem;
     background: white;
-    border: 1px solid #e1eaff;
-    border-radius: 1.6rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
     animation: slideDown 0.3s ease-out;
 
     @keyframes slideDown {
@@ -352,48 +356,21 @@ const handleAllNotificationsClick = () => {
         color: #2b2b2b;
         margin: 0;
       }
-
-      .close-btn {
-        width: 3rem;
-        height: 3rem;
-        background: #f6f9ff;
-        border: none;
-        border-radius: 0.8rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.2s ease;
-
-        &:hover {
-          background: #e8f2ff;
-        }
-
-        .icon-chevron-up {
-          width: 1.6rem;
-          height: 1.6rem;
-          background-color: #4c7ff7;
-          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='18,15 12,9 6,15'/%3E%3C/svg%3E")
-            no-repeat center;
-          mask-size: contain;
-        }
-      }
     }
 
     .notification-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
       .notification-item {
         display: flex;
         align-items: center;
         gap: 1.2rem;
         padding: 1.6rem 2rem;
-        cursor: pointer;
+        border-radius: 2rem;
+        background: #eef2fb;
         transition: background-color 0.2s ease;
         border-bottom: 1px solid #f6f9ff;
-
-        &:hover {
-          background-color: #f6f9ff;
-        }
-
         &:last-child {
           border-bottom: none;
         }
@@ -448,8 +425,7 @@ const handleAllNotificationsClick = () => {
     .view-all-section {
       display: flex;
       justify-content: center;
-      padding: 1.6rem 2rem;
-      border-top: 1px solid #f6f9ff;
+      margin-top: 0.8rem;
 
       .view-all-btn {
         display: flex;
@@ -467,6 +443,37 @@ const handleAllNotificationsClick = () => {
         .count {
           font-weight: 700;
           color: #4c7ff7;
+        }
+      }
+
+      .close-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 4.6rem;
+        height: 4.6rem;
+        padding: 1.1rem;
+        background: #fff;
+        border: 0.1rem solid #e2e2e2;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: #e8f2ff;
+        }
+
+        .icon-chevron-up {
+          width: 2.4rem;
+          height: 2.4rem;
+          background-color: #fff;
+          background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 14.5834L12.0008 10L17 14.5834' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+          background-repeat: no-repeat;
+          background-position: center;
+          mask-size: contain;
         }
       }
     }

@@ -15,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import BaseBody from '~/components/layout/BaseBody.vue'
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import LineTabs, { type Tab } from '~/components/tabbar/LineTabs.vue'

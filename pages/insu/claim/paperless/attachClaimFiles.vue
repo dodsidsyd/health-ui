@@ -11,9 +11,7 @@
     <!-- ToDo: 로딩중 -->
     <div class="mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          진단서 사본 서류를 첨부해 주세요
-        </span>
+        <span class="text"> 진단서 사본 서류를 첨부해 주세요 </span>
       </h1>
     </div>
     <FlexSection>
@@ -54,10 +52,17 @@
         </button>
       </div>
     </FlexSection>
-    
+
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="다음" class="lg w-full medium btn-sticky" :disabled="hasSelectedHospitals" @click="clickBottomModal" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="다음"
+        class="lg w-full medium btn-sticky"
+        :disabled="hasSelectedHospitals"
+        @click="clickBottomModal"
+      />
     </ButtonGroup>
   </BaseBody>
   <BottomModal
@@ -68,9 +73,32 @@
     @close="toggleBottomModal"
   >
     <template #content>
-      <div class="wrap-radio-btn">
-        <RadioImg id="rdo1" name="rdo1" checked custom-style="button has-icon" text="카메라 촬영" :icon-src="iconCamera" icon-alt="아이콘:카메라 촬영" />
-        <RadioImg id="rdo2" name="rdo1" custom-style="button has-icon" text="앨범에서 선택" :icon-src="iconAlbum" icon-alt="아이콘:앨범에서 선택" />
+      <div class="wrap-radio-btn flex-col gap-8">
+        <RadioImg
+          id="rdo1"
+          name="rdo1"
+          checked
+          custom-style="button attached-file"
+          text="카메라 촬영"
+          :icon-src="iconCamera"
+          icon-alt="아이콘:카메라 촬영"
+        />
+        <RadioImg
+          id="rdo2"
+          name="rdo1"
+          custom-style="button attached-file"
+          text="앨범에서 선택"
+          :icon-src="iconAlbum"
+          icon-alt="아이콘:앨범에서 선택"
+        />
+        <RadioImg
+          id="rdo3"
+          name="rdo1"
+          custom-style="button attached-file"
+          text="파일에서 선택"
+          :icon-src="iconFile"
+          icon-alt="아이콘:파일에서 선택"
+        />
       </div>
     </template>
   </BottomModal>
@@ -86,6 +114,7 @@ import { BottomModal } from '@lemonhc/fo-ui/components/modal'
 import RadioImg from '~/components/publishing/input/radioImg.vue'
 import iconCamera from '~/assets/images/insu/icon-camera.svg'
 import iconAlbum from '~/assets/images/insu/icon-album.svg'
+import iconFile from '~/assets/images/insu/icon-file.svg'
 
 const isShowBottomModal = ref(false)
 const toggleBottomModal = () => {
@@ -127,7 +156,7 @@ const bottomModalProps = ref({
       padding-right: 1.6rem;
     }
     &:not(:first-child) {
-      border-left: 0.1rem solid #EEEEEE;
+      border-left: 0.1rem solid #eeeeee;
       padding-left: 1.6rem;
     }
     .img-attach {
@@ -150,8 +179,8 @@ const bottomModalProps = ref({
   width: 100%;
   padding: 1.8rem;
   border-radius: 0.8rem;
-  background-color:#F9F9F9;
-  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #E2E2E2);
+  background-color: #f9f9f9;
+  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #e2e2e2);
   [type='file'] {
     display: none;
   }
@@ -159,7 +188,7 @@ const bottomModalProps = ref({
 .wrap-attached-file {
   margin-top: 0.8rem;
   padding: 2rem;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   border-radius: 1.2rem;
   display: flex;
   flex-wrap: wrap;
@@ -169,7 +198,7 @@ const bottomModalProps = ref({
     flex: 0 0 9.7rem;
     position: relative;
     border-radius: 0.8rem;
-    border: 0.1rem solid #E2E2E2;
+    border: 0.1rem solid #e2e2e2;
     width: 9.7rem;
     overflow: hidden;
     .img {

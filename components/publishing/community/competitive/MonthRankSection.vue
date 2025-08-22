@@ -6,6 +6,7 @@
       aria-label="전체랭킹"
       element-type="a"
       :is-show-link="true"
+      icon="arrow-type-black"
       link-class="btn-link"
       :is-link="true"
       link-href="#"

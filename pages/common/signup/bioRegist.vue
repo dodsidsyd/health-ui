@@ -14,7 +14,7 @@
         빠른 이용을 위해<br />
         생체인증을 설정하세요.
       </div>
-      <p class="fz-18 medium mt-24">전체메뉴 > 설정 메뉴에서도 설정이 가능합니다.</p>
+      <p class="fz-18 medium mt-24 fc-body-02">전체메뉴 > 설정 메뉴에서도 설정이 가능합니다.</p>
       <div class="flex flex-row gap-26 align-center justify-center">
         <div class="bio-icon">
           <img src="../../../assets/images/icon-finger-print.svg" alt="" />
@@ -47,7 +47,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
   font-weight: 500;
   position: absolute;
   left: 0;
-  bottom: 5.6rem;
+  bottom: calc(5.6rem - 2rem);
   padding: 2rem;
   padding-left: 4rem;
   right: 0;

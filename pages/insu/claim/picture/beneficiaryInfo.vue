@@ -1,18 +1,16 @@
 <template>
   <BaseBody
     :show-back-button="true"
-    page-title="서류없이 청구"
+    page-title="사진찍어 청구"
     logo-type="text"
     :has-notification="true"
     :has-reward="false"
     :has-add-text-left="true"
     class="pb-36"
   >
-    <div class="pb-32 mt-24">
+    <div class="mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          수익자(보험금 받는 분)<br />정보를 입력해 주세요
-        </span>
+        <span class="text"> 수익자(보험금 받는 분)<br />정보를 입력해 주세요 </span>
       </h1>
       <div class="wrap-benefit">
         <div class="input-tit required">수익자 이름</div>
@@ -54,20 +52,27 @@
         <InputText label="피보험자와의 관계*" placeholder="예) 자녀, 남편, 배우자, 부, 모 등" />
       </div>
     </div>
-    <hr class="hr-section ml-n20 mr-n20 mb-10" />
+    <hr class="hr-section ml-n20 mr-n20 mt-32 mb-32" />
     <FlexSection>
       <div class="wrap-check-head">
         <div class="tit">보험금 지급계좌</div>
-        <Button btn-type="line" element-type="button" aria-label="지급계좌 추가" class="xs" icon="ico-plus" :width="12.5" />
+        <Button
+          btn-type="line"
+          element-type="button"
+          aria-label="지급계좌 추가"
+          class="xs"
+          icon="ico-plus"
+          :width="12.5"
+        />
       </div>
-      
+
       <div class="wrap-check-icon">
         <label for="check1" class="c-checktype-btn">
-          <input 
-            id="check1" 
-            name="check1" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check1"
+            name="check1"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[0]"
             @change="updateAllSelection"
           />
@@ -75,7 +80,11 @@
             <img src="/assets/images/insu/logo-alert-db.png" alt="DB손해보험 자동이체 계좌" class="hospital-logo" />
             <div class="wrap-hospital-desc">
               <div class="wrap-desc">
-                <span class="tit">DB손해보험 자동이체 계좌 DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌</span>
+                <span class="tit"
+                  >DB손해보험 자동이체 계좌 DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체
+                  계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체 계좌DB손해보험 자동이체
+                  계좌</span
+                >
                 <span class="address">김레몬 123456789456</span>
               </div>
             </div>
@@ -84,11 +93,11 @@
         </label>
         <div class="tit2">최근 보험금 지급계좌</div>
         <label for="check2" class="c-checktype-btn">
-          <input 
-            id="check2" 
-            name="check2" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check2"
+            name="check2"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[1]"
             @change="updateAllSelection"
           />
@@ -104,11 +113,11 @@
           </div>
         </label>
         <label for="check3" class="c-checktype-btn">
-          <input 
-            id="check3" 
-            name="check3" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check3"
+            name="check3"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[2]"
             @change="updateAllSelection"
           />
@@ -125,11 +134,11 @@
         </label>
         <div class="tit2">새로운 보험금 지급계좌</div>
         <label for="check4" class="c-checktype-btn">
-          <input 
-            id="check4" 
-            name="check4" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check4"
+            name="check4"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[3]"
             @change="updateAllSelection"
           />
@@ -152,10 +161,10 @@
             <img src="/assets/images/insu/icon-cancel.svg" alt="취소" />
           </i>
         </div>
-        <InputSearch 
+        <InputSearch
           class="bank-account"
-          selectPlaceholder="은행선택" 
-          placeholder="계좌번호 입력" 
+          selectPlaceholder="은행선택"
+          placeholder="계좌번호 입력"
           modal-title="은행선택"
           :custom-search-options="bankOptions"
           :hide-search-icon="true"
@@ -168,7 +177,13 @@
     </FlexSection>
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="확인" class="lg w-full medium btn-sticky" :disabled="!hasSelectedHospitals" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="확인"
+        class="lg w-full medium btn-sticky"
+        :disabled="!hasSelectedHospitals"
+      />
     </ButtonGroup>
   </BaseBody>
 </template>
@@ -228,7 +243,7 @@ const clickRegisterHospitals = () => {
 .wrap-benefit {
   .input-tit {
     margin-top: 3.2rem;
-  }  
+  }
 }
 .input-tit {
   margin-bottom: 0.6rem;
@@ -239,7 +254,7 @@ const clickRegisterHospitals = () => {
   position: relative;
   &.required {
     &::after {
-      content: "*";
+      content: '*';
       font-size: 1.2rem;
       display: inline-block;
       margin-left: 0.3rem;
@@ -255,7 +270,6 @@ const clickRegisterHospitals = () => {
   .tit {
     font-weight: 700;
   }
-  
 }
 .wrap-check-icon {
   display: flex;
@@ -268,12 +282,12 @@ const clickRegisterHospitals = () => {
   .c-checktype-btn {
     width: 100%;
     padding: 2rem;
-    border: 0.1rem solid #E2E2E2;
+    border: 0.1rem solid #e2e2e2;
     background-color: #fff;
     border-radius: 1.2rem;
     &:has(.c-checktype-check:checked) {
       padding: 1.9rem;
-      border: 0.2rem solid #4C7FF7;
+      border: 0.2rem solid #4c7ff7;
       box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04);
       .icon {
         border-color: #4c7ff7;
@@ -306,7 +320,7 @@ const clickRegisterHospitals = () => {
             font-size: 1.6rem;
             font-weight: 700;
             line-height: 1.4;
-            color: #2B2B2B;
+            color: #2b2b2b;
             width: 100%;
             @include mixin.ellipsis;
             overflow: hidden;
@@ -333,17 +347,17 @@ const clickRegisterHospitals = () => {
           .h-label {
             padding: 0.3rem 0.6rem;
             border-radius: 0.4rem;
-            background-color: #EEEEEE;
+            background-color: #eeeeee;
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 1.3;
             color: #555555;
             &.no-doc {
-              background-color: #E5EDFF;
-              color: #4C7FF7;
+              background-color: #e5edff;
+              color: #4c7ff7;
             }
             &.myhospital {
-              background-color: #4C7FF7;
+              background-color: #4c7ff7;
               color: #fff;
             }
           }
@@ -384,7 +398,7 @@ const clickRegisterHospitals = () => {
     position: relative;
     &.required {
       &::after {
-        content: "*";
+        content: '*';
         font-size: 1.2rem;
         display: inline-block;
         margin-left: 0.3rem;
@@ -420,7 +434,7 @@ const clickRegisterHospitals = () => {
   margin-bottom: 4rem;
   padding: 2rem;
   border-radius: 1.2rem;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   .regi-account-head {
     display: flex;
     justify-content: space-between;
@@ -443,7 +457,7 @@ const clickRegisterHospitals = () => {
   .wrap-depositor {
     .c-btn {
       margin-top: 2rem;
-      background-color: #4F5561;
+      background-color: #4f5561;
     }
     .text {
       margin-top: 0.6rem;

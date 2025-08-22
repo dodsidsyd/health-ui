@@ -23,7 +23,7 @@
           :value="displayValue"
           :readonly="readonly"
           :disabled="disabled"
-          :class="['c-inp', $attrs.class, { 't-right': unitR }, { 'is-invalid': isValid }]"
+          :class="['c-inp', $attrs.class, { 't-right': unitR }, { 'is-invalid': isInvalid }]"
           @input="onInput"
         />
         <!-- Clear button for debugging -->
@@ -43,6 +43,13 @@
           aria-label="검색"
           @click="onSearchClick"
         ></button>
+        <Button
+          v-if="inpType === 'hasBtn'"
+          class="c-btn btn-primary xs check"
+          btn-type="button"
+          :disabled="inputValue.length === 0"
+          >{{ btnText }}</Button
+        >
       </div>
       <p v-if="isInvalid" class="feedback error">
         <span class="text">{{ validText }}</span>
@@ -52,6 +59,7 @@
 </template>
 
 <script setup lang="ts">
+import Button from '~/components/publishing/button/Button.vue'
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
 interface OptionType {
   value: string
@@ -76,7 +84,8 @@ const props = defineProps({
   isInvalid: { type: Boolean, default: false },
   validText: { type: String, default: '인풋 유효성 에러 메시지' }, // 유효성 검사 메시지
   customOpts: { type: Array as () => OptionType[], default: () => [] },
-  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' },
+  btnText: { type: String, default: '중복확인' }
 })
 
 const emit = defineEmits(['update:modelValue', 'search'])
@@ -369,5 +378,12 @@ function onSearchClick() {
   width: 2.4rem;
   height: 2.4rem;
   flex: 0 0 auto;
+}
+:deep(.c-btn) {
+  &.check {
+    width: auto;
+    margin-left: 0.8rem;
+    flex: 0 0 auto;
+  }
 }
 </style>

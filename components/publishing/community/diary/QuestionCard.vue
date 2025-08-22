@@ -60,6 +60,9 @@ const handleClick = () => {
     height: 3.2rem;
   }
   p {
+    display:flex;
+    align-items: center;
+    min-height: 5rem;
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 2.5rem;

@@ -16,7 +16,7 @@ import { ref, computed, watch } from 'vue'
 
 interface Props {
   modelValue?: Date
-  navigationMode?: 'week' | 'month' | 'day' | 'notyear'
+  navigationMode?: 'week' | 'month' | 'day' | 'notyear' | 'year'
   prevBtn?: boolean
   nextBtn?: boolean
 }
@@ -63,6 +63,9 @@ const previousMonth = () => {
     case 'month':
       newDate.setMonth(newDate.getMonth() - 1)
       break
+    case 'year':
+      newDate.setFullYear(newDate.getFullYear() - 1)
+      break
     case 'notyear':
       newDate.setDate(newDate.getDate() - 1)
       break
@@ -86,6 +89,9 @@ const nextMonth = () => {
       break
     case 'month':
       newDate.setMonth(newDate.getMonth() + 1)
+      break
+    case 'year':
+      newDate.setFullYear(newDate.getFullYear() + 1)
       break
     case 'notyear':
       newDate.setDate(newDate.getDate() + 1)
@@ -124,6 +130,9 @@ const formatCurrentDate = computed(() => {
 
     case 'month':
       return `${year}년 ${month}월`
+
+    case 'year':
+      return `${year}년`
 
     case 'notyear':
       return `${month}월 ${day}일 ${weekday}`

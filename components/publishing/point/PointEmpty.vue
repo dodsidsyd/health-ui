@@ -1,10 +1,17 @@
 <template>
   <div class="point-history-empty">
-    <p>포인트 내역이 없습니다.</p>
+    <p>{{ text }}</p>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  text: {
+    type: String,
+    default: '포인트 내역이 없습니다.'
+  }
+})
+</script>
 
 <style scoped lang="scss">
 .point-history-empty {

@@ -179,7 +179,7 @@
       <!-- 댓글 입력 컴포넌트 -->
       <CommentBox />
       <!-- 커뮤니티 가입 인터랙트 -->
-      <commNoPermission />
+      <CommNoPermission />
     </AccessPermissions>
   </BaseBody>
 </template>
@@ -199,15 +199,17 @@ import PostDetailComment from '~/components/publishing/community/board/PostDetai
 import PostDetailReply from '~/components/publishing/community/board/PostDetailReply.vue'
 import CommentBox from '~/components/publishing/community/board/CommentBox.vue'
 import imgBanner from '@/assets/images/community/img-community-02.png'
+import imgBanner2 from '@/assets/images/community/img-add-groupBanner.png'
+import imgBanner3 from '@/assets/images/community/img-general-banner.png'
 import PostDetailAnotherBoard from '~/components/publishing/community/board/PostDetailAnotherBoard.vue'
 import AccessPermissions from '~/components/publishing/community/board/AccessPermissionsWrap.vue'
-import commNoPermission from '~/components/publishing/community/board/commNoPermission.vue'
+import CommNoPermission from '~/components/publishing/community/board/commNoPermission.vue'
 import ReportBox from '~/components/publishing/community/board/ReportBox.vue'
 import { BottomModal } from '@lemonhc/fo-ui/components/modal'
 // 접근권한 없는 케이스 상태
 const hasAccess = ref(true)
 // 이미지 슬라이드 데이터 (로컬 이미지 사용)
-const imageSlides = [imgBanner, imgBanner, imgBanner, imgBanner]
+const imageSlides = [imgBanner, imgBanner2, imgBanner3, imgBanner]
 // 좋아요 반응형 변수
 const myLikeCount = ref(104)
 // 선택된 리액션 아이콘 클래스를 저장할 상태

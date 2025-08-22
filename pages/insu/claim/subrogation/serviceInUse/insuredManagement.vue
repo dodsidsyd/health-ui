@@ -3,14 +3,14 @@
     :show-back-button="true"
     page-title="대리청구/피보험자 관리"
     logo-type="text"
-    :has-notification="true"
-    :has-reward="false"
-    :has-add-text-left="true"
-    class="pb-60"
+    :has-search="true"
+    :has-add-text="true"
+    :add-text-click-enabled="true"
+    add-text="<span class='icon ico-edit'></span>"
   >
     <!-- ToDo: 편집 버튼 다른 곳에 넣으시고 삭제 -->
-    <div @click="clickFullModal">피보험자 편집(버튼)</div>
-    <h1 class="c-tit mt-24">
+    <!-- <div @click="clickFullModal">피보험자 편집(버튼)</div>-->
+    <h1 class="c-tit mt-24 mb-32">
       <span class="text"> 청구할 피보험자를 선택해 주세요 </span>
     </h1>
     <LineTabs :tabs="tabs" />
@@ -396,6 +396,15 @@ import Checkbox from '~/components/publishing/input/check.vue'
 import ConfirmModal from '~/components/common/modal/ConfirmModal.vue'
 import warnIcon from '~/assets/images/insu/subrogation/icon-warn.png'
 
+// 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
+const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
+// 컴포넌트 마운트 시 addTextClick 핸들러 등록
+onMounted(() => {
+  if (setAddTextClickHandler) {
+    setAddTextClickHandler(clickFullModal)
+  }
+})
+
 const isShowConfirmModal = ref(false)
 const confirmModalContent = ref('')
 const clickConfirmModal = async () => {
@@ -551,8 +560,8 @@ const selectAgent = (selectValue: any) => {
 }
 
 const clickClaim = () => {
-  // 보안키패드 모달 띄우기
-  navigateTo('/insu/claim/subrogation/serviceInUse/selectInsuranceCompany')
+  // 청구하기
+  navigateTo('/insu/claim/subrogation/serviceInUse/selectInsurance01')
 }
 
 const movePage = () => {

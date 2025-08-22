@@ -28,7 +28,8 @@ const tabs = ref<Tab[]>([
   { title: '탭', to: '/guide/tabsStyle' },
   { title: '모달', to: '/guide/modal' },
   { title: '스와이프', to: '/guide/swiper' },
-  { title: '이모지', to: '/guide/emoji' }
+  { title: '이모지', to: '/guide/emoji' },
+  { title: '아이콘', to: '/guide/icons' }
 ])
 
 // /guide 경로로 접근할 때 첫 번째 탭으로 리다이렉트

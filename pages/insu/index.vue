@@ -260,6 +260,7 @@ const insuStatus = ref<InsuStatus>('unregistered')
     }
   }
   .btn-wide {
+    position: relative;
     margin: 1.2rem 2rem 0;
     padding: 3.1rem 2.4rem;
     border-radius: 1.2rem;
@@ -405,7 +406,8 @@ h2.tit2 {
   }
 }
 .wrap-more {
-  margin-top: 1.6rem;
+  margin: 1.6rem -2rem 0;
+  padding: 0 2rem;
   display: flex;
   gap: 1.2rem;
   overflow-x: auto;

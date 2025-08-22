@@ -17,8 +17,12 @@
         :logo-type-with-back="headerOptions.logoTypeWithBack"
         :show-search="headerOptions.showSearch"
         :show-search-btn="headerOptions.showSearchBtn"
+        :search-with-select="headerOptions.searchWithSelect"
+        :search-select-options="headerOptions.searchSelectOptions"
+        :search-select-placeholder="headerOptions.searchSelectPlaceholder"
         :has-notification="headerOptions.hasNotification"
         :has-notification-dot="headerOptions.hasNotificationDot"
+        :has-cart="headerOptions.hasCart"
         :has-reward="headerOptions.hasReward"
         :has-reward-dot="headerOptions.hasRewardDot"
         :has-setting="headerOptions.hasSetting"
@@ -28,6 +32,7 @@
         :has-share="headerOptions.hasShare"
         :has-menu="headerOptions.hasMenu"
         :notification-count="headerOptions.notificationCount"
+        :cart-count="headerOptions.cartCount"
         :chat-count="headerOptions.chatCount"
         :is-center-title="headerOptions.isCenterTitle"
         :has-add-text="headerOptions.hasAddText"
@@ -41,10 +46,16 @@
         :has-insu="headerOptions.hasInsu"
         :insu-status="headerOptions.insuStatus"
         :has-my-info="headerOptions.hasMyInfo"
+        :has-edit-btn="headerOptions.hasEditBtn"
+        :has-tel-btn="headerOptions.hasTelBtn"
+        :has-write="headerOptions.hasWrite"
+        :has-profile="headerOptions.hasProfile"
         @go-back="handleGoBack"
         @close="handleClose"
         @toggle-sidebar="handleToggleSidebar"
         @add-text-click="handleAddTextClick"
+        @edit="handleEditEvent"
+        @search="handleSearchEvent"
       >
         <!-- 유틸 컴포넌트 자체를 넣을 수 있는 방법 -->
         <!-- <template #headerUtils> </template> -->
@@ -95,12 +106,16 @@ const headerOptions = ref({
   // 유틸 옵션
   showSearch: false,
   showSearchBtn: false,
+  searchWithSelect: false,
+  searchSelectOptions: [],
+  searchSelectPlaceholder: '전체',
 
   // 알림 옵션
   hasNotification: false,
   hasNotificationDot: false,
   hasReward: false,
   hasRewardDot: false,
+  hasCart: false,
 
   // 추가 기능 옵션
   hasSetting: false,
@@ -109,10 +124,12 @@ const headerOptions = ref({
   hasScrap: false, // 스크랩 버튼 표시 여부
   hasShare: false,
   hasMenu: false,
+  hasTelBtn: false,
 
   // 카운트 옵션
   notificationCount: 0,
   chatCount: 0,
+  cartCount: 0,
 
   // 레이아웃 옵션
   isCenterTitle: false,
@@ -138,7 +155,16 @@ const headerOptions = ref({
   insuStatus: 'unregistered',
 
   // 커뮤니티 마이프로필
-  hasMyInfo: false
+  hasMyInfo: false,
+
+  // 청구의 신 수정 버튼
+  hasEditBtn: false,
+
+  // 글쓰기 버튼
+  hasWrite: false,
+
+  // 프로필 버튼
+  hasProfile: false
 })
 
 // 페이지에서 사용할 수 있도록 provide
@@ -176,8 +202,12 @@ watch(
       pageType: '',
       showSearch: false,
       showSearchBtn: false,
+      searchWithSelect: false,
+      searchSelectOptions: [],
+      searchSelectPlaceholder: '전체',
       hasNotification: false,
       hasNotificationDot: false,
+      hasCart: false,
       hasReward: false,
       hasRewardDot: false,
       hasSetting: false,
@@ -187,6 +217,7 @@ watch(
       hasShare: false,
       hasMenu: false,
       notificationCount: 0,
+      cartCount: 0,
       chatCount: 0,
       isCenterTitle: false,
       hasAddText: false,
@@ -199,7 +230,11 @@ watch(
       whiteLogo: false,
       hasInsu: false,
       insuStatus: 'unregistered',
-      hasMyInfo: false
+      hasMyInfo: false,
+      hasEditBtn: false,
+      hasTelBtn: false,
+      hasWrite: false,
+      hasProfile: false
     }
   },
   { immediate: false }
@@ -288,11 +323,24 @@ const handleGoBack = () => {
   router.go(-1) // 브라우저 기본 뒤로가기
 }
 
+// 페이지에서 close 핸들러를 등록할 수 있도록 provide
+let pageCloseHandler: (() => void) | null = null
+
+provide('setCloseHandler', (handler: () => void) => {
+  console.log('default.vue: setCloseHandler called with handler:', handler)
+  pageCloseHandler = handler
+})
+
 const handleClose = () => {
-  // 전체화면 모달 닫기 로직
-  // 기본적으로 뒤로가기와 동일하게 처리
-  console.log('전체화면 모달 닫기')
-  router.go(-1)
+  // 페이지에서 등록한 close 핸들러가 있으면 실행
+  if (pageCloseHandler) {
+    console.log('Calling page close handler')
+    pageCloseHandler()
+  } else {
+    // 기본적으로 뒤로가기와 동일하게 처리
+    console.log('전체화면 모달 닫기 - 기본 동작')
+    router.go(-1)
+  }
 }
 
 const handleToggleSidebar = () => {
@@ -302,6 +350,8 @@ const handleToggleSidebar = () => {
 
 // 런타임에서 설정된 addTextClick 핸들러
 let pageAddTextClickHandler: (() => void) | null = null
+// 런타임에서 설정된 search 핸들러
+let pageSearchHandler: ((query?: string) => void) | null = null
 
 // addTextClick 상태 관리
 const isAddTextClickEnabled = ref(false)
@@ -312,6 +362,13 @@ provide('setAddTextClickHandler', (handler: () => void) => {
   pageAddTextClickHandler = handler
   isAddTextClickEnabled.value = true
   console.log('pageAddTextClickHandler updated to:', pageAddTextClickHandler)
+})
+
+// 페이지에서 search 핸들러를 등록할 수 있도록 provide
+provide('setSearchHandler', (handler: (query?: string) => void) => {
+  console.log('default.vue: setSearchHandler called with handler:', handler)
+  pageSearchHandler = handler
+  console.log('pageSearchHandler updated to:', pageSearchHandler)
 })
 
 // addTextClick 상태를 provide
@@ -326,6 +383,27 @@ const handleAddTextClick = () => {
   } else {
     console.log('No addTextClick handler registered')
   }
+}
+
+// search 이벤트 핸들러
+const handleSearchEvent = searchData => {
+  console.log('default.vue: handleSearchEvent called with:', searchData)
+  console.log('pageSearchHandler:', pageSearchHandler)
+  if (pageSearchHandler) {
+    console.log('Calling pageSearchHandler')
+    // 객체 또는 문자열 모두 처리
+    if (typeof searchData === 'object') {
+      pageSearchHandler(searchData.query, searchData.type)
+    } else {
+      pageSearchHandler(searchData)
+    }
+  } else {
+    console.log('No search handler registered')
+  }
+}
+const modalTriggerSignal = ref(0)
+const handleEditEvent = () => {
+  modalTriggerSignal.value++
 }
 
 const tabs = [

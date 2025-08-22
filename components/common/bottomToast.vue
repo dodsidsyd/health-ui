@@ -122,12 +122,14 @@ onUnmounted(() => {
 
 .toast-message {
   flex: 1;
+  color: #fff;
   p {
     margin: 0;
     font-size: 1.4rem;
     line-height: 140%;
     color: vars.$white;
     text-align: center;
+    color: #fff;
   }
 }
 

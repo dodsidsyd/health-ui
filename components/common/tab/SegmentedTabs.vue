@@ -60,7 +60,7 @@ const tabStyle = computed(() => {
     position: relative;
     width: 100%;
     border-radius: 0.6rem;
-    padding: 0.3rem;
+    // padding: 0.3rem;
     gap: 0;
 
     .tab-link {
@@ -123,7 +123,7 @@ const tabStyle = computed(() => {
   .segmented-tabs {
     .tabs-container {
       .tab-link {
-        padding: 1.2rem 0.8rem;
+        padding: 1.2rem 0.6rem;
       }
     }
   }

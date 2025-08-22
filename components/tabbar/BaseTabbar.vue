@@ -67,7 +67,7 @@ withDefaults(defineProps<BaseTabbarProps>(), {
         height: var(--c-tabbar-btn-width);
         margin-top: -20px;
         border-radius: 50%;
-        background-color: var(--white);
+        background-color: rgb(var(--white));
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         .icon {
           position: absolute;

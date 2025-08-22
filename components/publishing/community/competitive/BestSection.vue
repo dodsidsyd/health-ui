@@ -113,7 +113,7 @@ const commList = [
   .community-box {
     display: block;
     background: #f4f4f4;
-    padding: 2rem;
+    padding: 0 2rem;
     border-radius: 1.2rem;
   }
 }

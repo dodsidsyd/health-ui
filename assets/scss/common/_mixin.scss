@@ -2,7 +2,6 @@
 @use 'sass:map';
 @use 'sass:color';
 @use 'sass:list';
-
 // Mixin to apply colors based on theme
 @mixin applyThemeColors($color-set) {
   --primary: #{list.nth($color-set, 1)}, #{list.nth($color-set, 2)}, #{list.nth($color-set, 3)};

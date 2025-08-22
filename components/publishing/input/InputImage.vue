@@ -12,41 +12,32 @@
           {{ label }}
         </template>
       </label>
-      
+
       <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
-        <!-- 이미지 미리보기 영역 -->
-        <div v-if="previewImages.length > 0" class="image-preview-container">
-          <div 
-            v-for="(image, index) in previewImages" 
-            :key="index" 
-            class="image-preview-item"
-          >
+        <!-- 이미지 미리보기 영역 (showPreview가 true일 때만 표시) -->
+        <div v-if="showPreview && previewImages.length > 0" class="image-preview-container">
+          <div v-for="(image, index) in previewImages" :key="index" class="image-preview-item">
             <img :src="image" :alt="`미리보기 이미지 ${index + 1}`" />
-            <button 
-              type="button" 
-              class="remove-image-btn"
-              @click="removeImage(index)"
-              aria-label="이미지 제거"
-            >
+            <button type="button" class="remove-image-btn" @click="removeImage(index)" aria-label="이미지 제거">
               <i class="icon ico-close"></i>
             </button>
           </div>
         </div>
-        
+
         <!-- 파일 입력 영역 -->
         <div class="file-input-area">
-                     <input
-             :id="inputId"
-             ref="fileInput"
-             type="file"
-             accept="image/*"
-             v-bind="multiple ? { multiple: true } : {}"
-             :disabled="disabled"
-             :class="['c-file-inp', { 'is-invalid': isInvalid }]"
-             @change="handleFileSelect"
-             @click="handleInputClick"
-           />
-          
+          <input
+            :id="inputId"
+            ref="fileInput"
+            type="file"
+            accept="image/*"
+            v-bind="multiple ? { multiple: true } : {}"
+            :disabled="disabled"
+            :class="['c-file-inp', { 'is-invalid': isInvalid }]"
+            @change="handleFileSelect"
+            @click="handleInputClick"
+          />
+
           <!-- 커스텀 버튼 -->
           <button
             type="button"
@@ -58,19 +49,13 @@
             <span v-if="uploadButtonText">{{ uploadButtonText }}</span>
           </button>
         </div>
-        
-        <!-- 파일 정보 표시 -->
-        <div v-if="selectedFiles.length > 0" class="file-info">
-          <p class="file-count">{{ selectedFiles.length }}개 파일 선택됨</p>
-          <p v-if="maxFiles" class="file-limit">최대 {{ maxFiles }}개까지 업로드 가능</p>
-        </div>
       </div>
-      
+
       <!-- 에러 메시지 -->
       <p v-if="isInvalid" class="feedback error">
         <span class="text">{{ validText }}</span>
       </p>
-      
+
       <!-- 도움말 텍스트 -->
       <p v-if="helpText" class="help-text">{{ helpText }}</p>
     </div>
@@ -102,7 +87,10 @@ const props = defineProps({
   showIcon: { type: Boolean, default: true },
   iconType: { type: String, default: 'ico-image' },
   iconSize: { type: String, default: '2.4rem' },
-  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' },
+  showPreview: { type: Boolean, default: true },
+  currentImageCount: { type: Number, default: 0 },
+  enableLimitCheck: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['update:modelValue', 'file-selected', 'file-removed', 'error'])
@@ -129,9 +117,9 @@ const handleFileSelect = (event: Event) => {
   if (!files || files.length === 0) return
 
   const newFiles = Array.from(files)
-  
-  // 파일 개수 제한 확인
-  if (props.maxFiles && selectedFiles.value.length + newFiles.length > props.maxFiles) {
+
+  // 파일 개수 제한 확인 (부모의 현재 이미지 개수 + 새로 선택된 파일 개수)
+  if (props.maxFiles && props.modelValue.length + newFiles.length > props.maxFiles) {
     emit('error', `최대 ${props.maxFiles}개까지 업로드 가능합니다.`)
     return
   }
@@ -151,11 +139,11 @@ const handleFileSelect = (event: Event) => {
 
   // 파일 추가
   selectedFiles.value.push(...newFiles)
-  
+
   // 미리보기 생성
   newFiles.forEach(file => {
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = e => {
       previewImages.value.push(e.target?.result as string)
     }
     reader.readAsDataURL(file)
@@ -171,13 +159,19 @@ const handleFileSelect = (event: Event) => {
 
 // 파일 입력 트리거
 const triggerFileInput = () => {
+  // 파일 개수 제한 확인 (enableLimitCheck가 true일 때만 체크)
+  if (props.enableLimitCheck && props.maxFiles && props.currentImageCount >= props.maxFiles) {
+    emit('error', `최대 ${props.maxFiles}개까지 업로드 가능합니다.`)
+    return
+  }
+
   fileInput.value?.click()
 }
 
 // 입력 클릭 처리
 const handleInputClick = () => {
-  // 파일 개수 제한 확인
-  if (props.maxFiles && selectedFiles.value.length >= props.maxFiles) {
+  // 파일 개수 제한 확인 (enableLimitCheck가 true일 때만 체크)
+  if (props.enableLimitCheck && props.maxFiles && props.currentImageCount >= props.maxFiles) {
     emit('error', `최대 ${props.maxFiles}개까지 업로드 가능합니다.`)
     return
   }
@@ -187,7 +181,7 @@ const handleInputClick = () => {
 const removeImage = (index: number) => {
   selectedFiles.value.splice(index, 1)
   previewImages.value.splice(index, 1)
-  
+
   emit('update:modelValue', [...selectedFiles.value])
   emit('file-removed', index)
 }
@@ -202,25 +196,33 @@ const formatFileSize = (bytes: number): string => {
 }
 
 // modelValue 변경 감지
-watch(() => props.modelValue, (newValue) => {
-  if (newValue.length !== selectedFiles.value.length) {
-    selectedFiles.value = [...newValue]
-    // 미리보기 재생성
-    previewImages.value = []
-    newValue.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        previewImages.value.push(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-    })
-  }
-}, { deep: true })
+watch(
+  () => props.modelValue,
+  newValue => {
+    if (newValue.length !== selectedFiles.value.length) {
+      selectedFiles.value = [...newValue]
+      // 미리보기 재생성
+      previewImages.value = []
+      newValue.forEach(file => {
+        const reader = new FileReader()
+        reader.onload = e => {
+          previewImages.value.push(e.target?.result as string)
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+  },
+  { deep: true }
+)
 
 // 컴포넌트 초기화
-watch(() => props.modelValue, (newValue) => {
-  selectedFiles.value = [...newValue]
-}, { immediate: true })
+watch(
+  () => props.modelValue,
+  newValue => {
+    selectedFiles.value = [...newValue]
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss" scoped>
@@ -235,7 +237,7 @@ watch(() => props.modelValue, (newValue) => {
   font-weight: 600;
   color: #333;
   line-height: 1.4;
-  
+
   .required-mark {
     color: #ff4757;
   }
@@ -243,14 +245,14 @@ watch(() => props.modelValue, (newValue) => {
 
 .c-inp-el {
   position: relative;
-  
+
   &.lg {
     .upload-btn {
       padding: 1.6rem 2rem;
       font-size: 1.6rem;
     }
   }
-  
+
   &.sm {
     .upload-btn {
       padding: 0.8rem 1.2rem;
@@ -269,6 +271,7 @@ watch(() => props.modelValue, (newValue) => {
 
 .file-input-area {
   position: relative;
+  height: 2.4rem;
 }
 
 .upload-btn {
@@ -277,17 +280,12 @@ watch(() => props.modelValue, (newValue) => {
   gap: 0.8rem;
   font-size: 1.4rem;
   font-weight: 500;
-  
-  &:hover:not(:disabled) {
-    background: #e9ecef;
-    border-color: #adb5bd;
-  }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   .icon {
     background-size: contain;
     background-repeat: no-repeat;
@@ -309,13 +307,13 @@ watch(() => props.modelValue, (newValue) => {
   border-radius: 0.8rem;
   overflow: hidden;
   border: 0.1rem solid #e9ecef;
-  
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   .remove-image-btn {
     position: absolute;
     top: 0.4rem;
@@ -331,11 +329,11 @@ watch(() => props.modelValue, (newValue) => {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
-    
+
     &:hover {
       background: rgba(0, 0, 0, 0.8);
     }
-    
+
     .icon {
       width: 1.2rem;
       height: 1.2rem;
@@ -343,36 +341,20 @@ watch(() => props.modelValue, (newValue) => {
   }
 }
 
-.file-info {
-  margin-top: 0.8rem;
-  
-  .file-count {
-    font-size: 1.2rem;
-    color: #6c757d;
-    margin: 0;
-  }
-  
-  .file-limit {
-    font-size: 1.1rem;
-    color: #adb5bd;
-    margin: 0.2rem 0 0 0;
-  }
-}
-
 .feedback {
   margin: 0.4rem 0 0 0;
   font-size: 1.2rem;
   line-height: 1.4;
-  
+
   &.error {
     color: #dc3545;
   }
-  
+
   .text {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    
+
     &::before {
       content: '⚠';
       font-size: 1.4rem;
@@ -389,9 +371,9 @@ watch(() => props.modelValue, (newValue) => {
 
 .is-invalid {
   border-color: #dc3545 !important;
-  
+
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 }
-</style> 
+</style>

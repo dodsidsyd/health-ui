@@ -46,9 +46,13 @@
   <!-- 일일 걸음수 내역 모달 -->
   <BottomModal :is-visible="isShowStepHistoryModal" v-bind="StepHistoryModalProps" @close="toggleStepHistoryModal">
     <template #content>
+      <!-- 08-13 안내문구 추가 -->
+      <p class="fz-13 text-left" style="color: #555">걸음내역은 일일 마감 이후 업데이트 됩니다.</p>
       <StepsHistoryItem :date="'2025.06.25'" :steps="'8,471'" :mission="'1,600'" :item="'254'" />
       <StepsHistoryItem :date="'2025.06.25'" :steps="'8,471'" :mission="'1,600'" :item="'254'" />
       <StepsHistoryItem :date="'2025.06.25'" :steps="'8,471'" :mission="'1,600'" :item="'254'" />
+      <!-- 08-13 집계내역 없음 추가 -->
+      <EmptyResult class="pd-60y" :title="'집계된 걸음수 내역이 없습니다.'" />
     </template>
   </BottomModal>
   <!-- 챌린지 미션 모달 -->
@@ -173,6 +177,7 @@ import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import RoundTabs, { type RoundTab } from '~/components/tabbar/RoundTabs.vue'
 import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
+import EmptyResult from '~/components/publishing/wholeMenu/EmptyResult.vue'
 // 레이아웃에서 addTextClick 핸들러 등록 기능 가져오기
 const setAddTextClickHandler = inject<(handler: () => void) => void>('setAddTextClickHandler')
 // 컴포넌트 마운트 시 addTextClick 핸들러 등록

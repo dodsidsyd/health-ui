@@ -8,16 +8,14 @@
     :has-add-text-left="true"
     class="pb-36"
   >
-    <div class="agree-wrap flex flex-col gap-10 mt-40">
+    <div class="agree-wrap flex flex-col gap-10 mt-8">
       <h1 class="c-tit">
-        <span class="text">
-          다녀온 병원을 검색해 주세요
-        </span>
+        <span class="text"> 다녀온 병원을 검색해 주세요 </span>
       </h1>
-      <div class="c-tit-sub">서류 없이도 청구 가능한 병원인지 알 수 있어요.</div>
+      <div class="c-tit-sub mt-6">서류 없이도 청구 가능한 병원인지 알 수 있어요.</div>
       <InputText class="search-hospital" inp-type="search" placeholder="병원 이름을 입력해 주세요." />
     </div>
-    
+
     <FlexSection>
       <div class="wrap-recent-searches">
         <div class="text">최근 검색</div>
@@ -110,7 +108,6 @@ import Checkbox from '~/components/publishing/input/check.vue'
 // 체크박스 상태 관리
 const isPaperlessClaim = ref(true)
 const isMyHospital = ref(false)
-
 </script>
 
 <style scoped lang="scss">
@@ -127,7 +124,7 @@ const isMyHospital = ref(false)
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 140%;
-    color: #2B2B2B;
+    color: #2b2b2b;
   }
 }
 .wrap-claim-type {
@@ -135,17 +132,17 @@ const isMyHospital = ref(false)
   gap: 1.2rem;
 }
 .wrap-hospitals {
-  border-top: 0.1rem solid #EEEEEE;
+  border-top: 0.1rem solid #eeeeee;
   margin: 0 -2rem;
   padding: 0 2rem;
   .item {
-    padding: 2rem 0; 
+    padding: 2rem 0;
     display: flex;
     align-items: center;
     gap: 1.6rem;
     width: 100%;
     &:not(:first-child) {
-      border-top: 0.1rem solid #EEEEEE;
+      border-top: 0.1rem solid #eeeeee;
     }
     .hospital-logo {
       width: 4.8rem;
@@ -165,7 +162,7 @@ const isMyHospital = ref(false)
           font-size: 1.6rem;
           font-weight: 700;
           line-height: 1.4;
-          color: #2B2B2B;
+          color: #2b2b2b;
           width: 100%;
           @include mixin.ellipsis;
           overflow: hidden;
@@ -192,17 +189,17 @@ const isMyHospital = ref(false)
         .h-label {
           padding: 0.3rem 0.6rem;
           border-radius: 0.4rem;
-          background-color: #EEEEEE;
+          background-color: #eeeeee;
           font-size: 1.2rem;
           font-weight: 500;
           line-height: 1.3;
           color: #555555;
           &.no-doc {
-            background-color: #E5EDFF;
-            color: #4C7FF7;
+            background-color: #e5edff;
+            color: #4c7ff7;
           }
           &.my {
-            background-color: #4C7FF7;
+            background-color: #4c7ff7;
             color: #fff;
           }
         }
@@ -219,7 +216,6 @@ const isMyHospital = ref(false)
         height: 2.4rem;
       }
     }
-    
   }
 }
 .wrap-empty {

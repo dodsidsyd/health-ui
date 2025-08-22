@@ -2,16 +2,16 @@
   <div class="diary-Calendar">
     <DatePicker
       v-model="currentDate"
-      @update:modelValue="handleDateChange"
-      @date-status-change="handleDateStatusChange"
-      @emoji-click="handleEmojiClick"
-      @diary-click="handleDiaryClick"
       :disabled-dates="disabledDates"
       :show-header="showHeader"
       :show-navigation="showNavigation"
       :enable-month-picker="enableMonthPicker"
       :heart-diary="heartDiary"
-      :heartDiaryData="heartDiaryData"
+      :heart-diary-data="heartDiaryData"
+      @update:model-value="handleDateChange"
+      @date-status-change="handleDateStatusChange"
+      @emoji-click="handleEmojiClick"
+      @diary-click="handleDiaryClick"
     />
   </div>
 </template>

@@ -6,12 +6,32 @@
       src="/community/home/ico-bullseye.svg"
       class="space-between"
     />
-    <StickyTabsContainer>
-      <BoxedTabs :tabs="boxTabs" :active-key="activeBoxTab" variant="fill-type" @tab-change="onBoxTabChange" />
-    </StickyTabsContainer>
-    <div class="list">
-      <CommItem v-for="item in firstHalfItems" :key="item.id" :item="item" :type="item.type" />
-      <div v-if="showBanner" class="event-banner">
+    <template v-if="commList.length > 0">
+      <StickyTabsContainer>
+        <BoxedTabs :tabs="boxTabs" :active-key="activeBoxTab" variant="fill-type" @tab-change="onBoxTabChange" />
+      </StickyTabsContainer>
+      <div class="list">
+        <CommItem v-for="item in firstHalfItems" :key="item.id" :item="item" :type="item.type" />
+        <div v-if="showBanner" class="event-banner">
+          <NuxtLink to="#">
+            <div class="banner-txt">
+              <p class="tit">실손의료비 보상금 예측 서비스</p>
+              <strong class="txt">내가 받을 수 있는<br />보상금은 얼마일까?</strong>
+            </div>
+            <div class="img">
+              <img src="~/assets/images/community/home/ico-money.svg" alt="" />
+            </div>
+          </NuxtLink>
+        </div>
+        <CommItem v-for="item in secondHalfItems" :key="item.id" :item="item" :type="item.type" />
+        <Button btn-type="line" class="btn-more" aria-label="더보기 +" @click="onMoreClick">{{
+          moreButtonText
+        }}</Button>
+      </div>
+    </template>
+    <template v-else>
+      <EmptyState empty-title="오늘 추천 글이 없어요" href="/community" :button="true" />
+      <div class="event-banner mt-24">
         <NuxtLink to="#">
           <div class="banner-txt">
             <p class="tit">실손의료비 보상금 예측 서비스</p>
@@ -22,11 +42,7 @@
           </div>
         </NuxtLink>
       </div>
-      <CommItem v-for="item in secondHalfItems" :key="item.id" :item="item" :type="item.type" />
-      <Button btn-type="line" class="btn-more mt-20 mb-20" aria-label="더보기 +" @click="onMoreClick">{{
-        moreButtonText
-      }}</Button>
-    </div>
+    </template>
   </section>
 </template>
 <script setup lang="ts">
@@ -35,6 +51,7 @@ import TitleIconBox from '~/components/common/TitleIconBox.vue'
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
 import CommItem from '~/components/publishing/community/common/CommItem.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 const activeBoxTab = ref('option0')
 const boxTabs = ref<BoxTab[]>([
   { title: '40대가 많이봤어요', key: 'option0' },
@@ -148,16 +165,12 @@ const router = useRouter()
 
 const bannerPosition = 3
 const maxItems = 15
-const maxClicks = 5
+// 정확한 계산: (전체 개수 - 초기 표시 개수) / 한 번에 로드할 개수
+const maxClicks = Math.ceil((commList.length - 3) / 3)
 
 const firstHalfItems = computed(() => commItems.value.slice(0, bannerPosition))
 const secondHalfItems = computed(() => commItems.value.slice(bannerPosition))
 const showBanner = computed(() => commItems.value.length >= bannerPosition)
-
-// 더보기 버튼 표시 여부
-const showMoreButton = computed(() => {
-  return visibleCount.value < maxItems && visibleCount.value < commList.length && clickCount.value < maxClicks
-})
 
 // 더보기 버튼 텍스트
 const moreButtonText = computed(() => {
@@ -174,9 +187,13 @@ const moreButtonText = computed(() => {
   return `더보기 ${clickCount.value} / ${maxClicks}`
 })
 
-const handleTalkClick = profileData => {
-  router.push('#')
-}
+// const showMoreButton = computed(() => {
+//   return visibleCount.value < maxItems && visibleCount.value < commList.length && clickCount.value < maxClicks
+// })
+
+// const handleTalkClick = profileData => {
+//   router.push('#')
+// }
 
 const onMoreClick = async () => {
   if (clickCount.value >= maxClicks) return
@@ -202,9 +219,14 @@ const onMoreClick = async () => {
 </script>
 <style scoped lang="scss">
 .suggestedPosts-section {
-  padding-top: 3.2rem;
+  padding: 3.2rem 0 4.4rem;
   &:before {
     display: none;
+  }
+  .event-banner {
+    & + .btn-more {
+      margin-top: 2rem;
+    }
   }
 }
 :deep(.title-box) {

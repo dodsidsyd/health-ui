@@ -163,6 +163,24 @@ function onChange(e: Event) {
         }
       }
     }
+    &.attached-file {
+      .c-label {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 8rem;
+        padding: 0 1.6rem;
+        font-size: 1.6rem;
+        border-radius: 1.2rem;
+        .radio-text {
+          // margin-top: 0.8rem;
+          color: #959595;
+          text-align: left;
+          order: 2;
+          white-space: pre-line;
+        }
+      }
+    }
     // 반응형 width 지원
     &.responsive {
       .c-label {

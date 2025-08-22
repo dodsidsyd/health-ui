@@ -14,7 +14,16 @@
 
     <FlexSection class="gap-12 pb-40">
       <InputText label="게임명*" :model-value="'여의도 테니스 모임 오세요'" />
-      <InputCalendarFromTo label="게임 기간*" />
+      <InputCalendarFromTo
+        label="게임 기간*"
+        placeholder="시작일시"
+        placeholder2="종료일시"
+        :show-time-picker="true"
+        :default-hour="9"
+        :default-minute="0"
+        :minute-step="5"
+        @time-change="handleTimeChange"
+      />
       <FlexColDiv class="gap-12">
         <InputLabelText label="게임 방식" :required="true" />
         <FlexRowDiv class="gap-28">
@@ -71,6 +80,8 @@ import FlexColDiv from '~/components/page/FlexColDiv.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import Radio from '~/components/publishing/input/radio.vue'
 import ConfirmModal from '~/components/common/modal/ConfirmModal.vue'
+import { ref } from 'vue'
+
 // 먼저 목표도달하기 선택시
 const selectedGameMode = ref('reachGoal')
 // 참가자 목록 데이터
@@ -94,6 +105,26 @@ const clickConfirmModal = async () => {
 const handleConfirmBtn = () => {
   navigateTo('/walkingKing/privateGameBeforeStart')
   isShowConfirmModal.value = false
+}
+
+// 날짜 + 시간 선택
+const fromDateTime = ref('')
+const toDateTime = ref('')
+
+// 시간 변경 핸들러
+const handleTimeChange = (timeInfo: { field: 'from' | 'to'; hour: number; minute: number; dateTime: Date }) => {
+  console.log('게임 시간 변경:', timeInfo)
+
+  // 시작/종료 시간 검증
+  if (timeInfo.field === 'to' && fromDateTime.value && toDateTime.value) {
+    const fromDate = new Date(fromDateTime.value.replace(/\./g, '-').replace(' ', 'T'))
+    const toDate = new Date(toDateTime.value.replace(/\./g, '-').replace(' ', 'T'))
+
+    if (fromDate >= toDate) {
+      alert('게임 종료 시간은 시작 시간보다 늦어야 합니다.')
+      return
+    }
+  }
 }
 </script>
 <style scoped lang="scss"></style>

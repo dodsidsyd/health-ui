@@ -507,6 +507,7 @@ const closeHealthData = () => {
 }
 /* TipTap 에디터 텍스트 스타일 */
 :deep(.ProseMirror) {
+  width: 100%;
   outline: none;
   font-size: 1.8rem;
   line-height: 2.9rem;
@@ -526,6 +527,11 @@ const closeHealthData = () => {
 .editor-content-wrapper {
   padding: 0 2rem;
   display: flex;
+}
+
+.editor-main {
+  width: 100%;
+  height: 100%;
 }
 
 /* 해시태그 섹션 */

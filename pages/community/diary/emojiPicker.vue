@@ -6,23 +6,16 @@
     :add-text-click-enabled="false"
     @close="handleClose"
   >
-    <DateRangeSelect
+    <!-- <DateRangeSelect
       v-model="selectedDate"
       class="mt-23 mb-10"
       navigation-mode="notyear"
       :prev-btn="false"
       :next-btn="false"
       @update:model-value="handleDateChange"
-    />
+    /> -->
 
-    <TitieBox 
-      title="오늘은 어떤 하루였나요?" 
-      titleClass=""
-      ariaLabel=""
-      text=""
-      :center="true"
-      class="mb-24" 
-    />
+    <TitieBox title="오늘은 어떤 하루였나요?" titleClass="" ariaLabel="" text="" :center="true" class="mt-20 mb-24" />
 
     <Emoji @emoji-selected="handleEmojiSelected" />
   </BaseBody>
@@ -32,7 +25,7 @@
 import { ref, onMounted, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BaseBody from '~/components/layout/BaseBody.vue'
-import DateRangeSelect from '~/components/smartRing/DateRangeSelect.vue'
+// import DateRangeSelect from '~/components/smartRing/DateRangeSelect.vue'
 import TitieBox from '~/components/common/TitleBox.vue'
 import Emoji from '~/components/publishing/community/diary/Emoji.vue'
 
@@ -40,7 +33,7 @@ const router = useRouter()
 const route = useRoute()
 
 // URL 파라미터에서 날짜 받아오기
-const selectedDate = ref(new Date(route.query.date as string || new Date()))
+const selectedDate = ref(new Date((route.query.date as string) || new Date()))
 
 // 날짜 변경 핸들러
 const handleDateChange = (newDate: Date) => {
@@ -50,15 +43,15 @@ const handleDateChange = (newDate: Date) => {
 // 이모지 선택 핸들러
 const handleEmojiSelected = (selectedEmoji: { file: string; name: string }) => {
   // returnPath가 있으면 해당 경로로, 없으면 create.vue로 이동
-  const returnPath = route.query.returnPath as string || '/community/diary/create'
-  
+  const returnPath = (route.query.returnPath as string) || '/community/diary/create'
+
   // 선택된 이모지와 날짜 정보를 쿼리로 전달
   const query = {
     date: selectedDate.value.toISOString().split('T')[0],
     emoji: selectedEmoji.file,
     name: selectedEmoji.name
   }
-  
+
   router.push({
     path: returnPath,
     query

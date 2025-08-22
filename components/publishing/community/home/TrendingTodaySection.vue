@@ -7,15 +7,21 @@
       :is-img="true"
       src="/community/home/ico-fire.svg"
     />
-    <StickyTabsContainer>
-      <BoxedTabs :tabs="boxTabs" :active-key="activeBoxTab" variant="fill-type" @tab-change="onBoxTabChange" />
-    </StickyTabsContainer>
-    <TrendingToday
-      :items="trendingData"
-      :isLoggedIn="isLoggedIn"
-      @itemClick="handleItemClick"
-      @loginRequired="showLoginModal"
-    />
+
+    <!-- 데이터가 있을 때 -->
+    <template v-if="trendingData.length > 0">
+      <StickyTabsContainer>
+        <BoxedTabs :tabs="boxTabs" :active-key="activeBoxTab" variant="fill-type" @tab-change="onBoxTabChange" />
+      </StickyTabsContainer>
+      <TrendingToday
+        :items="trendingData"
+        :isLoggedIn="isLoggedIn"
+        @itemClick="handleItemClick"
+        @loginRequired="showLoginModal"
+      />
+    </template>
+    <!-- 데이터가 없을 때 -->
+    <EmptyState v-else empty-title="오늘 급상승 글이 없어요" href="/community" :button="true" />
   </section>
 </template>
 <script setup lang="ts">
@@ -23,6 +29,8 @@ import TitleIconBox from '~/components/common/TitleIconBox.vue'
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
 import TrendingToday from '~/components/publishing/community/home/TrendingToday.vue'
+import Button from '~/components/publishing/button/Button.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 
 const activeBoxTab = ref('all')
 const boxTabs = ref<BoxTab[]>([
@@ -53,47 +61,47 @@ onMounted(() => {
 
 // 샘플 데이터
 const trendingData = ref([
-  {
-    id: 1,
-    writer: '작성자1',
-    writerImageUrl: 'community/img-rank-profile.png',
-    tit: '게시글 제목입니다',
-    text: '이것은 1위 게시글의 내용입니다. 오늘 가장 인기있는 글이에요.',
-    images: ['community/img-community-02.png', 'community/img-community-01.png', 'community/img-community-02.png'], // 1위용 다중 이미지
-    cate: [{ label: '커뮤니티명', type: 'blue' }],
-    likeNum: 128,
-    viewNum: 1520,
-    replyNum: 45
-  },
-  {
-    id: 2,
-    writer: '작성자2',
-    writerImageUrl: 'community/img-rank-profile.png',
-    tit: '게시글 제목입니다',
-    text: '이것은 2위 게시글의 내용입니다.',
-    src: 'community/img-community-02.png',
-    images: ['community/img-community-01.png', 'community/img-community-01.png', 'community/img-community-01.png'],
-    cate: [
-      { label: '건강의신', type: 'blue' },
-      { label: '게시판명', type: '' }
-    ],
-    likeNum: 89,
-    viewNum: 980,
-    replyNum: 32
-  },
-  {
-    id: 3,
-    writer: '작성자3',
-    writerImageUrl: 'community/img-rank-profile.png',
-    tit: '게시글 제목입니다',
-    text: '이것은 3위 게시글의 내용입니다.',
-    images: ['community/img-community-01.png', 'community/img-community-01.png'],
-    length: 2,
-    cate: [{ label: '질문게시판', type: 'blue' }],
-    likeNum: 67,
-    viewNum: 756,
-    replyNum: 28
-  }
+  // {
+  //   id: 1,
+  //   writer: '작성자1',
+  //   writerImageUrl: 'community/img-rank-profile.png',
+  //   tit: '게시글 제목입니다',
+  //   text: '이것은 1위 게시글의 내용입니다. 오늘 가장 인기있는 글이에요.',
+  //   images: ['community/img-community-02.png', 'community/img-community-01.png', 'community/img-community-02.png'], // 1위용 다중 이미지
+  //   cate: [{ label: '커뮤니티명', type: 'blue' }],
+  //   likeNum: 128,
+  //   viewNum: 1520,
+  //   replyNum: 45
+  // },
+  // {
+  //   id: 2,
+  //   writer: '작성자2',
+  //   writerImageUrl: 'community/img-rank-profile.png',
+  //   tit: '게시글 제목입니다',
+  //   text: '이것은 2위 게시글의 내용입니다.',
+  //   src: 'community/img-community-02.png',
+  //   images: ['community/img-community-01.png', 'community/img-community-01.png', 'community/img-community-01.png'],
+  //   cate: [
+  //     { label: '건강의신', type: 'blue' },
+  //     { label: '게시판명', type: '' }
+  //   ],
+  //   likeNum: 89,
+  //   viewNum: 980,
+  //   replyNum: 32
+  // },
+  // {
+  //   id: 3,
+  //   writer: '작성자3',
+  //   writerImageUrl: 'community/img-rank-profile.png',
+  //   tit: '게시글 제목입니다',
+  //   text: '이것은 3위 게시글의 내용입니다.',
+  //   images: ['community/img-community-01.png', 'community/img-community-01.png'],
+  //   length: 2,
+  //   cate: [{ label: '질문게시판', type: 'blue' }],
+  //   likeNum: 67,
+  //   viewNum: 756,
+  //   replyNum: 28
+  // }
 ])
 
 // 이벤트 핸들러
@@ -113,9 +121,15 @@ useHead({
 </script>
 <style scoped lang="scss">
 .trendingToday-section {
-  padding-top: 3.2rem;
+  padding: 3.2rem 0;
   &:before {
     display: none;
+  }
+}
+
+:deep(.trending-list) {
+  .trending-item:last-child {
+    padding-bottom: 0;
   }
 }
 </style>

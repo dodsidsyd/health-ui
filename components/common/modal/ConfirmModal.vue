@@ -3,14 +3,14 @@
     <div class="c-dim" @click="closeModal"></div>
     <div class="c-modal-inner">
       <div class="c-modal-header">
-        <strong class="c-modal-title" id="modalTitle">{{ title }}</strong>
+        <strong id="modalTitle" class="c-modal-title">{{ title }}</strong>
         <button v-if="isShowCloseButton" type="button" class="c-modal-close-btn" aria-label="닫기" @click="closeModal">
           <i class="icon close"></i>
         </button>
       </div>
       <div class="c-modal-body">
-        <div v-if="html" v-html="html" />
-        <div v-else-if="content">{{ content }}</div>
+        <div v-if="html" v-html="html"></div>
+        <div v-else-if="content" style="white-space: pre-line">{{ content }}</div>
       </div>
       <div v-if="isShowFooter" class="c-modal-footer">
         <button
@@ -79,3 +79,9 @@ const isDisabledConfirmButton = computed(() => {
   return props.disabledConfirmButton
 })
 </script>
+<style lang="scss" scoped>
+.c-modal-body {
+  padding-bottom: 0;
+  text-align: left;
+}
+</style>

@@ -109,4 +109,12 @@ const slideList = [
   }
 }
 
+@media (min-width: 768px) {
+  .daily-quote-section {
+    :deep(swiper-slide) {
+    width: 30rem;
+  }
+  }
+}
+
 </style>

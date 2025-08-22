@@ -9,20 +9,10 @@
   >
     <template #content>
       <div class="modal-content">
-        <Button
-          btnType="text"
-          class="modal-btn edit-btn"
-          @click="selectedDiary && $emit('edit', selectedDiary)"
-        >
+        <Button btnType="text" class="modal-btn edit-btn" @click="selectedDiary && $emit('edit', selectedDiary)">
           수정하기
         </Button>
-        <Button
-          btnType="text"
-          class="modal-btn delete-btn"
-          @click="$emit('showDeleteConfirm')"
-        >
-          삭제하기
-        </Button>
+        <Button btnType="text" class="modal-btn delete-btn" @click="$emit('showDeleteConfirm')"> 삭제하기 </Button>
       </div>
     </template>
   </BottomModal>
@@ -33,12 +23,14 @@
     title="정말로 일기를 삭제할까요?"
     content="한 번 삭제하면 되돌리 수 없어요."
     :is-show-cancel-button="true"
+    :is-show-close-button="true"
     :is-show-confirm-button="true"
     confirm-button-text="삭제하기"
     cancel-button-text="취소"
     @confirm="$emit('confirmDelete')"
+    @close="$emit('close')"
     @cancel="$emit('cancelDelete')"
-    @close="$emit('cancelDelete')"
+    class="modal-confirm-modal"
   />
 </template>
 
@@ -81,19 +73,32 @@ defineEmits<Emits>()
 .modal-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1.2rem;
-  padding: 1.6rem 0;
 }
-
-.modal-btn {
-  width: 100%;
-  padding: 1.6rem;
-  border: none;
-  border-radius: 1.2rem;
-  font-size: 1.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+:deep(.c-btn) {
+  text-align: left;
+  &.modal-btn {
+    display: block;
+    width: 100%;
+    padding: 1.6rem 0;
+    border: none;
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
+    transition: all 0.2s ease;
+  }
 }
-</style> 
+.modal-confirm-modal {
+  width: calc(100% - 7.3rem);
+  :deep(.c-modal-inner) {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+  }
+  :deep(.c-modal-header) {
+    padding: 3.2rem 2rem 2.4rem;
+  }
+  :deep(.c-modal-body) {
+    text-align: left;
+    padding: 0 2rem;
+  }
+}
+</style>

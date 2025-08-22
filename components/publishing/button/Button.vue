@@ -5,8 +5,8 @@
     :aria-label="ariaLabel || defaultSlotText"
     :href="isLink && elementType === 'a' ? linkHref : undefined"
     :role="isLink && elementType !== 'button' ? 'link' : undefined"
-    @click="btnevtClick"
     :style="buttonStyle"
+    @click="btnevtClick"
   >
     <img v-if="imageSrc && iconPosition === 'left'" :src="imageSrc" alt="버튼 이미지" class="btn-image" />
     <!-- 아이콘이 텍스트 앞에 있을 때 -->
@@ -14,8 +14,7 @@
       v-if="icon && iconPosition === 'left'"
       :class="`icon ${icon}`"
       :style="{
-        ...iconStyle,
-        marginRight: '4px'
+        ...iconStyle
       }"
       aria-hidden="true"
     ></i>
@@ -28,8 +27,7 @@
       v-if="icon && iconPosition === 'right'"
       :class="`icon ${icon}`"
       :style="{
-        ...iconStyle,
-        marginLeft: '4px'
+        ...iconStyle
       }"
       aria-hidden="true"
     ></i>
@@ -44,7 +42,8 @@ const props = defineProps({
   btnType: {
     type: String,
     required: true,
-    validator: (value: string) => ['primary', 'secondary', 'tertiary', 'line', 'link', 'text'].includes(value)
+    validator: (value: string) =>
+      ['primary', 'secondary', 'tertiary', 'line', 'link', 'text', 'gray', 'darkgray', 'primary-line'].includes(value)
   },
   icon: {
     type: String,
@@ -183,6 +182,9 @@ const btnevtClick = (event: MouseEvent) => {
   line-height: 1.5;
   color: rgb(var(--white));
   @include mixin.rippleEffectWhite;
+  .text {
+    padding: 0 0.4rem;
+  }
   // 두번째 색상
   &.btn-secondary {
     background-color: rgba(232, 232, 232, 1);
@@ -237,7 +239,7 @@ const btnevtClick = (event: MouseEvent) => {
     background-color: var(--gray2);
   }
   &.btn-darkgray {
-    background-color: #4f5561;
+    background-color: #555;
     .text {
       color: #fff;
     }
@@ -245,9 +247,16 @@ const btnevtClick = (event: MouseEvent) => {
   &.btn-trans {
     background: transparent;
   }
+  &.btn-primary-line {
+    background-color: #f6f9ff;
+    outline: 1px solid #4c7ff7;
+    .text {
+      color: #4c7ff7;
+    }
+  }
   // outline 타입
   &.btn-line {
-    background-color: var(--white);
+    background-color: rgb(var(--white));
     outline: 1px solid #e2e2e2;
     border: unset;
     border-radius: 4px;
@@ -257,11 +266,12 @@ const btnevtClick = (event: MouseEvent) => {
     .text {
       color: #2b2b2b;
       font-weight: vars.$medium;
+      white-space: pre;
     }
     &:disabled,
     &[disabled] {
       @include mixin.disabled;
-      background-color: var(--white);
+      background-color: rgb(var(--white));
       .text {
         color: rgba(149, 149, 149, 1);
       }
@@ -296,7 +306,7 @@ const btnevtClick = (event: MouseEvent) => {
     &:disabled,
     &[disabled] {
       @include mixin.disabled;
-      background-color: var(--white);
+      background-color: rgb(var(--white));
       .text {
         color: #555;
       }
@@ -323,7 +333,6 @@ const btnevtClick = (event: MouseEvent) => {
       width: 2rem;
       height: 2rem;
       background-position: center;
-      background-repeat: no-repeat;
       background-size: 2rem;
     }
   }
@@ -332,7 +341,6 @@ const btnevtClick = (event: MouseEvent) => {
       width: 2rem;
       height: 2rem;
       background-position: center;
-      background-repeat: no-repeat;
       background-size: 2rem;
     }
   }
@@ -341,7 +349,6 @@ const btnevtClick = (event: MouseEvent) => {
       width: 2.4rem;
       height: 2.4rem;
       background-position: center;
-      background-repeat: no-repeat;
       background-size: 2.4rem;
     }
   }
@@ -350,7 +357,6 @@ const btnevtClick = (event: MouseEvent) => {
       width: 1.6rem;
       height: 1.6rem;
       background-position: center;
-      background-repeat: no-repeat;
       background-size: 1.6rem;
     }
   }
@@ -359,7 +365,6 @@ const btnevtClick = (event: MouseEvent) => {
       width: 1.5rem;
       height: 1.5rem;
       background-position: center;
-      background-repeat: no-repeat;
       background-size: 1.5rem;
     }
   }

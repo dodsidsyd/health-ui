@@ -5,6 +5,7 @@
       title="실시간 랭킹"
       aria-label="전체랭킹"
       element-type="a"
+      icon="arrow-type-black"
       :is-show-link="true"
       link-class="btn-link"
       :is-link="true"

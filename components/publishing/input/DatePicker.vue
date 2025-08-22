@@ -8,7 +8,10 @@
         :class="{ clickable: props.enableMonthPicker }"
         @click="handleHeaderClick"
       >
-        {{ currentYear }}년 {{ currentMonth }}월
+        <template v-if="props.weekMode">
+          {{ currentYear }}년 {{ currentMonth }}월 <span class="week-number">{{ getWeekOfMonth }}번째 주</span>
+        </template>
+        <template v-else> {{ currentYear }}년 {{ currentMonth }}월 </template>
       </h2>
 
       <!-- 월 네비게이션 (조건부) -->
@@ -28,7 +31,7 @@
           <li class="saturday">토</li>
         </ol>
 
-        <div class="calendar-dates">
+        <div class="calendar-dates" :class="{ 'week-mode': props.weekMode }">
           <!-- 이전 달의 빈 날짜들 -->
           <div v-for="emptyDay in startPadding" :key="'empty-' + emptyDay" class="empty-date"></div>
 
@@ -42,13 +45,24 @@
               'disabled-day': isDisabled(date),
               'vital-record': props.vitalRecord,
               'heart-diary': props.heartDiary,
+              'vital-homework': props.vitalHomework,
+              'homework-start-date': isHomeworkStartDate(date),
+              'homework-end-date': isHomeworkEndDate(date),
+              'homework-period': isInHomeworkPeriod(date),
               'no-data': isNoDataDate(date),
+              scheduled: isScheduledDate(date),
               sunday: isSunday(date),
-              saturday: isSaturday(date)
+              saturday: isSaturday(date),
+              'debt-price-mode': props.isShowDebtPrice,
+              'no-price': props.isShowDebtPrice && isNoPrice(date)
             }"
             @click="handleDateClick(date)"
           >
-            <span class="date-cell">{{ date }}</span>
+            <span class="date-cell">
+              {{ date }}
+              <!-- 스케줄 마커 (점 스타일) -->
+              <span v-if="isScheduledDate(date)" class="schedule-dot"></span>
+            </span>
             <!-- vital-record 모드일 때만 아이콘 표시 -->
             <span
               v-if="props.vitalRecord || props.heartDiary"
@@ -56,8 +70,30 @@
               :class="getVitalIconClass(date)"
               @click.stop="handleEmojiClick(date, $event)"
             ></span>
+            <!-- 건강 숙제 모드 -->
+            <span
+              v-if="props.vitalHomework"
+              class="homework-status"
+              :class="getHomeworkStatusClass(date)"
+              @click.stop="handleHomeworkClick(date, $event)"
+            >
+              <span v-if="getHomeworkStatus(date) === 'completed'" class="check-icon"></span>
+            </span>
+            <!-- 건강 부채 모드 -->
+            <span v-if="props.isShowDebtPrice && getDebtPrice(date)" class="debt-price">{{ getDebtPrice(date) }}</span>
           </div>
         </div>
+      </div>
+
+      <!-- 시간 선택 영역 (showTimePicker가 true일 때만 표시) -->
+      <div v-if="props.showTimePicker" class="time-picker-section">
+        <HourMinRollSelecter
+          v-model="timeValue"
+          :minute-step="props.minuteStep"
+          :default-hour="props.defaultHour"
+          :default-minute="props.defaultMinute"
+          @change="handleTimeChange"
+        />
       </div>
     </div>
 
@@ -107,11 +143,31 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 
+import HourMinRollSelecter from '~/components/publishing/input/HourMinRollSelecter.vue'
+
 // Props 정의
 const props = defineProps({
   modelValue: {
     type: Date,
     default: null
+  },
+  // 스케줄된 날짜들 (새로운 props)
+  scheduled: {
+    type: [String, Array],
+    default: () => [],
+    validator: value => {
+      // 문자열 형태: "1, 13, 15" 또는 "1,13,15"
+      // 배열 형태: [1, 13, 15] 또는 ["1", "13", "15"]
+      // 날짜 객체 배열: [new Date(), ...]
+      // 날짜 문자열 배열: ["2024-01-15", ...]
+      if (typeof value === 'string') {
+        return true
+      }
+      if (Array.isArray(value)) {
+        return true
+      }
+      return false
+    }
   },
   // 선택 불가 날짜
   disabledDates: {
@@ -138,6 +194,26 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // 건강 숙제 모드
+  vitalHomework: {
+    type: Boolean,
+    default: false
+  },
+  // 건강 숙제 데이터
+  vitalHomeworkData: {
+    type: Object,
+    default: () => ({})
+  },
+  // 건강 숙제 시작 날짜
+  homeworkStartDate: {
+    type: [String, Date],
+    default: null
+  },
+  // 건강 숙제 종료 날짜
+  homeworkEndDate: {
+    type: [String, Date],
+    default: null
+  },
   // 하트 다이어리 모드
   heartDiary: {
     type: Boolean,
@@ -157,17 +233,144 @@ const props = defineProps({
   showCalendar: {
     type: Boolean,
     default: true
+  },
+  // 시간 선택기 표시 여부 (새로운 prop)
+  showTimePicker: {
+    type: Boolean,
+    default: false
+  },
+  // 주간 선택 모드 (새로운 prop)
+  weekMode: {
+    type: Boolean,
+    default: false
+  },
+  // 주간 모드에서 표시할 기준 날짜 (기본값: 오늘)
+  weekBaseDate: {
+    type: [Date, String],
+    default: null
+  },
+  // 건강 부채 가격 표시 여부
+  isShowDebtPrice: {
+    type: Boolean,
+    default: false
+  },
+  // 건강 부채 데이터 (날짜별 가격)
+  debtPriceData: {
+    type: Object,
+    default: () => ({})
+  },
+  // 기본 시간 설정 (시)
+  defaultHour: {
+    type: Number,
+    default: 0,
+    validator: value => value >= 0 && value <= 23
+  },
+  // 기본 분 설정 (분)
+  defaultMinute: {
+    type: Number,
+    default: 0,
+    validator: value => value >= 0 && value <= 59
+  },
+  // 분 단위 간격 (5분, 10분, 15분 등)
+  minuteStep: {
+    type: Number,
+    default: 1,
+    validator: value => value > 0 && value <= 60
   }
 })
 
 // Emits 정의
-const emit = defineEmits(['update:modelValue', 'emoji-click', 'date-status-change', 'diary-click'])
+const emit = defineEmits([
+  'update:modelValue',
+  'emoji-click',
+  'date-status-change',
+  'diary-click',
+  'time-change',
+  'scheduled-date-click',
+  'homework-click'
+])
 
 // 반응형 상태
 const currentDate = ref(new Date())
 const selectedDate = ref(props.modelValue)
 const isPickerMode = ref(false)
 const tempSelectedMonth = ref(null) // 임시 선택된 월
+
+// 시간 관련 반응형 상태
+const timeValue = ref({
+  hour: props.defaultHour,
+  minute: props.defaultMinute
+})
+
+// scheduled 날짜들을 파싱하여 배열로 변환
+const scheduledDates = computed(() => {
+  const scheduled = props.scheduled
+
+  if (!scheduled || scheduled.length === 0) {
+    return []
+  }
+
+  // 문자열 형태인 경우: "1, 13, 15"
+  if (typeof scheduled === 'string') {
+    return scheduled
+      .split(',')
+      .map(d => d.trim())
+      .filter(d => d)
+      .map(d => {
+        const num = parseInt(d)
+        return isNaN(num) ? null : num
+      })
+      .filter(d => d !== null)
+  }
+
+  // 배열 형태인 경우
+  if (Array.isArray(scheduled)) {
+    return scheduled
+      .map(item => {
+        // 숫자인 경우
+        if (typeof item === 'number') {
+          return item
+        }
+        // 문자열 숫자인 경우
+        if (typeof item === 'string' && !item.includes('-')) {
+          const num = parseInt(item)
+          return isNaN(num) ? null : num
+        }
+        // 날짜 문자열인 경우 (YYYY-MM-DD)
+        if (typeof item === 'string' && item.includes('-')) {
+          const date = new Date(item)
+          // 현재 표시 중인 년월과 같은 경우만 날짜 추출
+          if (
+            date.getFullYear() === currentDate.value.getFullYear() &&
+            date.getMonth() === currentDate.value.getMonth()
+          ) {
+            return date.getDate()
+          }
+          return null
+        }
+        // Date 객체인 경우
+        if (item instanceof Date) {
+          // 현재 표시 중인 년월과 같은 경우만 날짜 추출
+          if (
+            item.getFullYear() === currentDate.value.getFullYear() &&
+            item.getMonth() === currentDate.value.getMonth()
+          ) {
+            return item.getDate()
+          }
+          return null
+        }
+        return null
+      })
+      .filter(d => d !== null && d >= 1 && d <= 31)
+  }
+
+  return []
+})
+
+// 특정 날짜가 스케줄된 날짜인지 확인
+const isScheduledDate = date => {
+  return scheduledDates.value.includes(date)
+}
 
 // props.modelValue 변경 감지하여 currentDate(표시 월)와 selectedDate 동기화
 watch(
@@ -205,37 +408,144 @@ const monthList = [
 const currentYear = computed(() => currentDate.value.getFullYear())
 const currentMonth = computed(() => currentDate.value.getMonth() + 1)
 
-// 현재 월의 일수 계산
+// 주간 모드용 계산된 속성들
+const weekStartDate = computed(() => {
+  if (!props.weekMode) return null
+
+  // currentDate를 기준으로 주의 시작 날짜 계산
+  const baseDate = new Date(currentDate.value)
+  const day = baseDate.getDay()
+  const diff = baseDate.getDate() - day
+
+  return new Date(baseDate.getFullYear(), baseDate.getMonth(), diff)
+})
+
+const weekEndDate = computed(() => {
+  if (!props.weekMode || !weekStartDate.value) return null
+
+  const endDate = new Date(weekStartDate.value)
+  endDate.setDate(weekStartDate.value.getDate() + 6)
+
+  return endDate
+})
+
+// 현재 월의 일수 계산 (주간 모드 고려)
 const daysInCurrentMonth = computed(() => {
+  if (props.weekMode && weekStartDate.value && weekEndDate.value) {
+    // 주간 모드: 해당 주의 모든 날짜를 반환 (7일)
+    const dates = []
+
+    // 주의 7일을 모두 추가
+    for (let i = 0; i < 7; i++) {
+      const currentDay = new Date(weekStartDate.value)
+      currentDay.setDate(weekStartDate.value.getDate() + i)
+      dates.push(currentDay.getDate())
+    }
+
+    return dates
+  }
+
+  // 기본 모드: 전체 월의 날짜
   const year = currentDate.value.getFullYear()
   const month = currentDate.value.getMonth()
-  return new Date(year, month + 1, 0).getDate()
+  const lastDay = new Date(year, month + 1, 0).getDate()
+
+  return Array.from({ length: lastDay }, (_, i) => i + 1)
 })
 
 // 월의 첫째 날이 무슨 요일인지 계산 (일요일 = 0)
 const firstDayOfMonth = computed(() => {
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드: 첫 날이 항상 일요일이므로 padding 없음
+    return 0
+  }
+
   const year = currentDate.value.getFullYear()
   const month = currentDate.value.getMonth()
   return new Date(year, month, 1).getDay()
 })
 
 // 달력 시작 부분의 빈 칸 수
-const startPadding = computed(() => firstDayOfMonth.value)
+const startPadding = computed(() => {
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드에서는 주의 시작부터 현재 표시 월의 첫 번째 날짜까지의 빈 칸 수 계산
+    const currentMonth = currentDate.value.getMonth()
+    const currentYear = currentDate.value.getFullYear()
+
+    // 주간 모드에서는 빈 칸 없음 (7일 모두 표시)
+    return 0
+  }
+
+  return firstDayOfMonth.value
+})
+
+// 시간 관련 메소드들
+const handleTimeChange = timeInfo => {
+  timeValue.value = timeInfo
+
+  if (selectedDate.value) {
+    const newDateTime = new Date(selectedDate.value)
+    newDateTime.setHours(timeInfo.hour, timeInfo.minute, 0, 0)
+
+    selectedDate.value = newDateTime
+    emit('update:modelValue', newDateTime)
+    emit('time-change', {
+      hour: timeInfo.hour,
+      minute: timeInfo.minute,
+      dateTime: newDateTime
+    })
+
+    console.log(`⏰ 시간 변경: ${timeInfo.hour}:${String(timeInfo.minute).padStart(2, '0')}`)
+  }
+}
 
 // 메소드들
 const previousMonth = () => {
-  const newDate = new Date(currentDate.value)
-  newDate.setMonth(newDate.getMonth() - 1)
-  currentDate.value = newDate
+  if (props.weekMode) {
+    // 주간 모드: 이전 주로 이동
+    const newDate = new Date(currentDate.value)
+    newDate.setDate(newDate.getDate() - 7)
+    currentDate.value = newDate
+  } else {
+    // 기본 모드: 이전 월로 이동
+    const newDate = new Date(currentDate.value)
+    newDate.setMonth(newDate.getMonth() - 1)
+    currentDate.value = newDate
+  }
 }
 
 const nextMonth = () => {
-  const newDate = new Date(currentDate.value)
-  newDate.setMonth(newDate.getMonth() + 1)
-  currentDate.value = newDate
+  if (props.weekMode) {
+    // 주간 모드: 다음 주로 이동
+    const newDate = new Date(currentDate.value)
+    newDate.setDate(newDate.getDate() + 7)
+    currentDate.value = newDate
+  } else {
+    // 기본 모드: 다음 월로 이동
+    const newDate = new Date(currentDate.value)
+    newDate.setMonth(newDate.getMonth() + 1)
+    currentDate.value = newDate
+  }
 }
 
-// 헤더 클릭 핸들러 (enableMonthPicker가 true일 때만 동작)
+// 주간 모드 헤더 포맷팅
+const formatWeekHeader = () => {
+  if (!weekStartDate.value || !weekEndDate.value) return ''
+
+  const startMonth = weekStartDate.value.getMonth() + 1
+  const startDate = weekStartDate.value.getDate()
+  const endMonth = weekEndDate.value.getMonth() + 1
+  const endDate = weekEndDate.value.getDate()
+  const year = weekStartDate.value.getFullYear()
+
+  if (startMonth === endMonth) {
+    return `${year}년 ${startMonth}월 ${startDate}일 - ${endDate}일`
+  } else {
+    return `${year}년 ${startMonth}월 ${startDate}일 - ${endMonth}월 ${endDate}일`
+  }
+}
+
+// 헤더 클릭 핸들러 (enableMonthPicker가 true일 때 동작)
 const handleHeaderClick = () => {
   if (props.enableMonthPicker) {
     openMonthPicker()
@@ -286,6 +596,13 @@ const nextYear = () => {
 const selectMonth = month => {
   const newDate = new Date(currentDate.value)
   newDate.setMonth(month - 1)
+
+  // 주간 모드에서는 선택한 월의 1일이 포함된 주로 이동
+  if (props.weekMode) {
+    // 단순히 해당 월의 1일로 설정 - weekStartDate에서 주의 시작을 계산할 것임
+    newDate.setDate(1)
+  }
+
   currentDate.value = newDate
   tempSelectedMonth.value = null // 임시 선택 초기화
   closeMonthPicker() // 월 선택 후 모달 닫기
@@ -299,6 +616,38 @@ const handleDateClick = date => {
   if (isDisabled(date)) {
     console.log(`❌ 비활성화된 날짜입니다: ${currentYear.value}년 ${currentMonth.value}월 ${date}일`)
     return
+  }
+
+  // 건강 숙제 모드에서는 homework-click 이벤트 발생
+  if (props.vitalHomework) {
+    const year = currentDate.value.getFullYear()
+    const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
+    const day = String(date).padStart(2, '0')
+    const dateKey = `${year}-${month}-${day}`
+
+    const homeworkInfo = props.vitalHomeworkData[dateKey]
+    const clickInfo = {
+      date: new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), date),
+      dateKey: dateKey,
+      hasHomework: !!homeworkInfo,
+      homeworkInfo: homeworkInfo,
+      status: getHomeworkStatus(date)
+    }
+
+    emit('homework-click', clickInfo)
+    return
+  }
+
+  // 스케줄된 날짜 클릭 시 이벤트 발생
+  if (isScheduledDate(date)) {
+    const scheduleInfo = {
+      date: new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), date),
+      year: currentYear.value,
+      month: currentMonth.value,
+      day: date
+    }
+    emit('scheduled-date-click', scheduleInfo)
+    console.log(`📌 스케줄된 날짜 클릭: ${currentYear.value}년 ${currentMonth.value}월 ${date}일`)
   }
 
   if (props.vitalRecord) {
@@ -319,7 +668,7 @@ const handleDateClick = date => {
     const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
     const day = String(date).padStart(2, '0')
     const dateKey = `${year}-${month}-${day}`
-    
+
     const diaryInfo = props.heartDiaryData[dateKey]
     const clickInfo = {
       date: new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), date),
@@ -327,7 +676,7 @@ const handleDateClick = date => {
       hasDiary: !!diaryInfo,
       diaryInfo: diaryInfo
     }
-    
+
     emit('diary-click', clickInfo)
     return
   }
@@ -342,23 +691,72 @@ const selectDate = date => {
     return
   }
 
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
-  const newSelectedDate = new Date(year, month, date)
+  let year, month
+
+  // week-mode에서는 실제 날짜의 월을 계산해야 함
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드: 주의 시작일 기준으로 날짜 계산
+    const dayIndex = daysInCurrentMonth.value.indexOf(date)
+    if (dayIndex !== -1) {
+      const actualDate = new Date(weekStartDate.value)
+      actualDate.setDate(weekStartDate.value.getDate() + dayIndex)
+      year = actualDate.getFullYear()
+      month = actualDate.getMonth()
+    } else {
+      // fallback to currentDate
+      year = currentDate.value.getFullYear()
+      month = currentDate.value.getMonth()
+    }
+  } else {
+    // 일반 모드: currentDate 사용
+    year = currentDate.value.getFullYear()
+    month = currentDate.value.getMonth()
+  }
+
+  // 시간 선택기가 활성화된 경우 시간 정보 포함
+  const newSelectedDate = props.showTimePicker
+    ? new Date(year, month, date, timeValue.value.hour, timeValue.value.minute)
+    : new Date(year, month, date)
 
   selectedDate.value = newSelectedDate
   emit('update:modelValue', newSelectedDate)
 
-  console.log(
-    `📅 선택된 날짜: ${newSelectedDate.getFullYear()}년 ${newSelectedDate.getMonth() + 1}월 ${newSelectedDate.getDate()}일`
-  )
+  if (props.showTimePicker) {
+    console.log(
+      `📅 선택된 날짜/시간: ${newSelectedDate.getFullYear()}년 ${newSelectedDate.getMonth() + 1}월 ${newSelectedDate.getDate()}일 ${String(timeValue.value.hour).padStart(2, '0')}:${String(timeValue.value.minute).padStart(2, '0')}`
+    )
+  } else {
+    console.log(
+      `📅 선택된 날짜: ${newSelectedDate.getFullYear()}년 ${newSelectedDate.getMonth() + 1}월 ${newSelectedDate.getDate()}일`
+    )
+  }
 }
 
 const isSelected = date => {
   if (!selectedDate.value) return false
 
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
+  let year, month
+
+  // week-mode에서는 실제 날짜의 월을 계산해야 함
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드: 주의 시작일 기준으로 날짜 계산
+    const dayIndex = daysInCurrentMonth.value.indexOf(date)
+    if (dayIndex !== -1) {
+      const actualDate = new Date(weekStartDate.value)
+      actualDate.setDate(weekStartDate.value.getDate() + dayIndex)
+      year = actualDate.getFullYear()
+      month = actualDate.getMonth()
+    } else {
+      // fallback to currentDate
+      year = currentDate.value.getFullYear()
+      month = currentDate.value.getMonth()
+    }
+  } else {
+    // 일반 모드: currentDate 사용
+    year = currentDate.value.getFullYear()
+    month = currentDate.value.getMonth()
+  }
+
   const checkDate = new Date(year, month, date)
 
   return selectedDate.value.toDateString() === checkDate.toDateString()
@@ -366,16 +764,57 @@ const isSelected = date => {
 
 const isToday = date => {
   const today = new Date()
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
+
+  let year, month
+
+  // week-mode에서는 실제 날짜의 월을 계산해야 함
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드: 주의 시작일 기준으로 날짜 계산
+    const dayIndex = daysInCurrentMonth.value.indexOf(date)
+    if (dayIndex !== -1) {
+      const actualDate = new Date(weekStartDate.value)
+      actualDate.setDate(weekStartDate.value.getDate() + dayIndex)
+      year = actualDate.getFullYear()
+      month = actualDate.getMonth()
+    } else {
+      // fallback to currentDate
+      year = currentDate.value.getFullYear()
+      month = currentDate.value.getMonth()
+    }
+  } else {
+    // 일반 모드: currentDate 사용
+    year = currentDate.value.getFullYear()
+    month = currentDate.value.getMonth()
+  }
+
   const checkDate = new Date(year, month, date)
 
   return today.toDateString() === checkDate.toDateString()
 }
 
 const isDisabled = date => {
-  const year = currentDate.value.getFullYear()
-  const month = currentDate.value.getMonth()
+  let year, month
+
+  // week-mode에서는 실제 날짜의 월을 계산해야 함
+  if (props.weekMode && weekStartDate.value) {
+    // 주간 모드: 주의 시작일 기준으로 날짜 계산
+    const dayIndex = daysInCurrentMonth.value.indexOf(date)
+    if (dayIndex !== -1) {
+      const actualDate = new Date(weekStartDate.value)
+      actualDate.setDate(weekStartDate.value.getDate() + dayIndex)
+      year = actualDate.getFullYear()
+      month = actualDate.getMonth()
+    } else {
+      // fallback to currentDate
+      year = currentDate.value.getFullYear()
+      month = currentDate.value.getMonth()
+    }
+  } else {
+    // 일반 모드: currentDate 사용
+    year = currentDate.value.getFullYear()
+    month = currentDate.value.getMonth()
+  }
+
   const checkDate = new Date(year, month, date)
 
   return props.disabledDates.some(disabledDate => {
@@ -406,6 +845,144 @@ const getDayOfWeek = date => {
 
 const isSunday = date => getDayOfWeek(date) === 0
 const isSaturday = date => getDayOfWeek(date) === 6
+
+// 숙제 기간 내의 날짜인지 확인
+const isInHomeworkPeriod = date => {
+  if (!props.vitalHomework || !props.homeworkStartDate || !props.homeworkEndDate) return false
+
+  const year = currentDate.value.getFullYear()
+  const month = currentDate.value.getMonth()
+  const checkDate = new Date(year, month, date)
+  checkDate.setHours(0, 0, 0, 0)
+
+  let startDate, endDate
+
+  if (typeof props.homeworkStartDate === 'string') {
+    startDate = new Date(props.homeworkStartDate)
+  } else {
+    startDate = new Date(props.homeworkStartDate)
+  }
+  startDate.setHours(0, 0, 0, 0)
+
+  if (typeof props.homeworkEndDate === 'string') {
+    endDate = new Date(props.homeworkEndDate)
+  } else {
+    endDate = new Date(props.homeworkEndDate)
+  }
+  endDate.setHours(0, 0, 0, 0)
+
+  return checkDate >= startDate && checkDate <= endDate
+}
+
+// 숙제 시작 날짜인지 확인
+const isHomeworkStartDate = date => {
+  if (!props.vitalHomework || !props.homeworkStartDate) return false
+
+  const year = currentDate.value.getFullYear()
+  const month = currentDate.value.getMonth()
+  const checkDate = new Date(year, month, date)
+
+  let startDate
+  if (typeof props.homeworkStartDate === 'string') {
+    startDate = new Date(props.homeworkStartDate)
+  } else {
+    startDate = props.homeworkStartDate
+  }
+
+  return checkDate.toDateString() === startDate.toDateString()
+}
+
+// 숙제 종료 날짜인지 확인
+const isHomeworkEndDate = date => {
+  if (!props.vitalHomework || !props.homeworkEndDate) return false
+
+  const year = currentDate.value.getFullYear()
+  const month = currentDate.value.getMonth()
+  const checkDate = new Date(year, month, date)
+
+  let endDate
+  if (typeof props.homeworkEndDate === 'string') {
+    endDate = new Date(props.homeworkEndDate)
+  } else {
+    endDate = props.homeworkEndDate
+  }
+
+  return checkDate.toDateString() === endDate.toDateString()
+}
+
+// 건강 숙제 상태 클래스 계산
+const getHomeworkStatusClass = date => {
+  const status = getHomeworkStatus(date)
+  return status ? `homework-${status}` : ''
+}
+
+// 건강 숙제 상태 가져오기
+const getHomeworkStatus = date => {
+  if (!props.vitalHomework) return null
+
+  const year = currentDate.value.getFullYear()
+  const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
+  const day = String(date).padStart(2, '0')
+  const dateKey = `${year}-${month}-${day}`
+
+  const homeworkInfo = props.vitalHomeworkData[dateKey]
+  if (!homeworkInfo) return null
+
+  // status는 'pending', 'in-progress', 'completed', 'missed' 등이 될 수 있음
+  return homeworkInfo.status || null
+}
+
+// 건강 숙제 클릭 핸들러
+const handleHomeworkClick = (date, event) => {
+  event.preventDefault()
+
+  const year = currentDate.value.getFullYear()
+  const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
+  const day = String(date).padStart(2, '0')
+  const dateKey = `${year}-${month}-${day}`
+
+  const clickedDate = new Date(year, currentDate.value.getMonth(), date)
+  const homeworkInfo = props.vitalHomeworkData[dateKey]
+
+  emit('homework-click', {
+    date: clickedDate,
+    dateKey: dateKey,
+    homeworkInfo: homeworkInfo || null,
+    status: getHomeworkStatus(date),
+    originalEvent: event
+  })
+
+  console.log(`📋 건강 숙제 클릭: ${dateKey}`, homeworkInfo)
+}
+
+// 건강 부채 가격 가져오기
+const getDebtPrice = date => {
+  if (!date || typeof date !== 'number') return ''
+
+  const year = currentDate.value.getFullYear()
+  const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
+  const day = String(date).padStart(2, '0')
+  const dateKey = `${year}-${month}-${day}`
+
+  const price = props.debtPriceData[dateKey]
+  if (!price || price === 0) return ''
+
+  // 천단위 콤마 추가
+  return price.toLocaleString('ko-KR')
+}
+
+// 부채 가격이 0인지 확인
+const isNoPrice = date => {
+  if (!date || typeof date !== 'number') return false
+
+  const year = currentDate.value.getFullYear()
+  const month = String(currentDate.value.getMonth() + 1).padStart(2, '0')
+  const day = String(date).padStart(2, '0')
+  const dateKey = `${year}-${month}-${day}`
+
+  const price = props.debtPriceData[dateKey]
+  return price === 0 || price === undefined || price === null
+}
 
 // 활력 아이콘 클래스 계산
 const getVitalIconClass = date => {
@@ -468,17 +1045,17 @@ const isNoDataDate = date => {
     const dateKey = `${year}-${monthStr}-${dayStr}`
 
     const diaryInfo = props.heartDiaryData[dateKey]
-    
+
     // 데이터가 없고 오늘 또는 과거 날짜인 경우 diary.svg 사용 (no-data)
     if (!diaryInfo && checkDate <= today) {
       return true
     }
-    
+
     // 데이터가 없고 미래 날짜인 경우 기본값 사용 (no-data 아님)
     if (!diaryInfo && checkDate > today) {
       return false
     }
-    
+
     return false
   } else {
     // vital-record 모드일 때 vitalData 사용 (기존 로직 유지)
@@ -534,13 +1111,63 @@ const handleEmojiClick = (date, event) => {
   }
 }
 
+// 주간 모드에서 날짜가 현재 주에 속하는지 확인
+const isInCurrentWeek = date => {
+  if (!props.weekMode || !weekStartDate.value || !weekEndDate.value) return true
+
+  const checkDate = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth(), date)
+  return checkDate >= weekStartDate.value && checkDate <= weekEndDate.value
+}
+
+// 주간 모드에서 몇 번째 주인지 계산 (계산된 속성으로 변경)
+const getWeekOfMonth = computed(() => {
+  if (!props.weekMode || !weekStartDate.value) return 1
+
+  const currentMonth = currentDate.value.getMonth()
+  const currentYear = currentDate.value.getFullYear()
+
+  // 현재 표시 중인 월의 첫째 날
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1)
+
+  // 현재 주에서 표시 월에 해당하는 모든 날짜 찾기
+  const datesInCurrentMonth = []
+  for (let i = 0; i < 7; i++) {
+    const dayInWeek = new Date(weekStartDate.value)
+    dayInWeek.setDate(weekStartDate.value.getDate() + i)
+
+    if (dayInWeek.getMonth() === currentMonth && dayInWeek.getFullYear() === currentYear) {
+      datesInCurrentMonth.push(dayInWeek.getDate())
+    }
+  }
+
+  // 현재 월에 해당하는 날짜가 없으면 1 반환
+  if (datesInCurrentMonth.length === 0) return 1
+
+  // 현재 월에서 가장 작은 날짜를 기준으로 주차 계산
+  const smallestDate = Math.min(...datesInCurrentMonth)
+
+  // 해당 월의 몇 번째 주인지 계산
+  return Math.ceil((smallestDate + firstDayOfMonth.getDay()) / 7)
+})
+
 // 컴포넌트 마운트 시 오늘 날짜로 초기화
 onMounted(() => {
-  if (!props.modelValue) {
-    currentDate.value = new Date()
+  if (props.weekMode) {
+    // 주간 모드: 기준 날짜 또는 오늘 날짜 기준으로 초기화
+    const baseDate = props.weekBaseDate ? new Date(props.weekBaseDate) : new Date()
+    currentDate.value = baseDate
+
+    if (props.modelValue) {
+      selectedDate.value = new Date(props.modelValue)
+    }
   } else {
-    currentDate.value = new Date(props.modelValue)
-    selectedDate.value = new Date(props.modelValue)
+    // 기본 모드
+    if (!props.modelValue) {
+      currentDate.value = new Date()
+    } else {
+      currentDate.value = new Date(props.modelValue)
+      selectedDate.value = new Date(props.modelValue)
+    }
   }
 })
 </script>
@@ -561,18 +1188,22 @@ onMounted(() => {
     top: 0;
     left: 3.2rem;
     line-height: 3.2rem;
-    text-align: center;
+    gap: 0 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     right: 3.2rem;
+
     transition: color 0.2s;
-
-    &.clickable {
-      cursor: pointer;
-
-      &:hover {
-        color: #4c7ff7;
-      }
+    &::after {
+      content: '';
+      width: 2rem;
+      height: 2rem;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='20' viewBox='0 0 21 20' fill='none'%3E%3Cpath d='M6.33301 8.33325L10.5004 12.1499L14.6663 8.33325' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
-
     &:not(.clickable) {
       cursor: default;
     }
@@ -591,11 +1222,18 @@ onMounted(() => {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    position: relative;
     cursor: pointer;
     transition: opacity 0.2s;
 
     &:hover {
       opacity: 0.7;
+    }
+    &.btn-prev {
+      left: 0rem;
+    }
+    &.btn-next {
+      right: 0rem;
     }
   }
 }
@@ -614,6 +1252,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   font-weight: 500;
+  gap: 0.8rem;
   text-align: center;
   margin-bottom: 1.6rem;
 
@@ -639,6 +1278,10 @@ onMounted(() => {
   grid-template-columns: repeat(7, 1fr);
   gap: 0.8rem;
 
+  > div {
+    display: flex;
+    justify-content: center;
+  }
   .empty-date {
     height: 3.6rem;
   }
@@ -656,6 +1299,80 @@ onMounted(() => {
     border-radius: 50%;
     position: relative;
     transition: background-color 0.2s;
+
+    // 스케줄 점(Dot) 마커 스타일
+    .schedule-dot {
+      position: absolute;
+      bottom: -0.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: #4c7ff7;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      animation: schedulePulse 2s ease-in-out infinite;
+    }
+  }
+
+  // 스케줄된 날짜 스타일
+  .scheduled {
+    .date-cell {
+      // font-weight: 600;
+
+      .schedule-dot {
+        opacity: 0.9;
+        border: 1px vars.$white solid;
+      }
+    }
+
+    // 선택된 날짜의 점 색상
+    &.selected .date-cell .schedule-dot {
+      opacity: 1;
+    }
+
+    // 오늘 날짜의 점 강조
+    &.today .date-cell .schedule-dot {
+      background-color: #4c7ff7;
+      opacity: 1;
+      width: 0.7rem;
+      height: 0.7rem;
+    }
+
+    // 일요일 스케줄 점 색상
+    &.sunday .date-cell .schedule-dot {
+      background-color: #f14960;
+    }
+
+    // 토요일 스케줄 점 색상
+    &.saturday .date-cell .schedule-dot {
+      background-color: #4c7ff7;
+    }
+
+    // 호버 시 점 강조
+    &:hover .date-cell {
+      transform: scale(1.05);
+
+      .schedule-dot {
+        width: 0.6rem;
+        height: 0.6rem;
+        opacity: 1;
+        animation: schedulePulse 0.5s ease-in-out infinite;
+      }
+    }
+  }
+
+  // 펄스 애니메이션
+  @keyframes schedulePulse {
+    0%,
+    100% {
+      transform: translateX(-50%) scale(1);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateX(-50%) scale(1.2);
+      opacity: 1;
+    }
   }
 
   .disabled-day {
@@ -667,6 +1384,13 @@ onMounted(() => {
       &:hover {
         background-color: transparent;
       }
+
+      // disabled 날짜의 스케줄 점도 흐리게
+      .schedule-dot {
+        background-color: #d5d5d5;
+        animation: none;
+        opacity: 0.3;
+      }
     }
 
     // heart-diary 모드에서도 disabled 스타일 적용
@@ -674,10 +1398,10 @@ onMounted(() => {
       .date-cell {
         color: #d5d5d5;
       }
-      
-      .emoji {        
-        background:url('/_nuxt/assets/images/emoji/blank.svg') no-repeat center center;
-        background-size: contain;        
+
+      .emoji {
+        background: url('/_nuxt/assets/images/emoji/blank.svg') no-repeat center center;
+        background-size: contain;
         pointer-events: none;
       }
     }
@@ -685,6 +1409,11 @@ onMounted(() => {
 
   // 일요일 날짜 스타일
   .sunday {
+    &.disabled-day {
+      .date-cell {
+        color: #d5d5d5;
+      }
+    }
     .date-cell {
       color: #f14960;
     }
@@ -710,6 +1439,11 @@ onMounted(() => {
 
   // 토요일 날짜 스타일
   .saturday {
+    &.disabled-day {
+      .date-cell {
+        color: #d5d5d5;
+      }
+    }
     .date-cell {
       color: #4c7ff7;
     }
@@ -759,11 +1493,11 @@ onMounted(() => {
   }
 
   // vitalRecord 모드 스타일(스마트링 활력 기록)
-  
   .vital-record {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     .date-cell {
       cursor: default;
       line-height: 1.8rem;
@@ -774,6 +1508,13 @@ onMounted(() => {
       display: flex;
       height: auto;
       flex-direction: column;
+
+      // vital-record 모드에서도 스케줄 점 표시
+      .schedule-dot {
+        position: relative;
+        bottom: auto;
+        margin-top: 0.4rem;
+      }
     }
 
     .emoji {
@@ -840,12 +1581,12 @@ onMounted(() => {
     align-items: center;
     &.today {
       .emoji {
-        border:.3rem solid #4C7FF7;
-        background-color: #4C7FF7;
+        border: 0.3rem solid #4c7ff7;
+        background-color: #4c7ff7;
       }
     }
     .date-cell {
-      width:auto;
+      width: auto;
       line-height: 1.8rem;
       margin-top: 2rem;
       font-size: 1.3rem;
@@ -854,6 +1595,13 @@ onMounted(() => {
       display: flex;
       height: auto;
       flex-direction: column;
+
+      // heart-diary 모드에서도 스케줄 점 표시
+      .schedule-dot {
+        position: relative;
+        bottom: auto;
+        margin-top: 0.4rem;
+      }
     }
 
     .emoji {
@@ -886,12 +1634,12 @@ onMounted(() => {
       .emoji {
         border: none;
         background-color: transparent;
-        background-image: url("/_nuxt/assets/images/emoji/diary.svg");
+        background-image: url('/_nuxt/assets/images/emoji/diary.svg');
       }
       &.today {
         .emoji {
-          background-color: #4C7FF7;
-          border: .3rem solid #4C7FF7;
+          background-color: #4c7ff7;
+          border: 0.3rem solid #4c7ff7;
         }
       }
     }
@@ -925,6 +1673,280 @@ onMounted(() => {
       background-color: #f6f9ff;
     }
   }
+
+  // 건강 숙제 모드
+  .vital-homework {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    // 숙제 기간 내 날짜들의 연결 배경
+    &.homework-period {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3.2rem;
+        background: #dbe5fd;
+        z-index: 0;
+      }
+
+      // 주의 첫 날이 아닌 경우 왼쪽 연결
+      &:not(.sunday):not(:first-child)::before {
+        left: -50%;
+      }
+
+      // 주의 마지막 날이 아닌 경우 오른쪽 연결
+      &:not(.saturday):not(:last-child)::before {
+        right: -50%;
+      }
+
+      .date-cell {
+        position: relative;
+        z-index: 1;
+        font-weight: 600;
+      }
+
+      .homework-status {
+        border: 0.1rem solid transparent;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='18' viewBox='0 0 19 18' fill='none'%3E%3Cpath d='M9.50033 3.66699L9.50033 14.3337M14.8337 9.00033L4.16699 9.00033' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        position: relative;
+        background-color: vars.$blue-primary;
+        z-index: 2;
+        transition: 0.3s all ease;
+      }
+    }
+
+    // 숙제 시작 날짜 스타일
+    &.homework-start-date,
+    &.sunday {
+      &.homework-period::before {
+        left: 2.6rem !important;
+      }
+    }
+
+    // 숙제 종료 날짜 스타일
+    &.homework-end-date,
+    &.saturday {
+      &.homework-period::before {
+        right: 2.6rem !important;
+      }
+    }
+
+    // 시작과 종료가 같은 날인 경우
+    &.homework-start-date.homework-end-date {
+      &.homework-period::before {
+        left: 0;
+        right: 0;
+      }
+    }
+
+    .date-cell {
+      cursor: pointer;
+      line-height: 1.8rem;
+      margin-top: 0.8rem;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #555;
+      display: flex;
+      height: auto;
+      flex-direction: column;
+    }
+
+    .homework-status {
+      width: 3.2rem;
+      height: 3.2rem;
+      display: block;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      border-radius: 50%;
+      background-color: #eee;
+      margin-top: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      border: 0.2rem solid transparent;
+
+      // 진행 중 상태
+      &.homework-in-progress {
+        background-color: #e3f2fd;
+        border-color: #2196f3;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 0.8rem;
+          height: 0.8rem;
+          background-color: #2196f3;
+          border-radius: 50%;
+        }
+      }
+
+      // 완료 상태
+      &.homework-completed {
+        border-color: vars.$blue-primary;
+        background-color: vars.$white;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26' fill='none'%3E%3Cpath d='M18.1199 9.16016L10.4831 16.8402L7.87988 14.2223' stroke='%234C7FF7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      }
+
+      // 놓친 상태
+      &.homework-missed {
+        background-color: #ffebee;
+        border-color: #f44336;
+        opacity: 0.7;
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 1.4rem;
+          height: 0.2rem;
+          background-color: #f44336;
+        }
+
+        &::before {
+          transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        &::after {
+          transform: translate(-50%, -50%) rotate(-45deg);
+        }
+      }
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    &.today {
+      .date-cell {
+        background: none;
+        font-weight: 600;
+      }
+      .homework-status {
+        background-color: vars.$white;
+        border: 0.2rem solid vars.$blue-primary;
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: -0.4rem;
+          right: -0.4rem;
+          top: -0.4rem;
+          bottom: -0.4rem;
+          border: 0.1rem solid vars.$blue-primary;
+          border-radius: 50%;
+          opacity: 0.5;
+
+          // scale 애니메이션 추가
+          animation: pulse-scale 2s ease-in-out infinite;
+        }
+        @keyframes pulse-scale {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.2);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+
+    &.selected .date-cell {
+      color: #555;
+      background-color: transparent;
+      &::before {
+        content: none;
+      }
+    }
+
+    // 요일별 색상 유지
+    &.sunday {
+      .date-cell {
+        color: #f14960;
+      }
+    }
+
+    &.saturday {
+      .date-cell {
+        color: #4c7ff7;
+      }
+    }
+
+    // 비활성화된 날짜
+    &.disabled-day {
+      .date-cell {
+        color: #d5d5d5;
+        cursor: not-allowed;
+      }
+
+      .homework-status {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // 건강 부채 모드
+  .debt-price-mode {
+    flex-direction: column;
+    align-items: center;
+    .date-cell {
+      line-height: 3rem;
+      height: 3rem;
+    }
+    &.selected,
+    &.today,
+    &.saturday,
+    &.sunday {
+      .date-cell {
+        color: #2b2b2b;
+        background-color: transparent;
+      }
+    }
+    &.no-price {
+      .date-cell {
+        color: #d5d5d5;
+      }
+    }
+    .debt-price {
+      font-size: 0.9rem;
+      color: #555;
+      font-weight: 400;
+    }
+  }
+}
+
+/* 시간 선택 영역 스타일 */
+.time-picker-section {
+  .time-picker-header {
+    margin-bottom: 1.6rem;
+
+    .time-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #26282c;
+      margin: 0;
+      text-align: center;
+    }
+  }
 }
 
 /* 월 선택 모달 내용 스타일 */
@@ -940,7 +1962,6 @@ onMounted(() => {
       .year-display {
         font-size: 2rem;
         font-weight: 700;
-        color: #4c7ff7;
         margin: 0;
       }
 
@@ -969,6 +1990,9 @@ onMounted(() => {
     gap: 1.2rem;
     justify-items: center;
     .month-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 3.6rem;
       height: 3.6rem;
       line-height: 3.7rem;
@@ -991,12 +2015,23 @@ onMounted(() => {
 }
 
 @media (max-width: 375px) {
+  .calendar-wrapper {
+    .year {
+      font-size: 1.8rem;
+    }
+  }
   .calendar-dates {
     .date-cell {
       width: 2.8rem;
       height: 2.8rem;
       line-height: 3rem;
       font-size: 1.3rem;
+
+      .schedule-dot {
+        width: 0.4rem;
+        height: 0.4rem;
+        bottom: -0.2rem;
+      }
     }
   }
 

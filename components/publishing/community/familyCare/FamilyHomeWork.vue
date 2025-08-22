@@ -14,31 +14,27 @@
       </button>
     </div>
 
-    <div class="homework-list">
-      <div class="homework-item">
-        <nuxt-link to="javascript:void(0)" class="item-link">
-          <div class="tit">수영가기 <CommonBadge variant="round" color="blue">참여중</CommonBadge></div>
-          <span class="homework-duration">4월16일 ~ 5월 17일 / 월, 수, 금</span>
-          <p class="homework-target">
-            <span>개설자 <strong>김엄마</strong></span>
-            <span>숙제대상 <strong>2명</strong></span>
-            <span class="duration-date"> <strong>1일째</strong> / 12일 </span>
-          </p>
-        </nuxt-link>
-      </div>
-      <div class="homework-item">
-        <nuxt-link to="javascript:void(0)" class="item-link">
-          <div class="tit">수영가기 <CommonBadge variant="round" color="blue">참여중</CommonBadge></div>
-          <span class="homework-duration">4월16일 ~ 5월 17일 / 월, 수, 금</span>
-          <p class="homework-target">
-            <span>개설자 <strong>김엄마</strong></span>
-            <span>숙제대상 <strong>2명</strong></span>
-            <span class="duration-date"> <strong>1일째</strong> / 12일 </span>
-          </p>
-        </nuxt-link>
-      </div>
+    <div v-if="homeworkList.length > 0" class="homework-list">
+      <HomeworkItem
+        v-for="homework in homeworkList"
+        :key="homework.id"
+        :homework="homework"
+        @view-detail="viewDetail"
+        @accept-homework="acceptHomework"
+        @reject-homework="rejectHomework"
+      />
+      <button type="button" class="btn-add-homework mb-12"><i class="icon ico-plus-lg"></i>숙제 추가하기</button>
     </div>
-    <button type="button" class="btn-add-homework mb-12"><i class="icon ico-plus-lg"></i>숙제 추가하기</button>
+
+    <EmptyState
+      v-else
+      class="mt-12"
+      empty-title="아직 숙제가 없어요"
+      href="/community"
+      :button="true"
+      button-aria-label="숙제 추가하기"
+      button-icon="ico-plus-lg"
+    />
 
     <!-- 숙제하기 바텀 모달 -->
     <Teleport to="body">
@@ -55,27 +51,13 @@
         @cancel="handleCancel"
       >
         <template #content>
-          <!-- 새로운 숙제 상세 정보 (기본 상태) -->
-          <div v-if="!isRejectMode">
-            <div class="new-homework-item">
-              <div class="tit">비타민C 영양제 먹기</div>
-              <span class="homework-duration">4월16일 ~ 5월 17일 / 월, 수, 금</span>
-              <p class="homework-target">
-                <span>개설자 <strong>김엄마</strong></span>
-                <span>숙제대상 <strong>2명</strong></span>
-              </p>
-            </div>
-
-            <div class="homework-creator">
-              <img src="~/assets/images/community/img-rank-profile.png" alt="" />
-              <div class="txt-box">
-                <strong>엄마</strong>
-                <p>
-                  요즘 우리 가족들 너무 피곤해하는것<br />
-                  같아서 추가했어 같이 해보면 어때?
-                </p>
-              </div>
-            </div>
+          <!-- HomeworkItem 컴포넌트 활용 (기본 상태) -->
+          <div v-if="!isRejectMode" class="modal-homework-wrapper">
+            <HomeworkItem
+              :homework="newHomeworkData"
+              @accept-homework="handleAcceptFromItem"
+              @reject-homework="handleRejectFromItem"
+            />
           </div>
 
           <!-- 거절 사유 입력 (거절 모드) -->
@@ -89,11 +71,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 import CommonBadge from '~/components/common/badge/CommonBadge.vue'
 
 import InputText from '~/components/publishing/input/InputText.vue'
+
+import HomeworkItem from '~/components/publishing/community/familyCare/HomeworkItem.vue'
+
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
 
 interface Props {
   color?: 'default' | 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'brown' | 'gray' | 'deepRed'
@@ -113,6 +99,34 @@ const showNewHomework = ref(false)
 const isShowHomeWorkModal = ref(false)
 const isRejectMode = ref(false)
 const rejectReason = ref('')
+
+// 새로운 숙제 데이터 (모달에서 표시할 데이터)
+const newHomeworkData = ref({
+  id: 'new-1',
+  title: '비타민C 영양제 먹기',
+  description: '요즘 우리 가족들 너무 피곤해하는것 같아서 추가했어 같이 해보면 어때?',
+  startDate: '2024-04-16',
+  endDate: '2024-05-17',
+  verificationDays: [
+    { day: '월', isSelected: true },
+    { day: '화', isSelected: false },
+    { day: '수', isSelected: true },
+    { day: '목', isSelected: false },
+    { day: '금', isSelected: true },
+    { day: '토', isSelected: false },
+    { day: '일', isSelected: false }
+  ],
+  targets: [
+    { id: '1', name: '나', isSelected: true },
+    { id: '2', name: '엄마', isSelected: true }
+  ],
+  createdAt: new Date().toISOString(),
+  status: 'active' as const,
+  isNew: true,
+  isParticipating: false,
+  creatorName: '엄마',
+  creatorProfile: 'community/img-rank-profile.png'
+})
 
 // 모달 제목과 버튼 텍스트를 동적으로 변경
 const modalTitle = computed(() => {
@@ -152,6 +166,17 @@ const toggleHomeWorkModal = () => {
 const resetModalState = () => {
   isRejectMode.value = false
   rejectReason.value = ''
+}
+
+// HomeworkItem 컴포넌트에서 수락 이벤트 처리
+const handleAcceptFromItem = (homeworkId: string) => {
+  console.log('숙제 수락:', homeworkId)
+  toggleHomeWorkModal()
+}
+
+// HomeworkItem 컴포넌트에서 거절 이벤트 처리
+const handleRejectFromItem = (homeworkId: string) => {
+  isRejectMode.value = true
 }
 
 // 확인 버튼 클릭 처리
@@ -194,11 +219,112 @@ const badgeClasses = computed(() => {
 
   return classes
 })
+
+// 상세보기 핸들러
+const viewDetail = (homeworkId: string) => {
+  console.log('View detail:', homeworkId)
+}
+
+// 수락 핸들러
+const acceptHomework = (homeworkId: string) => {
+  console.log('Accept homework:', homeworkId)
+}
+
+// 거절 핸들러
+const rejectHomework = (homeworkId: string) => {
+  console.log('Reject homework:', homeworkId)
+}
+
+// 숙제 리스트 데이터 (예시)
+const homeworkList = ref([
+  {
+    id: '1',
+    title: '물 2L 마시기',
+    description: '하루에 물을 2L 마시는 습관을 만들어보세요. 건강한 피부와 신진대사에 도움이 됩니다.',
+    startDate: '2024-01-10',
+    endDate: '2024-02-10',
+    verificationDays: [
+      { day: '월', isSelected: true },
+      { day: '화', isSelected: true },
+      { day: '수', isSelected: true },
+      { day: '목', isSelected: true },
+      { day: '금', isSelected: true },
+      { day: '토', isSelected: true },
+      { day: '일', isSelected: true }
+    ],
+    targets: [
+      { id: '1', name: '나', isSelected: true },
+      { id: '2', name: '엄마', isSelected: true }
+    ],
+    createdAt: '2024-01-10T09:00:00Z',
+    status: 'active',
+    progress: 65,
+    isNew: false,
+    isParticipating: true,
+    creatorName: '엄마',
+    myCompletedDate: 3,
+    missionProgressDays: 15
+  },
+  {
+    id: '2',
+    title: '물 2L 마시기',
+    description: '하루에 물을 2L 마시는 습관을 만들어보세요. 건강한 피부와 신진대사에 도움이 됩니다.',
+    startDate: '2024-01-10',
+    endDate: '2024-02-10',
+    verificationDays: [
+      { day: '월', isSelected: true },
+      { day: '화', isSelected: true },
+      { day: '수', isSelected: true },
+      { day: '목', isSelected: true },
+      { day: '금', isSelected: true },
+      { day: '토', isSelected: true },
+      { day: '일', isSelected: true }
+    ],
+    targets: [
+      { id: '1', name: '나', isSelected: true },
+      { id: '2', name: '엄마', isSelected: true }
+    ],
+    createdAt: '2024-01-10T09:00:00Z',
+    status: 'active',
+    progress: 65,
+    isNew: false,
+    isParticipating: true,
+    creatorName: '엄마',
+    myCompletedDate: 5,
+    missionProgressDays: 15
+  },
+  {
+    id: '3',
+    title: '스트레칭 10분',
+    description: '매일 아침 스트레칭 10분으로 유연성을 높이고 몸을 깨워보세요.',
+    startDate: '2024-01-01',
+    endDate: '2024-01-31',
+    verificationDays: [
+      { day: '월', isSelected: true },
+      { day: '화', isSelected: true },
+      { day: '수', isSelected: true },
+      { day: '목', isSelected: true },
+      { day: '금', isSelected: true },
+      { day: '토', isSelected: false },
+      { day: '일', isSelected: false }
+    ],
+    targets: [{ id: '1', name: '나', isSelected: true }],
+    createdAt: '2024-01-01T09:00:00Z',
+    status: 'completed',
+    progress: 100,
+    isNew: false,
+    isParticipating: false,
+    creatorName: '나',
+    myCompletedDate: 0,
+    missionProgressDays: 31
+  }
+])
 </script>
 
 <style scoped lang="scss">
 .family-homework {
   margin-top: 3.2rem;
+  position: relative;
   .homework-tit {
     display: flex;
     justify-content: space-between;
@@ -262,6 +388,7 @@ const badgeClasses = computed(() => {
     flex-direction: column;
     margin-top: 1.2rem;
     gap: 1.2rem 0;
+
     .homework-item {
       .item-link {
         width: 100%;
@@ -307,6 +434,10 @@ const badgeClasses = computed(() => {
 }
 
 .btn-add-homework {
+  width: auto;
+  align-self: flex-start;
+  justify-self: center;
+  margin: auto;
   position: relative;
   border-radius: 3.2rem;
   padding: 0.7rem 1.6rem;
@@ -320,7 +451,7 @@ const badgeClasses = computed(() => {
   justify-content: center;
   gap: 0 0.4rem;
   margin-top: 1.2rem;
-  justify-self: center;
+
   @include mixin.rippleEffectPrimary;
   .icon {
     display: inline-block;
@@ -329,71 +460,18 @@ const badgeClasses = computed(() => {
   }
 }
 
-.new-homework-item {
-  width: 100%;
-  position: relative;
-  font-size: 1.4rem;
-  background: vars.$white;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  color: #959595;
-  font-weight: 500;
-  .tit {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #2b2b2b;
-    display: flex;
-    justify-content: space-between;
+// 모달 내부에서 HomeworkItem 컴포넌트 스타일 조정
+.modal-homework-wrapper {
+  // 모달 안에서는 박스 그림자와 보더 제거
+  :deep(.homework-item) {
+    border: none;
+    box-shadow: none;
+    padding: 0;
   }
-  .homework-target {
-    display: flex;
-    gap: 0 1.2rem;
-    margin-top: 1.2rem;
-    strong {
-      color: #2b2b2b;
-      font-weight: 500;
-    }
-    .duration-date {
-      margin-left: auto;
-      flex: 0 0 auto;
-      strong {
-        color: vars.$blue-primary;
-      }
-    }
-  }
-}
 
-.homework-creator {
-  margin: 2rem 0 1.6rem;
-  background-color: #e7f4ff;
-  border-radius: 0 2rem 2rem 2rem;
-  display: flex;
-  padding: 1.6rem;
-  gap: 0 0.8rem;
-  text-align: left;
-
-  img {
-    width: 3.2rem;
-    height: 3.2rem;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  .txt-box {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.6rem;
-    text-align: left;
-    color: #555;
-    gap: 0.7rem 0;
-    strong {
-      font-weight: 500;
-      line-height: 2.2rem;
-      margin-top: 0.5rem;
-    }
-    p {
-      font-weight: 400;
-    }
+  // 모달에서는 버튼 숨기기 (모달 자체 버튼 사용)
+  :deep(.homework-item-actions) {
+    display: none;
   }
 }
 </style>

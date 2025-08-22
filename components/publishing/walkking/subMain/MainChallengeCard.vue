@@ -388,7 +388,7 @@ function startCountingAnimation() {
 .challenge-date-limit {
   position: absolute;
   width: 4.8rem;
-  height: 4.8rem;
+  // height: 4.8rem;
   font-size: 1.2rem;
   font-weight: 600;
   display: flex;

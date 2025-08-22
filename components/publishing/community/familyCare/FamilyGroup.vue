@@ -42,10 +42,10 @@ import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
 
 const activeBoxTab = ref('group1')
 const boxTabs = ref<BoxTab[]>([
-  { title: '우리집', key: 'group1' },
-  { title: '동네친구들', key: 'group2' },
-  { title: '베프', key: 'group3' },
-  { title: '디자인팀', key: 'group4' }
+  { title: '우리집 10', key: 'group1' },
+  { title: '동네친구들 5', key: 'group2' },
+  { title: '베프 2', key: 'group3' },
+  { title: '디자인팀 15', key: 'group4' }
 ])
 const onBoxTabChange = (key: string) => {
   activeBoxTab.value = key

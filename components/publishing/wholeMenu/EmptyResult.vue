@@ -1,5 +1,5 @@
 <template>
-  <div class="empty-reuslt">
+  <div class="empty-reuslt" :class="{ 'is-absolute': isAbsolute }">
     <div class="empty-image"></div>
     <p>{{ title }}</p>
     <div>
@@ -13,6 +13,10 @@ const props = defineProps({
   title: {
     type: String,
     default: '검색 결과가 없습니다.'
+  },
+  isAbsolute: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -21,7 +25,13 @@ const props = defineProps({
 .empty-reuslt {
   // position: relative;
   flex: 1;
-
+  &.is-absolute {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
   .empty-image {
     width: 8rem;
     height: 8rem;

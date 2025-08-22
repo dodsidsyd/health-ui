@@ -279,16 +279,16 @@ $color-steps: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12;
   color: rgb(var(--black)) !important;
 }
 .essmark {
-  color: rgb(var(--red-06)) !important;
+  color: var(--red-06) !important;
 }
 .fc-body-01 {
-  color: rgb(var(--gray-16)) !important;
+  color: var(--gray-16) !important;
 }
 .fc-body-02 {
-  color: rgb(var(--gray-11)) !important;
+  color: var(--gray-11) !important;
 }
 .fc-body-03 {
-  color: rgb(var(--gray-17)) !important;
+  color: var(--gray-17) !important;
 }
 
 /* 정렬 */

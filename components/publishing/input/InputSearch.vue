@@ -9,7 +9,7 @@
           <Select
             v-model="selectedOption"
             :select-placeholder="selectPlaceholder"
-            modal-title="검색 옵션을 선택해주세요"
+            :modal-title="modalTitle"
             :custom-opts="searchOptions"
             :transparent="true"
             :inp-type="'search'"
@@ -63,6 +63,7 @@ const props = defineProps({
   name: { type: String, default: 'search' },
   selectPlaceholder: { type: String, default: '검색 옵션' },
   placeholder: { type: String, default: '이름, 휴대폰 뒷자리' },
+  modalTitle: { type: String, default: '이름, 휴대폰 뒷자리' },
   modelValue: { type: String, default: '' },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },

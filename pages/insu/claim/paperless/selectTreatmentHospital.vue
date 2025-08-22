@@ -32,7 +32,7 @@
       </div>
       <Button btn-type="line" element-type="button" aria-label="MY병원 연결하기" class="mt-16" />
     </div>
-    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-8 ml-n20 mr-n20" />
     <LineTabs :tabs="tabs" />
     <FlexSection>
       <div class="total-my-hospotal">
@@ -91,7 +91,7 @@
       <div class="wrap-find-hospital">
         <span class="text">찾고 있는 병원이 없나요?</span>
         <Button
-          btn-type="secondary"
+          btn-type="line"
           element-type="button"
           aria-label="직접 병원 찾기"
           class="xs w-auto pl-16 pr-16 medium"
@@ -381,13 +381,20 @@ const bottomModalProps = ref({
     justify-content: center;
     align-items: center;
     gap: 1.2rem;
-    border: 0.1rem solid #e2e2e2;
+    background-color: #f4f4f4;
+    // border: 0.1rem solid #e2e2e2;
     border-radius: 1.2rem;
     .text {
       font-size: 1.6rem;
       font-weight: 400;
       line-height: 140%;
       color: #555;
+    }
+    :deep(.btn-line) {
+      background-color: #fff;
+      .text {
+        color: #555;
+      }
     }
   }
 }

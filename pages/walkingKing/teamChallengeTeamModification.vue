@@ -3,9 +3,14 @@
     <FlexColDiv class="gap-12">
       <InputText v-model="challengeName" label="챌린지명*" :disabled="true" />
       <InputText v-model="challengeType" label="참가방식*" :disabled="true" />
-      <InputText v-model="teamName" label="팀명*" />
+      <!-- 08-04 중복확인 추가 -->
+      <InputText v-model="teamName" label="팀명*" inp-type="hasBtn" />
       <InputText v-model="introduceTeam" label="팀소개*" />
-      <TeamProfileImage :modify="true" />
+      <!-- 08-04 대표 이미지 수정 -->
+      <FlexColDiv class="gap-6">
+        <InputLabelText label="대표이미지" />
+        <SelectThumbnail />
+      </FlexColDiv>
     </FlexColDiv>
   </BaseBody>
   <ButtonGroup class="is-fixed">
@@ -23,7 +28,8 @@ import { ref } from 'vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
-import TeamProfileImage from '~/components/publishing/walkking/TeamProfileImage.vue'
+import SelectThumbnail from '~/components/publishing/walkking/SelectThumbnail.vue'
+import InputLabelText from '~/components/publishing/input/InputLabelText.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import BottomToastSlot from '~/components/common/bottomToastSlot.vue'

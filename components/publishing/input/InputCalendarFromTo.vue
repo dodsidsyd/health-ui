@@ -14,9 +14,9 @@
       </label>
       <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
-          :name="name"
           :id="inputId"
-          :placeholder="placeholder"
+          :name="name"
+          :placeholder="getFromPlaceholder"
           :value="internalFromDate"
           :readonly="readonly"
           :disabled="disabled"
@@ -32,9 +32,9 @@
         <button class="customCalendar" @click="selectFromDate"></button>
         <span class="wave-txt">~</span>
         <input
-          :name="`${name}-to`"
           :id="`${inputId}-to`"
-          :placeholder="placeholder2"
+          :name="`${name}-to`"
+          :placeholder="getToPlaceholder"
           :value="internalToDate"
           :readonly="readonly"
           :disabled="disabled"
@@ -45,7 +45,7 @@
         <button class="customCalendar" @click="selectToDate"></button>
       </div>
       <p v-if="isInvalid" class="feedback error">
-        <span class="text">메세지를 입력하세요</span>
+        <span class="text">{{ validText }}</span>
       </p>
       <p v-if="dateRangeError" class="feedback error">
         <span class="text">시작일이 종료일보다 늦을 수 없습니다</span>
@@ -76,10 +76,16 @@ const props = defineProps({
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
-  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' },
+  // 새로운 시간 관련 props
+  showTimePicker: { type: Boolean, default: false },
+  defaultHour: { type: Number, default: 0, validator: (value: number) => value >= 0 && value <= 23 },
+  defaultMinute: { type: Number, default: 0, validator: (value: number) => value >= 0 && value <= 59 },
+  minuteStep: { type: Number, default: 1, validator: (value: number) => value > 0 && value <= 60 },
+  validText: { type: String, default: '기간을 선택해주세요' }
 })
 
-const emit = defineEmits(['update:fromDate', 'update:toDate', 'validation-error'])
+const emit = defineEmits(['update:fromDate', 'update:toDate', 'validation-error', 'time-change'])
 
 const inputId = props.name
 const activeField = ref<'from' | 'to'>('from')
@@ -89,6 +95,15 @@ const internalFromDate = ref(props.fromDate)
 const internalToDate = ref(props.toDate)
 
 const isShowDatePickerModal = ref(false)
+
+// 시간 선택 여부에 따른 placeholder 계산
+const getFromPlaceholder = computed(() => {
+  return props.showTimePicker ? 'YYYY.MM.DD HH:MM' : props.placeholder
+})
+
+const getToPlaceholder = computed(() => {
+  return props.showTimePicker ? 'YYYY.MM.DD HH:MM' : props.placeholder2
+})
 
 // 라벨에 * 표시가 있는지 확인
 const hasRequiredMark = computed(() => {
@@ -130,23 +145,44 @@ const dateRangeError = computed(() => {
   return fromDateObj > toDateObj
 })
 
-// 날짜 형식 파싱 (YYYY.MM.DD 또는 YYYY-MM-DD)
+// 날짜 형식 파싱 (YYYY.MM.DD 또는 YYYY-MM-DD, 시간 포함 가능)
 const parseDate = (dateStr: string): Date | null => {
   if (!dateStr) return null
 
-  // YYYY.MM.DD 또는 YYYY-MM-DD 형식 지원
-  const cleanedDate = dateStr.replace(/\./g, '-')
-  const date = new Date(cleanedDate)
+  try {
+    // 시간이 포함된 경우와 포함되지 않은 경우 모두 처리
+    let cleanedDate = dateStr
 
-  return isNaN(date.getTime()) ? null : date
+    // YYYY.MM.DD HH:MM 형식을 YYYY-MM-DD HH:MM으로 변환
+    if (dateStr.includes(' ')) {
+      const [datePart, timePart] = dateStr.split(' ')
+      const cleanedDatePart = datePart.replace(/\./g, '-')
+      cleanedDate = `${cleanedDatePart} ${timePart}`
+    } else {
+      // 날짜만 있는 경우
+      cleanedDate = dateStr.replace(/\./g, '-')
+    }
+
+    const date = new Date(cleanedDate)
+    return isNaN(date.getTime()) ? null : date
+  } catch (error) {
+    return null
+  }
 }
 
-// 날짜를 YYYY.MM.DD 형식으로 포맷
+// 날짜를 지정된 형식으로 포맷
 const formatDate = (date: Date): string => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
-  return `${year}.${month}.${day}`
+
+  if (props.showTimePicker) {
+    const hour = String(date.getHours()).padStart(2, '0')
+    const minute = String(date.getMinutes()).padStart(2, '0')
+    return `${year}.${month}.${day} ${hour}:${minute}`
+  } else {
+    return `${year}.${month}.${day}`
+  }
 }
 
 // 날짜 검증
@@ -178,6 +214,11 @@ const datepickerProps = computed(() => ({
   disabledConfirmButton: false,
   autoClose: false,
   initialDate: getInitialDate(),
+  // 시간 선택 관련 props 전달
+  showTimePicker: props.showTimePicker,
+  defaultHour: props.defaultHour,
+  defaultMinute: props.defaultMinute,
+  minuteStep: props.minuteStep,
   size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 }))
 
@@ -260,6 +301,16 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
     updateFromDate(formattedDate)
   } else {
     updateToDate(formattedDate)
+  }
+
+  // 시간 변경 이벤트 emit (시간 선택기가 활성화된 경우)
+  if (props.showTimePicker) {
+    emit('time-change', {
+      field: activeField.value,
+      hour: selectedDate.getHours(),
+      minute: selectedDate.getMinutes(),
+      dateTime: selectedDate
+    })
   }
 
   isShowDatePickerModal.value = false
@@ -349,6 +400,9 @@ watch([internalFromDate, internalToDate], ([newFrom, newTo]) => {
       font-weight: 500;
       background-color: transparent;
       min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       &::placeholder {
         color: #959595;
       }
@@ -394,6 +448,25 @@ watch([internalFromDate, internalToDate], ([newFrom, newTo]) => {
     color: #f14960;
     font-size: 1.3rem;
     line-height: 1.4rem;
+  }
+}
+@media (max-width: 393px) {
+  .c-inpType {
+    .c-inp-el {
+      .c-inp {
+        font-size: 1.4rem;
+      }
+      // .customCalendar {
+      //   width: 1.8rem;
+      //   height: 1.8rem;
+      //   background-size: contain;
+      //   display: none;
+      // }
+      .wave-txt {
+        font-size: 1.4rem;
+        margin: 0 0.4rem;
+      }
+    }
   }
 }
 </style>

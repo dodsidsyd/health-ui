@@ -20,7 +20,7 @@
           :id="inputId"
           :name="name"
           :placeholder="placeholder"
-          :value="displayValue"
+          :value="modelValue"
           :readonly="readonly"
           :disabled="disabled"
           :class="['c-inp', $attrs.class, { 'is-invalid': isInvalid }]"
@@ -28,7 +28,7 @@
           @input="onInput"
         />
 
-        <button class="verify-btn" @click="onButtonClick">{{ buttonText }}</button>
+        <button v-if="hasVerifyBtn" class="verify-btn" @click="onButtonClick">{{ buttonText }}</button>
       </div>
       <p v-if="isInvalid" class="feedback error">
         <span class="text">올바른 휴대폰 번호를 입력하세요</span>
@@ -74,10 +74,17 @@ const props = defineProps({
   isInvalid: { type: Boolean, default: false },
   customCarriers: { type: Array as () => CarrierOption[], default: () => [] },
   userName: { type: String, default: '홍길동' }, // 토스트에 표시할 사용자 이름
-  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' },
+  hasVerifyBtn: { type: Boolean, default: true } // 인증 버튼 표시 여부
 })
 
 const emit = defineEmits(['update:modelValue', 'change', 'verify'])
+
+const onInput = (e: Event) => {
+  const val = (e.target as HTMLInputElement).value
+  inputValue.value = val
+  emit('update:modelValue', val)
+}
 
 // 통신사 옵션 (커스텀 + 기본)
 const carrierOptions = computed(() => {

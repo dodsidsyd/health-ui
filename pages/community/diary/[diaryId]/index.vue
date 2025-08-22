@@ -81,17 +81,9 @@ const isShowConfirmModal = ref<boolean>(false)
 const showToastMessage = ref<boolean>(false)
 const toastMessage = ref<string>('')
 
-// 페이지 제목 (날짜 포맷)
+// 페이지 제목
 const pageTitle = computed((): string => {
-  if (!selectedDate.value) return '마음 일기'
-
-  const date = selectedDate.value
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토']
-  const weekday = weekdays[date.getDay()]
-
-  return `${month}월 ${day}일 ${weekday}요일`
+  return '마음일기'
 })
 
 // localStorage에서 다이어리 데이터 로드
@@ -190,6 +182,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

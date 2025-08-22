@@ -3,9 +3,23 @@
     <FlexColDiv class="gap-12">
       <InputText v-model="challengeName" label="챌린지명*" :disabled="true" />
       <InputText v-model="challengeType" label="참가방식*" :disabled="true" />
-      <InputText v-model="teamName" label="팀명*" />
+      <!-- 08-04 중복확인 추가 -->
+      <InputText v-model="teamName" label="팀명*" inp-type="hasBtn" />
       <InputText v-model="introduceTeam" label="팀소개*" />
-      <TeamProfileImage />
+      <!-- 08-04 대표 이미지 수정 -->
+      <FlexColDiv class="gap-6">
+        <InputLabelText label="대표이미지" />
+        <SelectThumbnail />
+      </FlexColDiv>
+      <!-- 08-13 팀전 참가 유의사항 추가 -->
+      <div class="challengeCaution">
+        <p>팀전 참가 유의사항</p>
+        <ul>
+          <li>팀전 참가를 위해서는 팀원으로 초대되는 모든 참가자가 동일하게 참가권을 지불하여야 합니다.</li>
+          <li>챌린지 시작 전 팀원 모집이 완료되지 않은 경우 자동으로 참가 취소되며, 참가권은 원복됩니다.</li>
+          <li>챌린지 시작 이후에는 참가 취소를 할 수 없습니다.</li>
+        </ul>
+      </div>
     </FlexColDiv>
   </BaseBody>
   <ButtonGroup class="is-fixed">
@@ -60,13 +74,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import SelectThumbnail from '~/components/publishing/walkking/SelectThumbnail.vue'
 import ChallengeAttendConfirm from '~/components/publishing/walkking/ChallengeAttendConfirm.vue'
 import JoinChallengeModal from '~/components/publishing/walkking/JoinChallengeModal.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexColDiv from '~/components/page/FlexColDiv.vue'
-import TeamProfileImage from '~/components/publishing/walkking/TeamProfileImage.vue'
+import InputLabelText from '~/components/publishing/input/InputLabelText.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import { BottomModal, BaseModal } from '@lemonhc/fo-ui/components/modal'
@@ -162,4 +176,36 @@ const onAttendPaidConfirm = () => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.challengeCaution {
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 0.8rem;
+  p {
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+  li {
+    position: relative;
+    padding-left: 0.9rem;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    color: #555;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0.7rem;
+      left: 0;
+      width: 0.3rem;
+      height: 0.3rem;
+      background-color: #959595;
+      border-radius: 50%;
+    }
+    & + li {
+      margin-top: 0.8rem;
+    }
+  }
+}
+</style>

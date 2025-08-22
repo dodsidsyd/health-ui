@@ -9,7 +9,9 @@
     class="pb-60"
   >
     <h1 class="c-tit mt-24">
-      <span class="text"> 피보험자(치료 받은 분)<br />정보를 입력해 주세요 </span>
+      <span class="text">
+        피보험자(치료 받은 분)<br />정보를 입력해 주세요
+      </span>
     </h1>
     <div class="wrap-form">
       <Select
@@ -66,13 +68,7 @@
     </div>
   </BaseBody>
   <ButtonGroup class="is-fixed">
-    <Button
-      btn-type="primary"
-      element-type="button"
-      aria-label="다음"
-      class="lg w-full medium btn-sticky"
-      @click="clickNext"
-    />
+    <Button btn-type="primary" element-type="button" aria-label="다음" class="lg w-full medium btn-sticky" @click="clickNext" />
   </ButtonGroup>
 
   <BottomModal
@@ -85,9 +81,7 @@
     @confirm="clickSame"
   >
     <template #content>
-      <div style="font-size: 1.8rem; font-weight: 700; text-align: left">
-        피보험자(치료 받은 분)와<br />수익자(보험금 받는 분)가 같은가요?
-      </div>
+      <div style="font-size:1.8rem;font-weight: 700;text-align:left;">피보험자(치료 받은 분)와<br />수익자(보험금 받는 분)가 같은가요?</div>
     </template>
   </BottomModal>
 </template>
@@ -133,7 +127,7 @@ const clickNext = () => {
       color: #555555;
       position: relative;
       &.required::after {
-        content: '*';
+        content: "*";
         font-size: 1.2rem;
         display: inline-block;
         margin-left: 0.3rem;

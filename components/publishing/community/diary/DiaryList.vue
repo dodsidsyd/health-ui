@@ -32,7 +32,10 @@ interface Diary {
     label: string
   }
   content: string
+  images?: string[]
   createdAt: string
+  isDailyQuote?: boolean
+  dailyQuoteQuestion?: string
 }
 
 interface DateGroup {

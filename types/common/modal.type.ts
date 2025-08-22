@@ -1,5 +1,7 @@
 export interface BaseModalProps {
   title?: string
+  addTitle?: string
+  addTitleClass?: string
   isVisible: boolean
   isShowCloseButton?: boolean
   isShowCancelButton?: boolean

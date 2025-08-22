@@ -3,8 +3,9 @@
     <div class="family-talk-tit">
       <h4 class="tit">패밀리 대화</h4>
     </div>
-    <div class="family-dm-list">
-      <div class="list-item">
+    <!-- 대화 없을때 클래스 추가 > no-talk -->
+    <div class="family-dm-list no-talk">
+      <!-- <div class="list-item">
         <img src="~/assets/images/community/img-rank-profile.png" alt="" />
         <div class="item-text">
           <strong>동생님이</strong>
@@ -27,8 +28,9 @@
           <p>미션완료 안한 사람들 어서 해요</p>
         </div>
         <span class="date-txt">오늘</span>
-      </div>
+      </div> -->
     </div>
+
     <button type="button" class="btn-message mb-12"><i class="icon ico-message"></i>대화 쓰기</button>
   </div>
 </template>
@@ -38,6 +40,7 @@
 <style scoped lang="scss">
 .family-talk {
   margin-top: 3.2rem;
+  position: relative;
   .family-talk-tit {
     .tit {
       font-size: 2rem;
@@ -104,7 +107,27 @@
       }
     }
   }
+  &.no-talk {
+    width: 100%;
+    height: 14.2rem;
+    background: #f4f4f4;
+    border-radius: 1.2rem;
+    margin-top: 1.2rem;
+    &:after {
+      content: '아직 대화가 없어요';
+      text-align: center;
+      display: block;
+      font-size: 1.6rem;
+      color: #959595;
+      padding-top: 3.4rem;
+    }
+    & + .btn-message {
+      position: absolute;
+      bottom: 2rem;
+    }
+  }
 }
+
 .btn-message {
   position: relative;
   border-radius: 3.2rem;

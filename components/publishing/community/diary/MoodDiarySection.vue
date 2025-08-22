@@ -4,8 +4,9 @@
     <TitleBox
       title="마음일기"
       titleClass=""
-      ariaLabel="달력전체보기"
-      text=""
+      element-type="a"
+      aria-label="달력전체보기"
+      icon="arrow-type-black"
       :link-href="'/community/diary/list'"
       :is-show-link="true"
     />
@@ -19,39 +20,47 @@
       @emoji-click="handleEmojiClick"
       @no-data-click="handleNoDataClick"
     />
-
+    <!-- 선택된 날짜 표시 -->
+    <div class="selected-date-header mt-32">
+      {{ selectedDateFormatted }}
+    </div>
     <!-- Daily Diary List -->
-    <div class="daily-diary-list">
-      <!-- 선택된 날짜 표시 -->
-      <div class="selected-date-header">
-        {{ selectedDateFormatted }}
-      </div>
-      <template v-if="selectedDateDiaries.length > 0">
-        <div v-for="diary in selectedDateDiaries" :key="diary.id" class="diary-item" @click="goToDiaryDetail(diary.id)">
-          <!-- 이모지 -->
-          <div class="emoji-box">
-            <img :src="diary.emoji.src" :alt="diary.emoji.label" />
-          </div>
-          <!-- 내용 -->
-          <div v-if="hasContent(diary)" class="content-box">
-            <!-- Daily-quote 모드일 때 특별한 형식 -->
-            <div v-if="diary.isDailyQuote" class="daily-quote-content">
-              <div class="daily-quote-label">오늘 한마디</div>
-              <div class="daily-quote-question" v-html="getCleanQuestion(diary.dailyQuoteQuestion)"></div>
-              <p v-if="diary.content" class="diary-text">{{ diary.content }}</p>
-            </div>
-
-            <!-- 일반 모드일 때 기존 형식 -->
-            <p v-else-if="diary.content" class="diary-text">{{ diary.content }}</p>
-          </div>
+    <div v-if="selectedDateDiaries.length > 0" class="daily-diary-list">
+      <div v-for="diary in selectedDateDiaries" :key="diary.id" class="diary-item" @click="goToDiaryDetail(diary.id)">
+        <!-- 이모지 -->
+        <div class="emoji-box">
+          <img :src="diary.emoji.src" :alt="diary.emoji.label" />
         </div>
-      </template>
+        <!-- 내용 -->
+        <div v-if="hasContent(diary)" class="content-box">
+          <!-- 오늘 한마디 모드일 때 특별한 형식 -->
+          <div v-if="diary.isDailyQuote" class="daily-quote-content">
+            <div class="daily-quote-label">오늘 한마디</div>
+            <div class="daily-quote-question" v-html="getCleanQuestion(diary.dailyQuoteQuestion)"></div>
+            <p v-if="diary.content" class="diary-text">{{ diary.content }}</p>
+          </div>
 
-      <!-- No diary for selected date -->
-      <div v-else class="no-diary" @click="goToEmojiPicker">
-        <p>이 날의 일기가 없습니다.</p>
-        <button class="create-btn">일기 작성하기</button>
+          <!-- 일반 모드일 때 기존 형식 -->
+          <p v-else-if="diary.content" class="diary-text">{{ diary.content }}</p>
+        </div>
+
+        <!-- 이미지 표시 -->
+        <div v-if="diary.images && diary.images.length > 0" class="diary-images">
+          <CommonSwiper
+            :slides="diary.images"
+            slide-type="image"
+            v-bind="SWIPER_PRESETS.moodSection"
+            class="diary-image-swiper"
+          />
+        </div>
       </div>
+    </div>
+    <div v-else class="no-diary">
+      <div class="no-diary-icon">
+        <img src="~/assets/images/diary/ico-diary-empty.svg" alt="일기 없음" />
+      </div>
+      <p>작성된 일기가 없습니다. <br />오늘 하루 어떠셨나요?</p>
+      <!-- <button type="button" class="write-diary-btn" @click="goToCreate">일기 작성하기</button> -->
     </div>
   </section>
 </template>
@@ -61,6 +70,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import TitleBox from '~/components/common/TitleBox.vue'
 import WeeklyPicker from '~/components/publishing/community/diary/WeeklyPicker.vue'
+import CommonSwiper from '~/components/publishing/swiper/CommonSwiper.vue'
+// CommonSwiper 프리셋 설정
+const SWIPER_PRESETS = {
+  moodSection: {
+    slidesPerView: 1,
+    spaceBetween: 8,
+    pagination: false,
+    navigation: false,
+    loop: false,
+    showSlideLength: true,
+    showPlayPauseButton: false
+  }
+} as const
 
 const router = useRouter()
 
@@ -159,7 +181,7 @@ const goToCreate = () => {
 // 이모지 피커 페이지로 이동
 const goToEmojiPicker = () => {
   router.push({
-    path: '/guide/emoji',
+    path: '/community/diary/emojiPicker',
     query: {
       date: selectedDate.value.toISOString().split('T')[0],
       returnTo: 'mood-diary'
@@ -202,7 +224,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .mood-diary-section {
-  padding: 2rem 0;
+  padding: 3.2rem 0 2rem;
 }
 
 .daily-diary-list {
@@ -219,10 +241,7 @@ onMounted(() => {
   flex-direction: column;
   padding: 2.4rem 0;
   background: #fff;
-
-  & + .diary-item {
-    border-top: 0.1rem solid #eee;
-  }
+  border-bottom: 0.1rem solid #eee;
 }
 
 .emoji-box {
@@ -278,32 +297,60 @@ onMounted(() => {
   @include mixin.multi-ellipsis($clamp: 2);
 }
 
-.no-diary {
-  text-align: center;
-  padding: 3rem 2rem;
-  background: #f8f9fa;
-  border-radius: 1.2rem;
+.diary-images {
+  margin-top: 1.6rem;
 
-  p {
-    font-size: 1.4rem;
-    color: #666;
-    margin-bottom: 1.6rem;
+  .diary-image-swiper {
+    :deep(swiper-slide) {
+      padding-bottom: 100%;
+      border-radius: 0.8rem;
+    }
+    :deep(.slide-image) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      object-fit: cover;
+    }
+
+    :deep(.slide-info) {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 1.2rem;
+      margin-top: 0;
+    }
+
+    :deep(.swiper-pagination) {
+      bottom: -2rem;
+    }
+  }
+}
+
+.no-diary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  padding: 8rem 0;
+
+  .no-diary-content {
+    cursor: pointer;
+    transition: transform 0.2s ease;
   }
 
-  .create-btn {
-    background: #4776e5;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 0.8rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease;
-
-    &:hover {
-      background: #3a5fd4;
-    }
+  p {
+    font-size: 1.8rem;
+    color: #555;
+    line-height: 2.5rem;
   }
 }
 </style>

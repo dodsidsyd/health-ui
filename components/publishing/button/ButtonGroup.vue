@@ -51,5 +51,13 @@ const gapStyle = gapValue ? { gap: `${gapValue / 10}rem` } : {}
       min-width: 15.2rem;
     }
   }
+  &.half {
+    :deep(.c-btn:first-child) {
+      width: 50%;
+    }
+    :deep(.c-btn:not(:first-child)) {
+      width: 50%;
+    }
+  }
 }
 </style>

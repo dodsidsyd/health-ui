@@ -1,16 +1,16 @@
 <template>
   <div :class="['c-checktype', customStyle]">
     <input
+      :id="id"
       type="checkbox"
       :name="name"
-      :id="id"
       :checked="modelValue"
       :disabled="disabled"
       class="c-check"
       @change="onChange"
     />
-    <label :for="id" class="c-label" :aria-label="ariaLabel">
-      <i v-if="!customStyle.includes('switch')" class="icon" aria-hidden="true" />
+    <label :for="id" :class="['c-label', reverse ? 'reverse' : '']" :aria-label="ariaLabel">
+      <i v-if="!customStyle.includes('switch') && !buttonType" class="icon" aria-hidden="true"></i>
       <span v-if="customStyle.includes('switch')" class="c-switch-rail">
         <span class="c-switch-button"></span>
       </span>
@@ -25,7 +25,9 @@ const props = defineProps({
   ariaLabel: { type: String, default: '레이블명' },
   disabled: { type: Boolean, default: false },
   customStyle: { type: String, default: '' },
-  modelValue: { type: Boolean, default: false }
+  buttonType: { type: Boolean, default: false },
+  modelValue: { type: Boolean, default: false },
+  reverse: { type: Boolean, default: false }
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -55,6 +57,7 @@ function onChange(e: Event) {
   --cchk-switch-width: max(4.8rem, calc(var(--switch-rail-size) + var(--switch-wh) - var(--switch-h)));
   &.small {
     .c-label {
+      align-items: flex-start;
       &::after {
         color: #555;
         font-size: 1.4rem;
@@ -213,6 +216,10 @@ function onChange(e: Event) {
       font-size: 1.6rem;
       font-weight: 500;
     }
+    &.reverse {
+      flex-direction: row-reverse;
+      justify-content: space-between;
+    }
   }
   .icon {
     display: flex;
@@ -321,6 +328,28 @@ function onChange(e: Event) {
       width: 100%;
     }
   }
+  &.buttonType3 {
+    .c-check {
+      background: #fff;
+      &:checked {
+        ~ .c-label {
+          background: #4f5561;
+          &::after {
+            color: #fff;
+          }
+        }
+      }
+    }
+    .c-label {
+      padding: 0.8rem 2rem;
+      border: 0.1rem solid #e2e2e2;
+      border-radius: 10rem;
+      line-height: 2.2rem;
+      &::after {
+        margin-left: 0;
+      }
+    }
+  }
   &.agree-all {
     .c-check {
       &:checked {
@@ -379,7 +408,7 @@ function onChange(e: Event) {
           background-color: #eee;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M13.8397 7.12L8.11205 12.88L6.15967 10.9166' stroke='%23D2D2D2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
           &::before {
-            background-color: var(--white);
+            background-color: rgb(var(--white));
           }
         }
       }

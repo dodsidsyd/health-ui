@@ -22,15 +22,25 @@
       </div>
       <div class="flow-item">
         <span class="tit">팔로우</span>
-        <button type="button" class="btn flowing-btn">팔로잉</button>
+        <button v-if="isFollowing" type="button" class="btn flowing-btn" @click="handleFollowToggle">팔로잉</button>
         <!-- 팔로우 버튼 추가 -->
-        <!-- <button type="button" class="btn flow-btn">팔로우</button> -->
+        <button v-else type="button" class="btn flow-btn" @click="handleFollowToggle">팔로우</button>
       </div>
     </div>
     <hr class="hr-section ml-n20 mr-n20 mb-10" />
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  isFollowingInitial: { type: Boolean, default: false }
+})
+// 팔로우 상태 관리
+const isFollowing = ref(props.isFollowingInitial)
+// 팔로우 토글
+const handleFollowToggle = () => {
+  isFollowing.value = !isFollowing.value
+}
+</script>
 
 <style lang="scss" scoped>
 .modal-profile {
@@ -162,6 +172,7 @@
         font-size: 1.2rem;
         display: inline-flex;
         width: 7.5rem;
+        height: 2.8rem;
         line-height: 2.8rem;
         border-radius: 2rem;
         text-align: center;

@@ -9,7 +9,14 @@
     <div class="c-dim" @click="closeModal"></div>
     <div class="c-modal-inner">
       <div class="c-modal-header">
-        <strong id="modalBottomTitle" class="c-modal-title">{{ title }}</strong>
+        <strong
+          v-if="addTitle"
+          v-html="addTitle"
+          id="modalBottomTitle"
+          :class="['c-modal-title', addTitleClass]"
+        ></strong>
+        <strong v-else id="modalBottomTitle" class="c-modal-title">{{ title }}</strong>
+
         <button v-if="isShowCloseButton" type="button" class="c-modal-close-btn" aria-label="닫기" @click="closeModal">
           <i class="icon close"></i>
         </button>
@@ -47,6 +54,8 @@ import type { BaseModalProps, ModalEmitEvent } from '~/types/common/modal.type'
 
 const props = withDefaults(defineProps<BaseModalProps>(), {
   title: '',
+  addTitle: '',
+  addTitleClass: '',
   isVisible: false,
   isShowCloseButton: true,
   isShowCancelButton: true,

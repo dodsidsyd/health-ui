@@ -32,7 +32,7 @@
       </div>
       <Button btn-type="line" element-type="button" aria-label="MY병원 연결하기" class="mt-16" />
     </div>
-    <hr class="hr-section mt-32 ml-n20 mr-n20" />
+    <hr class="hr-section mt-32 mb-8 ml-n20 mr-n20" />
     <LineTabs :tabs="tabs" />
     <FlexSection>
       <div class="total-my-hospotal">
@@ -95,7 +95,7 @@
       <div class="wrap-find-hospital">
         <span class="text">찾고 있는 병원이 없나요?</span>
         <Button
-          btn-type="secondary"
+          btn-type="line"
           element-type="button"
           aria-label="직접 병원 찾기"
           class="xs w-auto pl-16 pr-16 medium"
@@ -243,16 +243,18 @@ const clickConfirmModal = async () => {
       </div>
       <div style="font-weight: bold;font-size: var(--num-16);text-align: left;">고려대학병원은 입원비 서류없이 청구<br />서비스가 오픈 준비 중 이에요</div>
       <div style="font-weight: 400;font-size: var(--num-16);text-align: left;color: #555555;margin-top:0.8rem;">서류를 준비 하셨으면 사진찍어 청구 서비스를<br />이용할 수 있어요.</div>
-      <button type="button" class="c-btn btn-primary" style="height: 4.8rem; background-color: rgb(76, 127, 247); border-radius: 0.6rem; font-size: 1.6rem; font-weight: bold; display: inline-flex; justify-content: center; align-items: center; width: 100%; line-height: 1.5; color: white; border: none; cursor: pointer; margin-top: 2rem;">
-        <span class="text">사진찍어 청구</span>
-      </button>
-    </div>`
+      </div>`
+  // <button type="button" class="c-btn btn-primary" style="height: 4.8rem; background-color: rgb(76, 127, 247); border-radius: 0.6rem; font-size: 1.6rem; font-weight: bold; display: inline-flex; justify-content: center; align-items: center; width: 100%; line-height: 1.5; color: white; border: none; cursor: pointer; margin-top: 2rem;">
+  //   <span class="text">사진찍어 청구</span>
+  // </button>
 
   await ConfirmModal.open({
+    title: '안내',
     isVisible: true,
     html: modalContent,
     isShowCancelButton: false,
-    isShowConfirmButton: false
+    isShowConfirmButton: true,
+    confirmButtonText: '사진찍어 청구'
   })
 }
 const bottomModalProps = ref({
@@ -420,13 +422,20 @@ const bottomModalProps = ref({
     justify-content: center;
     align-items: center;
     gap: 1.2rem;
-    border: 0.1rem solid #e2e2e2;
+    background-color: #f4f4f4;
+    // border: 0.1rem solid #e2e2e2;
     border-radius: 1.2rem;
     .text {
       font-size: 1.6rem;
       font-weight: 400;
       line-height: 140%;
       color: #555;
+    }
+    :deep(.btn-line) {
+      background-color: #fff;
+      .text {
+        color: #555;
+      }
     }
   }
 }

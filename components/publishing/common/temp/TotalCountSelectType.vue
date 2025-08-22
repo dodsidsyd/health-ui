@@ -6,7 +6,7 @@
     </div>
     <!-- 버튼 타입 -->
 
-    <div class="select-option select-type">
+    <div class="select-option select-type" v-if="select">
       <Select modal-title="조회하기" :transparent="true" v-model="selectedPeriod" :custom-opts="selectOptions" />
     </div>
   </div>
@@ -19,11 +19,13 @@ import Select from '~/components/publishing/input/Select.vue'
 const props = withDefaults(
   defineProps<{
     count?: number
+    select?: boolean
     selectOptions?: Array<{ value: string; label: string }>
     selectedPeriod?: string
   }>(),
   {
     count: 0,
+    select: true,
     selectOptions: () => [
       { value: '3month', label: '3개월' },
       { value: '6month', label: '6개월' }

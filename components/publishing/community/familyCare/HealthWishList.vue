@@ -3,41 +3,50 @@
     <div class="wishList-tit">
       <h4 class="tit">건강 위시리스트</h4>
     </div>
-    <div class="wish-item-list">
-      <div class="wish-item">
+
+    <!-- 위시리스트가 있을 때 -->
+    <div v-if="wishList.length < 0" class="wish-item-list">
+      <div v-for="wishItem in wishList" :key="wishItem.id" class="wish-item">
         <div class="gift-info">
           <div class="gift-txt">
-            <p>
-              아빠 요즘 오메가3 먹는데<br />
-              패키지 선물해줄 사람~
-            </p>
-            <nuxt-link to="javascript:void(0)" class="gift-link">상품보기</nuxt-link>
+            <p>{{ wishItem.message }}</p>
+            <nuxt-link v-if="wishItem.productLink" :to="wishItem.productLink" class="gift-link">상품보기</nuxt-link>
           </div>
-          <span class="img-wrap"><img src="~/assets/images/community/img-rank-profile.png" alt="" /></span>
+          <span v-if="wishItem.productImage" class="img-wrap">
+            <img :src="getImageUrl(wishItem.productImage)" :alt="wishItem.productName || '상품 이미지'" />
+          </span>
         </div>
 
-        <Button element-type="button" aria-label="선물하기" class="sm" />
+        <Button
+          v-if="!wishItem.isGifted"
+          element-type="button"
+          :aria-label="`${wishItem.requesterName}에게 선물하기`"
+          class="sm"
+          @click="giftItem(wishItem.id)"
+        />
+        <Button
+          v-else
+          element-type="button"
+          :aria-label="`${wishItem.giftedBy}이(가) 선물했어요!`"
+          class="sm"
+          disabled
+        />
       </div>
-
-      <div class="wish-item">
-        <div class="gift-info">
-          <div class="gift-txt">
-            <p>
-              나 이거 갖고싶어!<br />
-              사주꾸야?
-            </p>
-            <nuxt-link to="javascript:void(0)" class="gift-link">상품보기</nuxt-link>
-          </div>
-          <span class="img-wrap"><img src="~/assets/images/community/img-add-groupBanner.png" alt="" /></span>
-        </div>
-
-        <Button element-type="button" aria-label="큰 딸이 선물했어요!" class="sm" disabled />
-      </div>
+      <button type="button" class="btn-add-wishList mb-12" @click="clickWishItemModal">
+        <i class="icon ico-plus-lg"></i>위시리스트 추가하기
+      </button>
     </div>
 
-    <button type="button" class="btn-add-wishList mb-12" @click="clickWishItemModal">
-      <i class="icon ico-plus-lg"></i>위시리스트 추가하기
-    </button>
+    <!-- 위시리스트가 없을 때 -->
+    <EmptyState
+      v-else
+      class="mt-12 mb-20"
+      empty-title="아직 위시리스트가 없어요"
+      href="/community"
+      :button="true"
+      button-aria-label="위시리스트 추가하기"
+      button-icon="ico-plus-lg"
+    />
 
     <Teleport to="body">
       <BottomModal
@@ -54,9 +63,9 @@
       >
         <template #content>
           <div class="wishList-form">
-            <FieldSet :placeholder="'갖고 싶은 선물 메모를 작성해 주세요.'" />
-            <InputText placeholder="선물 링크를 넣어주세요" />
-            <InputFile />
+            <FieldSet v-model="newWishItem.message" :placeholder="'갖고 싶은 선물 메모를 작성해 주세요.'" />
+            <InputText v-model="newWishItem.productLink" placeholder="선물 링크를 넣어주세요" />
+            <InputFile @change="handleFileChange" />
           </div>
         </template>
       </BottomModal>
@@ -65,22 +74,177 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import BottomModal from '~/components/common/modal/BottomModal.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import FieldSet from '~/components/publishing/input/FieldSet.vue'
 import InputFile from '~/components/publishing/input/InputFile.vue'
+import EmptyState from '~/components/publishing/community/common/EmptyState.vue'
+
+interface WishItem {
+  id: string
+  requesterName: string
+  requesterProfile?: string
+  message: string
+  productName?: string
+  productLink?: string
+  productImage?: string
+  isGifted: boolean
+  giftedBy?: string
+  giftedDate?: string
+  createdAt: string
+}
+
+// 위시리스트 데이터
+const wishList = ref<WishItem[]>([
+  {
+    id: '1',
+    requesterName: '아빠',
+    requesterProfile: 'community/img-rank-profile.png',
+    message: '아빠 요즘 오메가3 먹는데\n패키지 선물해줄 사람~',
+    productName: '오메가3 패키지',
+    productLink: 'javascript:void(0)',
+    productImage: 'community/img-rank-profile.png',
+    isGifted: false,
+    createdAt: '2024-04-15T10:00:00'
+  },
+  {
+    id: '2',
+    requesterName: '큰 딸',
+    requesterProfile: 'community/img-add-groupBanner.png',
+    message: '나 이거 갖고싶어!\n사주꾸야?',
+    productName: '건강 기능 식품',
+    productLink: 'javascript:void(0)',
+    productImage: 'community/img-add-groupBanner.png',
+    isGifted: true,
+    giftedBy: '큰 딸',
+    giftedDate: '2024-04-14T15:30:00',
+    createdAt: '2024-04-10T09:00:00'
+  },
+  {
+    id: '3',
+    requesterName: '엄마',
+    message: '비타민D 영양제 사주실 분?\n요즘 햇빛을 못 봐서 필요해요',
+    productName: '비타민D 3000IU',
+    productLink: 'javascript:void(0)',
+    productImage: 'community/img-rank-profile.png',
+    isGifted: false,
+    createdAt: '2024-04-12T14:00:00'
+  }
+])
+
+// 빈 리스트 테스트용 (주석 해제하면 빈 상태 확인 가능)
+// const wishList = ref<WishItem[]>([])
+
+// 새 위시아이템 데이터
+const newWishItem = ref({
+  message: '',
+  productLink: '',
+  productImage: null as File | null
+})
 
 // 모달 상태 관리
 const isShowWishItemModal = ref(false)
 
+// 이미지 경로 처리
+const basePath = '/_nuxt/assets/images/'
+
+const getImageUrl = (imagePath?: string) => {
+  if (!imagePath) return ''
+  // 이미 전체 경로가 포함된 경우 그대로 반환
+  if (imagePath.startsWith('http') || imagePath.startsWith('/')) {
+    return imagePath
+  }
+  return `${basePath}${imagePath}`
+}
+
+// 모달 열기/닫기
 const clickWishItemModal = () => {
+  resetNewWishItem()
   toggleWishItemModal()
 }
 
 const toggleWishItemModal = () => {
   isShowWishItemModal.value = !isShowWishItemModal.value
+}
+
+// 새 위시아이템 초기화
+const resetNewWishItem = () => {
+  newWishItem.value = {
+    message: '',
+    productLink: '',
+    productImage: null
+  }
+}
+
+// 파일 선택 처리
+const handleFileChange = (file: File) => {
+  newWishItem.value.productImage = file
+  console.log('Selected file:', file)
+}
+
+// 위시아이템 추가 확인
+const handleConfirm = () => {
+  if (!newWishItem.value.message.trim()) {
+    alert('메모를 작성해주세요.')
+    return
+  }
+
+  // 새 위시아이템 추가
+  const newItem: WishItem = {
+    id: `wish-${Date.now()}`,
+    requesterName: '나', // 현재 사용자
+    message: newWishItem.value.message,
+    productLink: newWishItem.value.productLink || undefined,
+    productImage: newWishItem.value.productImage ? URL.createObjectURL(newWishItem.value.productImage) : undefined,
+    isGifted: false,
+    createdAt: new Date().toISOString()
+  }
+
+  wishList.value.unshift(newItem) // 최신 항목을 맨 위에 추가
+
+  console.log('위시아이템 추가:', newItem)
+  toggleWishItemModal()
+  resetNewWishItem()
+}
+
+// 취소
+const handleCancel = () => {
+  toggleWishItemModal()
+  resetNewWishItem()
+}
+
+// 선물하기
+const giftItem = (itemId: string) => {
+  const item = wishList.value.find(w => w.id === itemId)
+  if (item) {
+    // 선물하기 확인 모달이나 프로세스 실행
+    console.log('선물하기:', item)
+
+    // 예시: 선물 완료 처리
+    item.isGifted = true
+    item.giftedBy = '나' // 현재 사용자
+    item.giftedDate = new Date().toISOString()
+  }
+}
+
+// 위시아이템 삭제
+const deleteWishItem = (itemId: string) => {
+  const index = wishList.value.findIndex(w => w.id === itemId)
+  if (index > -1) {
+    wishList.value.splice(index, 1)
+    console.log('위시아이템 삭제:', itemId)
+  }
+}
+
+// 위시아이템 수정
+const editWishItem = (itemId: string) => {
+  const item = wishList.value.find(w => w.id === itemId)
+  if (item) {
+    // 수정 모달 열기 또는 수정 페이지로 이동
+    console.log('위시아이템 수정:', item)
+  }
 }
 </script>
 
@@ -103,6 +267,23 @@ const toggleWishItemModal = () => {
     display: flex;
     flex-direction: column;
     gap: 2rem 0;
+
+    &.empty-wishlist {
+      width: 100%;
+      height: 14.2rem;
+      background: #f4f4f4;
+      border-radius: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .empty-text {
+        font-size: 1.6rem;
+        color: #959595;
+        font-weight: 500;
+      }
+    }
+
     .wish-item {
       display: flex;
       flex-direction: column;
@@ -121,11 +302,14 @@ const toggleWishItemModal = () => {
           display: flex;
           flex-direction: column;
           gap: 1.2rem 0;
+          flex: 1;
+          padding-right: 1.6rem;
 
           p {
             font-size: 1.6rem;
             font-weight: 500;
             color: #2b2b2b;
+            white-space: pre-line;
           }
           .gift-link {
             display: flex;
@@ -133,6 +317,7 @@ const toggleWishItemModal = () => {
             color: vars.$blue-primary;
             font-size: 1.6rem;
             font-weight: 400;
+            align-self: flex-start;
             &::before {
               content: '';
               width: 2rem;
@@ -150,6 +335,7 @@ const toggleWishItemModal = () => {
           background: #f4f4f4;
           border-radius: 1.2rem;
           overflow: hidden;
+          flex-shrink: 0;
           img {
             width: 100%;
             height: 100%;
@@ -174,8 +360,7 @@ const toggleWishItemModal = () => {
   align-items: center;
   justify-content: center;
   gap: 0 0.4rem;
-  margin-top: 1.2rem;
-  justify-self: center;
+  margin: 1.2rem auto 0;
   @include mixin.rippleEffectPrimary;
   .icon {
     display: inline-block;

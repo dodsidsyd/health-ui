@@ -1,11 +1,22 @@
 <template>
   <div class="c-input">
     <div class="c-inpType">
-      <label v-if="label" :for="inputId" class="c-label">{{ label }}</label>
+      <label v-if="label" :for="inputId" :class="['c-label', labelClass]" :style="{ fontSize: labelSize }">
+        <template v-if="hasRequiredMark">
+          <span v-for="(part, index) in labelParts" :key="index">
+            <span v-if="part === '*'" class="required-mark">*</span>
+            <span v-else>{{ part }}</span>
+          </span>
+        </template>
+        <template v-else>
+          {{ label }}
+        </template>
+      </label>
+
       <div class="c-inp-el" :class="{ lg: props.size === 'lg', sm: props.size === 'sm' }">
         <input
-          :name="name"
           :id="inputId"
+          :name="name"
           :placeholder="placeholder"
           :value="internalValue"
           :readonly="readonly"
@@ -17,15 +28,17 @@
         <button class="customCalendar" @click="clickDatePickerModal"></button>
       </div>
       <p v-if="isInvalid" class="feedback error">
-        <span class="text">메세지를 입력하세요</span>
+        <span class="text">{{ validText }}</span>
       </p>
     </div>
     <DatePickerModal
       :is-visible="isShowDatePickerModal"
       v-bind="datepickerProps"
+      :scheduled="scheduled"
       @cancel="clickDatePickerCancel"
       @confirm="clickDatePickerConfirm"
       @close="toggleDatePickerModal"
+      @scheduled-date-click="handleScheduledDateClick"
     />
   </div>
 </template>
@@ -33,6 +46,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue'
 import DatePickerModal from '~/components/common/modal/DatePickerModal.vue'
+
 interface OptionType {
   value: string
   label: string
@@ -41,15 +55,41 @@ interface OptionType {
 const props = defineProps({
   label: { type: String, default: '' },
   name: { type: String, default: 'Calendar' },
-  placeholder: { type: String, default: '2025.04.01' },
+  placeholder: { type: String, default: 'YYYY.MM.DD' },
   modelValue: { type: String, default: '' },
   readonly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   isInvalid: { type: Boolean, default: false },
+  validText: { type: String, default: '기간을 선택해주세요' },
+
+  // 스케줄된 날짜들 (새로운 props)
+  scheduled: {
+    type: [String, Array],
+    default: () => [],
+    validator: (value: string | any[]) => {
+      // 문자열 형태: "1, 13, 15" 또는 "1,13,15"
+      // 배열 형태: [1, 13, 15] 또는 ["1", "13", "15"]
+      // 날짜 객체 배열: [new Date(), ...]
+      // 날짜 문자열 배열: ["2024-01-15", ...]
+      if (typeof value === 'string') {
+        return true
+      }
+      if (Array.isArray(value)) {
+        return true
+      }
+      return false
+    }
+  },
+
+  // 새로운 시간 관련 props
+  showTimePicker: { type: Boolean, default: false },
+  defaultHour: { type: Number, default: 0, validator: (value: number) => value >= 0 && value <= 23 },
+  defaultMinute: { type: Number, default: 0, validator: (value: number) => value >= 0 && value <= 59 },
+  minuteStep: { type: Number, default: 1, validator: (value: number) => value > 0 && value <= 60 },
   size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'time-change', 'scheduled-date-click'])
 
 const inputId = props.name
 
@@ -71,11 +111,25 @@ watch(
 const parseDate = (dateStr: string): Date | null => {
   if (!dateStr) return null
 
-  // YYYY.MM.DD 또는 YYYY-MM-DD 형식 지원
-  const cleanedDate = dateStr.replace(/\./g, '-')
-  const date = new Date(cleanedDate)
+  try {
+    // 시간이 포함된 경우와 포함되지 않은 경우 모두 처리
+    let cleanedDate = dateStr
 
-  return isNaN(date.getTime()) ? null : date
+    // YYYY.MM.DD HH:MM 형식을 YYYY-MM-DD HH:MM으로 변환
+    if (dateStr.includes(' ')) {
+      const [datePart, timePart] = dateStr.split(' ')
+      const cleanedDatePart = datePart.replace(/\./g, '-')
+      cleanedDate = `${cleanedDatePart} ${timePart}`
+    } else {
+      // 날짜만 있는 경우
+      cleanedDate = dateStr.replace(/\./g, '-')
+    }
+
+    const date = new Date(cleanedDate)
+    return isNaN(date.getTime()) ? null : date
+  } catch (error) {
+    return null
+  }
 }
 
 // 날짜를 YYYY.MM.DD 형식으로 포맷
@@ -83,7 +137,14 @@ const formatDate = (date: Date): string => {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
-  return `${year}.${month}.${day}`
+
+  if (props.showTimePicker) {
+    const hour = String(date.getHours()).padStart(2, '0')
+    const minute = String(date.getMinutes()).padStart(2, '0')
+    return `${year}.${month}.${day} ${hour}:${minute}`
+  } else {
+    return `${year}.${month}.${day}`
+  }
 }
 
 const datepickerProps = computed(() => ({
@@ -96,7 +157,13 @@ const datepickerProps = computed(() => ({
   disabledCancelButton: false,
   disabledConfirmButton: false,
   autoClose: false,
-  initialDate: getInitialDate()
+  initialDate: getInitialDate(),
+  // 시간 선택 관련 props 전달
+  showTimePicker: props.showTimePicker,
+  defaultHour: props.defaultHour,
+  defaultMinute: props.defaultMinute,
+  minuteStep: props.minuteStep,
+  size: { type: String, validator: (value: string) => ['lg', 'sm', 'normal'].includes(value), default: 'normal' }
 }))
 
 // 모달에 전달할 초기 날짜 가져오기
@@ -141,6 +208,15 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
   // 날짜 업데이트 (내부 상태 + emit)
   updateValue(formattedDate)
 
+  // 시간 변경 이벤트 emit (시간 선택기가 활성화된 경우)
+  if (props.showTimePicker) {
+    emit('time-change', {
+      hour: selectedDate.getHours(),
+      minute: selectedDate.getMinutes(),
+      dateTime: selectedDate
+    })
+  }
+
   isShowDatePickerModal.value = false
 
   // DOM 업데이트 대기 후 input 요소에 값이 제대로 반영되었는지 확인
@@ -156,6 +232,27 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
     console.log(`📅 Input 요소 값: ${inputElement.value}`)
   }
 }
+
+// 스케줄된 날짜 클릭 핸들러
+const handleScheduledDateClick = (scheduleInfo: any) => {
+  console.log('📌 스케줄된 날짜 클릭:', scheduleInfo)
+  emit('scheduled-date-click', scheduleInfo)
+
+  // 스케줄된 날짜를 바로 선택하려면 아래 주석 해제
+  // const formattedDate = formatDate(scheduleInfo.date)
+  // updateValue(formattedDate)
+}
+
+// 라벨에 * 표시가 있는지 확인
+const hasRequiredMark = computed(() => {
+  return props.label.includes('*')
+})
+
+// 라벨을 * 기준으로 분리
+const labelParts = computed(() => {
+  if (!hasRequiredMark.value) return []
+  return props.label.split(/([*])/).filter(part => part !== '')
+})
 </script>
 
 <style lang="scss" scoped>
@@ -170,6 +267,12 @@ const clickDatePickerConfirm = async (selectedDate: Date | null) => {
   color: #555;
   & + .c-inp-el {
     margin-left: 0;
+  }
+  .required-mark {
+    color: #f14960; // 빨간색으로 * 표시
+    font-weight: 400;
+    display: inline-block;
+    margin-left: 0.4rem;
   }
 }
 

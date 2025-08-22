@@ -6,6 +6,7 @@
     :has-notification="true"
     :has-reward="false"
     :has-add-text-left="true"
+    :has-tel-btn="true"
     class="pb-60"
   >
     <div class="flex flex-col gap-16 mt-24">
@@ -28,6 +29,13 @@
           class="require"
         />
       </div>
+      <div class="input-tit">생년월일</div>
+      <InputText placeholder="생년월일을 입력해 주세요." />
+      <div class="input-tit">성별</div>
+      <FlexRowDiv class="gap-8">
+        <Radio id="rdo1" name="rdo1" custom-style="button small" aria-label="남성" class="w-full" />
+        <Radio id="rdo2" name="rdo1" custom-style="button small" aria-label="여성" class="w-full" />
+      </FlexRowDiv>
       <div class="input-tit required">담당 설계사 코드</div>
       <InputText placeholder="보험협회에 등록된 보험설계사 고유번호" />
       <div class="input-tit required">담당 설계사 이름</div>
@@ -38,11 +46,11 @@
     <Button
       btn-type="primary"
       element-type="button"
-      aria-label="가입하기"
+      aria-label="확인"
       class="lg w-full medium btn-sticky"
       @click="clickConfirmModal"
     >
-      가입하기
+      확인
     </Button>
   </ButtonGroup>
   <ConfirmModal
@@ -57,6 +65,7 @@
 </template>
 
 <script setup lang="ts">
+import FlexRowDiv from '~/components/page/FlexRowDiv.vue'
 import BaseBody from '~/components/layout/BaseBody.vue'
 import InputText from '~/components/publishing/input/InputText.vue'
 import Button from '~/components/publishing/button/Button.vue'
@@ -64,7 +73,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 import InputTimer from '~/components/publishing/input/InputTimer.vue'
 import InputPhone from '~/components/publishing/input/InputPhone.vue'
 import ConfirmModal from '~/components/common/modal/ConfirmModal.vue'
-
+import Radio from '~/components/publishing/input/radio.vue'
 const isShowConfirmModal = ref(false)
 const confirmModalContent = ref('')
 // ToDo: 메시지 내용 - 상황에 따라 변경 필요

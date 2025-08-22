@@ -11,9 +11,7 @@
     <!-- ToDo: 로딩중 -->
     <div class="mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          청구 서류를 첨부해 주세요
-        </span>
+        <span class="text"> 청구 서류를 첨부해 주세요 </span>
       </h1>
     </div>
     <FlexSection>
@@ -55,154 +53,164 @@
       </div>
       <div class="wrap-attached-info">
         <img src="/assets/images/insu/icon-info.svg" alt="info" />
-        <div class="text">가족청구는 <strong>피보험자와 수익자가 만 19세 미만 미성년자인 경우, 가족관계 증명서</strong>를 함께 첨부해 주세요.</div>
+        <div class="text">
+          가족청구는 <strong>피보험자와 수익자가 만 19세 미만 미성년자인 경우, 가족관계 증명서</strong>를 함께 첨부해
+          주세요.
+        </div>
       </div>
       <div class="wrap-payment-instructions-info">
-      <h2 class="tit2">필요한 청구 서류 안내</h2>
-      <div class="wrap-spread">
-        <div class="item">
-          <div class="item-head" @click="toggleItem(0)">
-            <div class="wrap-desc">
-              <div class="text">청구 제한 금액 안내</div>
+        <h2 class="tit2">필요한 청구 서류 안내</h2>
+        <div class="wrap-spread">
+          <div class="item">
+            <div class="item-head" @click="toggleItem(0)">
+              <div class="wrap-desc">
+                <div class="text">청구 제한 금액 안내</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[0] }"></i>
             </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[0] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[0] }">
-            <div class="spread-tit2">청구 금액 100만원 이하인 경우에만 FAX 청구가 가능해요.</div>
-            <div class="spread-tit2-sub">100만원 이상일 경우 보험사 앱 또는 우편 접수</div>
-            <ul class="spread-list2">
-              <li>300만원 이하 : 흥국생명, 하나생명, KB생명보험</li>
-              <li>150만원 이하 : AIA생명</li>
-            </ul>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(1)">
-            <div class="wrap-desc">
-              <div class="text">병원방문 (통원)</div>
-            </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[1] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[1] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진료비 영수증<span>(일자별 영수증)</span></div>
-            </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진료비 세부내역서<span>(비급여 진료비 없는 경우 생략)</span></div>
-            </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">처방전/진단서/통원확인서 중 1<span>(질병분류코드, 통원일 포함)</span></div>
-            </div>
-            <div class="list-item">
-              <label for="store">약국</label>
-              <div class="text">약제비 영수증</div>
+            <div class="item-body" :class="{ expanded: expandedItems[0] }">
+              <div class="spread-tit2">청구 금액 100만원 이하인 경우에만 FAX 청구가 가능해요.</div>
+              <div class="spread-tit2-sub">100만원 이상일 경우 보험사 앱 또는 우편 접수</div>
+              <ul class="spread-list2">
+                <li>300만원 이하 : 흥국생명, 하나생명, KB생명보험</li>
+                <li>150만원 이하 : AIA생명</li>
+              </ul>
             </div>
           </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(2)">
-            <div class="wrap-desc">
-              <div class="text">입원</div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(1)">
+              <div class="wrap-desc">
+                <div class="text">병원방문 (통원)</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[1] }"></i>
             </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[2] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[2] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">입퇴원 확인서<span>(진단명, 입원기간 포함)</span></div>
-            </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진료확인서</div>
-            </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진단서</div>
-            </div>
-            <div class="list-item">
-              <label for="store">약국</label>
-              <div class="text">약제비 영수증</div>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(3)">
-            <div class="wrap-desc">
-              <div class="text">수술</div>
-            </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[3] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[3] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진단서</div>
-            </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">수술기록지<span>(수술일자 포함)</span></div>
+            <div class="item-body" :class="{ expanded: expandedItems[1] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진료비 영수증<span>(일자별 영수증)</span></div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진료비 세부내역서<span>(비급여 진료비 없는 경우 생략)</span></div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">처방전/진단서/통원확인서 중 1<span>(질병분류코드, 통원일 포함)</span></div>
+              </div>
+              <div class="list-item">
+                <label for="store">약국</label>
+                <div class="text">약제비 영수증</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(4)">
-            <div class="wrap-desc">
-              <div class="text">응급</div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(2)">
+              <div class="wrap-desc">
+                <div class="text">입원</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[2] }"></i>
             </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[4] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[4] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">처방전</div>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(5)">
-            <div class="wrap-desc">
-              <div class="text">약제비</div>
-            </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[5] }"></i>
-          </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[5] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">처방전</div>
-            </div>
-            <div class="list-item">
-              <label for="store">약국</label>
-              <div class="text">약제비 영수증</div>
+            <div class="item-body" :class="{ expanded: expandedItems[2] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">입퇴원 확인서<span>(진단명, 입원기간 포함)</span></div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진료확인서</div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진단서</div>
+              </div>
+              <div class="list-item">
+                <label for="store">약국</label>
+                <div class="text">약제비 영수증</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="item">
-          <div class="item-head" @click="toggleItem(6)">
-            <div class="wrap-desc">
-              <div class="text">진단금</div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(3)">
+              <div class="wrap-desc">
+                <div class="text">수술</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[3] }"></i>
             </div>
-            <i class="icon-arrow-down" :class="{ 'rotated': expandedItems[6] }"></i>
+            <div class="item-body" :class="{ expanded: expandedItems[3] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진단서</div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">수술기록지<span>(수술일자 포함)</span></div>
+              </div>
+            </div>
           </div>
-          <div class="item-body" :class="{ 'expanded': expandedItems[6] }">
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진료비 영수증</div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(4)">
+              <div class="wrap-desc">
+                <div class="text">응급</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[4] }"></i>
             </div>
-            <div class="list-item">
-              <label for="hospital">병원</label>
-              <div class="text">진단 사실 확인서류<span>(질병에 따라 다름)</span></div>
+            <div class="item-body" :class="{ expanded: expandedItems[4] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">처방전</div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(5)">
+              <div class="wrap-desc">
+                <div class="text">약제비</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[5] }"></i>
+            </div>
+            <div class="item-body" :class="{ expanded: expandedItems[5] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">처방전</div>
+              </div>
+              <div class="list-item">
+                <label for="store">약국</label>
+                <div class="text">약제비 영수증</div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-head" @click="toggleItem(6)">
+              <div class="wrap-desc">
+                <div class="text">진단금</div>
+              </div>
+              <i class="icon-arrow-down" :class="{ rotated: expandedItems[6] }"></i>
+            </div>
+            <div class="item-body" :class="{ expanded: expandedItems[6] }">
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진료비 영수증</div>
+              </div>
+              <div class="list-item">
+                <label for="hospital">병원</label>
+                <div class="text">진단 사실 확인서류<span>(질병에 따라 다름)</span></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </FlexSection>
-    
+
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="다음" class="lg w-full medium btn-sticky" :disabled="hasSelectedHospitals" @click="clickBottomModal" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="다음"
+        class="lg w-full medium btn-sticky"
+        :disabled="hasSelectedHospitals"
+        @click="clickBottomModal"
+      />
     </ButtonGroup>
   </BaseBody>
   <BottomModal
@@ -214,8 +222,23 @@
   >
     <template #content>
       <div class="wrap-radio-btn">
-        <RadioImg id="rdo1" name="rdo1" checked custom-style="button has-icon" text="카메라 촬영" :icon-src="iconCamera" icon-alt="아이콘:카메라 촬영" />
-        <RadioImg id="rdo2" name="rdo1" custom-style="button has-icon" text="앨범에서 선택" :icon-src="iconAlbum" icon-alt="아이콘:앨범에서 선택" />
+        <RadioImg
+          id="rdo1"
+          name="rdo1"
+          checked
+          custom-style="button has-icon"
+          text="카메라 촬영"
+          :icon-src="iconCamera"
+          icon-alt="아이콘:카메라 촬영"
+        />
+        <RadioImg
+          id="rdo2"
+          name="rdo1"
+          custom-style="button has-icon"
+          text="앨범에서 선택"
+          :icon-src="iconAlbum"
+          icon-alt="아이콘:앨범에서 선택"
+        />
       </div>
     </template>
   </BottomModal>
@@ -280,7 +303,7 @@ const bottomModalProps = ref({
       padding-right: 1.6rem;
     }
     &:not(:first-child) {
-      border-left: 0.1rem solid #EEEEEE;
+      border-left: 0.1rem solid #eeeeee;
       padding-left: 1.6rem;
     }
     .img-attach {
@@ -303,8 +326,8 @@ const bottomModalProps = ref({
   width: 100%;
   padding: 1.8rem;
   border-radius: 0.8rem;
-  background-color:#F9F9F9;
-  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #E2E2E2);
+  background-color: #f9f9f9;
+  border: 0.1rem dashed var(--Semantic-Border-BRD-01, #e2e2e2);
   [type='file'] {
     display: none;
   }
@@ -312,7 +335,7 @@ const bottomModalProps = ref({
 .wrap-attached-file {
   margin-top: 0.8rem;
   padding: 2rem;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   border-radius: 1.2rem;
   display: flex;
   flex-wrap: wrap;
@@ -322,7 +345,7 @@ const bottomModalProps = ref({
     flex: 0 0 9.7rem;
     position: relative;
     border-radius: 0.8rem;
-    border: 0.1rem solid #E2E2E2;
+    border: 0.1rem solid #e2e2e2;
     width: 9.7rem;
     overflow: hidden;
     .img {
@@ -362,17 +385,19 @@ const bottomModalProps = ref({
     font-weight: 500;
     color: #959595;
     strong {
-      color: #4C7FF7;
+      color: #4c7ff7;
     }
   }
 }
 .wrap-payment-instructions-info {
-  margin: 5.3rem -2rem 0;
+  margin: 3.2rem -2rem 0;
   h2 {
-    padding: 0 2rem;
+    padding: 2rem;
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+    border-bottom: 0.1rem solid #eee;
   }
   .wrap-spread {
-    margin-top: 1.6rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -380,10 +405,10 @@ const bottomModalProps = ref({
     .item {
       width: 100%;
       &:not(:first-child) {
-        border-top: 0.1rem solid #EEEEEE;
+        border-top: 0.1rem solid #eeeeee;
       }
       &:last-child .item-body {
-        border-bottom: 0.1rem solid #EEEEEE;
+        border-bottom: 0.1rem solid #eeeeee;
       }
       .item-head {
         padding: 1.2rem 2.4rem;
@@ -393,7 +418,7 @@ const bottomModalProps = ref({
         gap: 1.2rem;
         cursor: pointer;
         transition: background-color 0.2s ease;
-        
+
         .ico-payment-method {
           flex: 0 0;
           width: 4.8rem;
@@ -405,9 +430,10 @@ const bottomModalProps = ref({
           align-items: center;
           gap: 0.6rem;
           .text {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #2B2B2B;
+            font-size: 1.4rem;
+            font-weight: 600;
+            line-height: 2rem;
+            color: #2b2b2b;
           }
           .label {
             flex: 0 0;
@@ -415,8 +441,8 @@ const bottomModalProps = ref({
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 130%;
-            color: #4C7FF7;
-            background-color: #E5EDFF;
+            color: #4c7ff7;
+            background-color: #e5edff;
             border-radius: 0.4rem;
           }
         }
@@ -427,7 +453,7 @@ const bottomModalProps = ref({
           background-size: 100%;
           transition: transform 0.3s ease;
           transform-origin: center center;
-          
+
           &.rotated {
             transform: rotate(180deg);
           }
@@ -436,21 +462,24 @@ const bottomModalProps = ref({
       .item-body {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease, padding 0.3s ease, border-top 0.3s ease;
+        transition:
+          max-height 0.3s ease,
+          padding 0.3s ease,
+          border-top 0.3s ease;
         padding: 0 2rem;
         border-top: 0.1rem solid transparent;
-        background-color: #F9F9F9;
-        
+        background-color: #f9f9f9;
+
         &.expanded {
           max-height: 50rem; // 충분한 높이로 설정
           padding: 2.4rem 2rem;
-          border-top: 0.1rem solid #EEEEEE;
+          border-top: 0.1rem solid #eeeeee;
         }
-        
+
         .spread-tit2 {
           font-size: 1.6rem;
           font-weight: 500;
-          color: #2B2B2B;
+          color: #2b2b2b;
         }
         .spread-tit2-sub {
           margin-top: 1.6rem;
@@ -491,24 +520,24 @@ const bottomModalProps = ref({
           label {
             padding: 0.3rem 0.6rem;
             border-radius: 0.4rem;
-            border: 0.1rem solid #4C7FF7;
+            border: 0.1rem solid #4c7ff7;
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 130%;
-            color: #4C7FF7;
-            &[for="store"] {
-              color: #FF6A00;
-              border-color: #FF6A00;              
+            color: #4c7ff7;
+            &[for='store'] {
+              color: #ff6a00;
+              border-color: #ff6a00;
             }
           }
           .text {
             margin-left: 0.4rem;
             font-size: 1.4rem;
             font-weight: 500;
-            line-height: 130%;;
+            line-height: 130%;
             color: #555555;
             span {
-              color:#959595;
+              color: #959595;
               margin-left: 0.2rem;
             }
           }

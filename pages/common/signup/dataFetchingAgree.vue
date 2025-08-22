@@ -16,11 +16,11 @@
       </p>
       <div class="mt-56 flex flex-row gap-26 align-center justify-center">
         <div class="app-icon">
-          <img src="../../../assets/images/logo-cc-symbol.svg" alt="청구의신" />
+          <img src="../../../assets/images/logo-cc-symbol.png" alt="청구의신" />
         </div>
         <i class="icon app-data-transfer" aria-hidden="true"></i>
-        <div style="app-icon">
-          <img src="../../../assets/images/logo-cc-symbol.svg" alt="청구의신" />
+        <div class="app-icon">
+          <img src="../../../assets/images/logo-hc-symbol.png" alt="건강의신" />
         </div>
       </div>
     </div>
@@ -40,9 +40,10 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 
 <style scoped lang="scss">
 .app-icon {
+  width: 10.4rem;
   border-radius: 3rem;
   overflow: hidden;
-  border: 0.1rem solid #eeeeee;
+  box-shadow: 0 1.5rem 4.5rem 0 rgba(0, 0, 0, 0.05);
   img {
     width: 100%;
     height: 100%;

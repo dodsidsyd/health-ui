@@ -56,12 +56,24 @@
       <!-- 검색창 -->
       <div v-if="showSearch" class="c-header-search-field">
         <div class="search-input-wrapper">
+          <!-- Select 컴포넌트 (옵션이 있을 때만 표시) -->
+          <Select
+            v-if="searchWithSelect && searchSelectOptions.length > 0"
+            v-model="searchType"
+            :custom-opts="searchSelectOptions"
+            :select-placeholder="searchSelectPlaceholder"
+            transparent
+            class="search-select"
+            :is-show-cancel-btn="false"
+            :is-show-confirm-btn="true"
+            :is-show-close-btn="true"
+          />
           <input
             v-model="searchQuery"
             type="text"
             :placeholder="!isValid ? '검색 에러 메시지 추가' : '검색어를 입력하세요'"
             class="search-input"
-            :class="['c-inp', { 'is-invalid': !isValid }]"
+            :class="['c-inp', { 'is-invalid': !isValid, 'with-select': searchWithSelect }]"
             @keyup.enter="handleSearch"
           />
           <button
@@ -80,6 +92,7 @@
       <div
         v-if="
           hasNotification ||
+          hasCart ||
           hasReward ||
           hasSetting ||
           hasSearch ||
@@ -87,16 +100,27 @@
           hasAddText ||
           hasShare ||
           hasMenu ||
+          hasEditBtn ||
           hasScrap ||
           hasInsu ||
-          hasMyInfo
+          hasMyInfo ||
+          hasTelBtn ||
+          hasWrite ||
+          hasProfile
         "
         class="c-header-util"
       >
         <!-- 검색 버튼 -->
         <div v-if="hasSearch" class="c-header-search">
-          <button type="button" class="c-btn c-icon" aria-label="검색" @click="handleSearchClick">
+          <button type="button" class="c-btn c-icon" aria-label="검색 123" @click="handleSearchMove">
             <i class="icon ico-search" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- 전화 버튼 -->
+        <div v-if="hasTelBtn" class="c-header-tel">
+          <button type="button" class="c-btn c-icon" aria-label="전화연결하기">
+            <i class="icon ico-tel" aria-hidden="true"></i>
           </button>
         </div>
 
@@ -107,6 +131,14 @@
             <span v-if="notificationCount > 0" class="count-badge">{{
               notificationCount > 99 ? '99+' : notificationCount
             }}</span>
+          </nuxt-link>
+        </div>
+
+        <!-- 장바구니 버튼 -->
+        <div v-if="hasCart" class="c-header-cart">
+          <nuxt-link to="/insu/claim/documentIssuance/selectDocument" title="장바구니로 이동" class="cart-wrapper">
+            <i class="icon ico-cart" aria-label="hidden"></i>
+            <span v-if="cartCount > 0" class="count-badge">{{ cartCount > 99 ? '99+' : cartCount }}</span>
           </nuxt-link>
         </div>
 
@@ -159,6 +191,13 @@
         <div v-if="hasMenu" class="c-header-menu">
           <button type="button" class="c-btn c-icon" aria-label="메뉴" @click="handleAddTextClick">
             <i class="icon ico-menu" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- 수정 버튼 -->
+        <div v-if="hasEditBtn" class="c-header-edit">
+          <button type="button" class="c-btn c-icon" aria-label="편집" @click="handleModifyBtnClick">
+            <i class="icon ico-edit" aria-label="편집"></i>
           </button>
         </div>
 
@@ -228,6 +267,20 @@
             </div>
           </button>
         </div>
+
+        <!-- 글쓰기 버튼 -->
+        <div v-if="hasWrite" class="c-header-write">
+          <button type="button" class="c-btn c-icon" aria-label="글쓰기" @click="handleWriteClick">
+            <i class="icon ico-head-write" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- 프로필 버튼 -->
+        <div v-if="hasProfile" class="c-header-profile">
+          <button type="button" class="c-btn c-icon" aria-label="프로필" @click="handleProfileClick">
+            <i class="icon ico-profile" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
       <!-- 닫기 버튼 (전체화면 모달용) -->
       <button
@@ -243,6 +296,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, defineProps, defineEmits, watch } from 'vue'
+import Select from '~/components/publishing/input/Select.vue'
 
 // 검색창 inValid 간단 테스트
 const isValid = ref(true)
@@ -257,10 +311,16 @@ const props = defineProps({
 
   showSearch: { type: Boolean, default: false }, // 검색 필드 표시 여부
   showSearchBtn: { type: Boolean, default: false }, // 검색 버튼 표시
+  searchWithSelect: { type: Boolean, default: false }, // 검색창에 Select 포함 여부
+  searchSelectOptions: { type: Array, default: () => [] }, // Select 옵션들
+  searchSelectPlaceholder: { type: String, default: '전체' }, // Select placeholder
 
   hasNotification: { type: Boolean, default: false }, // 공지 버튼 표시 여부
   hasNotificationDot: { type: Boolean, default: false }, // 공지 알림 여부
   notificationCount: { type: Number, default: 0 }, // 공지 갯수
+
+  hasCart: { type: Boolean, default: false }, // 장바구니 버튼 표시 여부
+  cartCount: { type: Number, default: 0 }, // 장바구니 갯수
 
   hasReward: { type: Boolean, default: false }, // 리워드 버튼표시 여부
   hasRewardDot: { type: Boolean, default: false }, // 리워드 갯수 여부
@@ -273,7 +333,8 @@ const props = defineProps({
   chatCount: { type: Number, default: 0 }, // 채팅 갯수
   hasShare: { type: Boolean, default: false }, // 공유 버튼 표시 여부
   hasMenu: { type: Boolean, default: false }, // 메뉴 버튼 표시 여부
-
+  hasEditBtn: { type: Boolean, default: false }, // 메뉴 버튼 표시 여부
+  hasTelBtn: { type: Boolean, default: false }, // 전화 버튼 표시 여부
   hasAddText: { type: Boolean, default: false }, // 일반 텍스트 추가 여부 (우측)
   addText: { type: String, default: '' }, // 일반 텍스트 내용 (우측)
   addTextClickEnabled: { type: Boolean, default: false }, // addText 클릭 활성화 여부
@@ -300,7 +361,9 @@ const props = defineProps({
       level: '',
       points: 0
     })
-  } // 사용자 정보
+  }, // 사용자 정보
+  hasWrite: { type: Boolean, default: false }, // 글쓰기 버튼 표시 여부
+  hasProfile: { type: Boolean, default: false } // 프로필 버튼 표시 여부
 })
 
 // console.log('BaseHeader props received:', props)
@@ -313,25 +376,59 @@ const emit = defineEmits([
   'addTextClick',
   'scrap',
   'insuAction',
-  'myInfoClick'
+  'myInfoClick',
+  'edit-clicked'
 ])
 
 const searchQuery = ref('')
+const searchType = ref('') // Select로 선택된 검색 타입
 const isSticky = ref(false)
 const headerRef = ref(null)
 const isTooltipVisible = ref(true) // 툴팁 표시 상태
 let headerHeight = 0
 
+// 검색 placeholder 생성 함수
+const getSearchPlaceholder = () => {
+  if (!isValid.value) return '검색 에러 메시지 추가'
+
+  if (props.searchWithSelect && searchType.value) {
+    const selectedOption = props.searchSelectOptions.find(opt => opt.value === searchType.value)
+    if (selectedOption) {
+      return `${selectedOption.label}로 검색`
+    }
+  }
+
+  return '검색어를 입력하세요'
+}
+
+// searchType 초기값 설정
+watch(
+  () => props.searchSelectOptions,
+  newOptions => {
+    if (newOptions && newOptions.length > 0 && !searchType.value) {
+      searchType.value = newOptions[0]?.value || ''
+    }
+  },
+  { immediate: true }
+)
+
 // 검색 처리 함수 (검색창 내)
 const handleSearch = () => {
   if (searchQuery.value.trim()) {
-    console.log('BaseHeader: handleSearch called with query:', searchQuery.value.trim())
-    emit('search', searchQuery.value.trim())
+    console.log('BaseHeader: handleSearch called with:', {
+      query: searchQuery.value.trim(),
+      type: searchType.value
+    })
+    // searchType도 함께 전달
+    emit('search', {
+      query: searchQuery.value.trim(),
+      type: searchType.value
+    })
   }
 }
 
 // 검색 버튼 클릭 처리 함수 (헤더 유틸리티)
-const handleSearchClick = () => {
+const handleSearchMove = () => {
   console.log('BaseHeader: handleSearchClick called')
   emit('search')
 }
@@ -347,6 +444,10 @@ const handleAddTextClick = () => {
   if (props.addTextClickEnabled) {
     emit('addTextClick')
   }
+}
+// 편집 버튼 클릭 처리 함수
+const handleModifyBtnClick = () => {
+  emit('edit-clicked')
 }
 //스크랩 상태 관리
 const isScraped = ref(props.isScrapedInitial)
@@ -364,8 +465,21 @@ const hideTooltip = () => {
 
 // myInfo 클릭 처리 함수
 const handleMyInfoClick = () => {
-  console.log('BaseHeader: handleMyInfoClick called')
-  emit('myInfoClick')
+  // 내정보 클릭 처리
+  console.log('내정보 클릭')
+  // TODO: 내정보 페이지로 이동 또는 모달 표시
+}
+
+const handleWriteClick = () => {
+  // 글쓰기 클릭 처리
+  console.log('글쓰기 클릭')
+  // TODO: 글쓰기 페이지로 이동 또는 모달 표시
+}
+
+const handleProfileClick = () => {
+  // 프로필 클릭 처리
+  console.log('프로필 클릭')
+  // TODO: 프로필 페이지로 이동 또는 모달 표시
 }
 
 // HTML 컨텐트 판별 함수
@@ -454,6 +568,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     height: 3.4rem;
+    line-height: 3.5rem;
     font-size: 1.8rem;
     font-weight: vars.$bold;
     letter-spacing: -0.036rem;
@@ -519,13 +634,31 @@ onUnmounted(() => {
       border-radius: 0.8rem;
       padding: 0.5rem 1.6rem;
       padding-right: 1rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+
       &:has(.is-invalid) {
         border: 0.1rem solid #f14960;
         .search-input::placeholder {
           color: #f14960;
         }
       }
+
+      // Select 컴포넌트 스타일
+      .search-select {
+        flex: 0 0 auto;
+        width: 8rem;
+        margin-right: 0.8rem;
+      }
+
+      // 구분선
+      .search-divider {
+        width: 0.1rem;
+        height: 2rem;
+        background-color: #e2e2e2;
+        margin: 0 1.2rem;
+        flex-shrink: 0;
+      }
+
       .search-input {
         flex: 1;
         border: none;
@@ -533,7 +666,13 @@ onUnmounted(() => {
         font-size: 1.6rem;
         line-height: 1;
         outline: none;
+        width: 100%;
         min-width: 0;
+
+        &.with-select {
+          font-size: 1.4rem; // Select가 있을 때 조금 작게
+        }
+
         &::placeholder {
           color: #999;
         }
@@ -548,6 +687,7 @@ onUnmounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
 
         .icon {
           width: 2rem;
@@ -556,6 +696,10 @@ onUnmounted(() => {
           background-repeat: no-repeat;
           background-size: contain;
         }
+      }
+
+      .clear-btn {
+        flex-shrink: 0;
       }
     }
   }
@@ -567,17 +711,22 @@ onUnmounted(() => {
     align-items: center;
     gap: 1.6rem;
     .c-header-notice,
+    .c-header-cart,
     .c-header-reward,
     .c-header-setting,
     .c-header-search,
     .c-header-chat,
     .c-header-scrap,
     .c-header-share,
-    .c-header-menu {
+    .c-header-edit,
+    .c-header-tel,
+    .c-header-menu,
+    .c-header-write,
+    .c-header-profile {
       font-size: 0;
       position: relative;
-
       .notification-wrapper,
+      .cart-wrapper,
       .chat-wrapper {
         position: relative;
         display: inline-block;
@@ -647,6 +796,11 @@ onUnmounted(() => {
           background-position: center;
           background-size: contain;
           background-repeat: no-repeat;
+          &.ico-edit,
+          &.ico-menu {
+            width: 2.4rem;
+            height: 2.4rem;
+          }
         }
       }
 

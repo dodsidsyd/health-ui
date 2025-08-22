@@ -75,6 +75,7 @@ const getButtonLabel = (type: string, point?: number): string => {
   }
   .c-btn {
     width: 7.2rem;
+    height: 3.6rem;
     ::v-deep(.text) {
       font-size: var(--num-14);
       font-weight: vars.$medium;

@@ -37,6 +37,10 @@ const props = defineProps({
   returnPath: {
     type: String,
     default: '/community/diary/create'
+  },
+  selectedDate: {
+    type: String,
+    default: ''
   }
 })
 
@@ -49,7 +53,7 @@ const handleEmojiSelected = (selectedEmoji) => {
   // 기본 동작: returnPath로 이동
   if (props.returnPath) {
     const query = {
-      date: route.query.date,
+      date: props.selectedDate || route.query.date,
       emoji: selectedEmoji.file,
       name: selectedEmoji.name
     }

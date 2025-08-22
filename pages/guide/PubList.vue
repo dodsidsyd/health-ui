@@ -102,6 +102,7 @@ interface PageItemData {
     | 'guide'
     | 'lottery'
     | 'calorieIntake'
+    | 'healthDebt'
 
   status?: 'completed' | 'ing' | 'pending' | '' | undefined // status를 optional로 만들고 빈 문자열 및 undefined 허용
 }
@@ -135,7 +136,8 @@ const sectionTabs = [
   { title: '포인트스토어', key: 'pointStore' },
   { title: '가이드', key: 'guide' },
   { title: '리워드보관함', key: 'lottery' },
-  { title: '일일섭취칼로리', key: 'calorieIntake' }
+  { title: '일일섭취칼로리', key: 'calorieIntake' },
+  { title: '건강부채', key: 'healthDebt' }
 ]
 
 // BoxedTabs를 위한 상태 탭 데이터
@@ -333,14 +335,6 @@ const pageListData: PageItemData[] = [
     title: 'MY병원찾기 결과',
     description: 'MY병원찾기 결과',
     path: '/insu/claim/paperless/successFindHospitals',
-    category: '보험청구',
-    section: 'insu',
-    status: ''
-  },
-  {
-    title: 'MY병원찾기 결과 없음',
-    description: 'MY병원찾기 결과 없음',
-    path: '/insu/claim/paperless/failedFindHospitals',
     category: '보험청구',
     section: 'insu',
     status: ''
@@ -657,6 +651,708 @@ const pageListData: PageItemData[] = [
     section: 'insu',
     status: ''
   },
+  {
+    title: '수익자 정보입력',
+    description: '수익자 정보입력',
+    path: '/insu/claim/subrogation/serviceInUse/beneficiaryInfo',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '약관동의',
+    description: '약관동의',
+    path: '/insu/claim/subrogation/serviceInUse/agreeTerms',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '보험사 선택1',
+    description: '보험사 선택1',
+    path: '/insu/claim/subrogation/serviceInUse/selectInsurance01',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '보험사 선택2',
+    description: '보험사 선택2',
+    path: '/insu/claim/subrogation/serviceInUse/selectInsurance02',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(질병)',
+    description: '사고내용(질병)',
+    path: '/insu/claim/subrogation/serviceInUse/accidentDetailsDisease',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(상해)',
+    description: '사고내용(상해)',
+    path: '/insu/claim/subrogation/serviceInUse/accidentDetailsDetriment',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(상해) - 주소입력',
+    description: '사고내용(상해) - 주소입력',
+    path: '/insu/claim/subrogation/serviceInUse/accidentDetailsDetrimentAddress',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '추가정보',
+    description: '추가정보',
+    path: '/insu/claim/subrogation/serviceInUse/inputMoreInfo',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '사고내용(질병)',
+    description: '사고내용(질병)',
+    path: '/insu/claim/subrogation/serviceInUse/accidentDetailsDisease',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '피보험자 수정',
+    description: '피보험자 수정',
+    path: '/insu/claim/subrogation/serviceInUse/EditInsuredData',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '3_21_청구내용 확인_대리청구',
+    description: '3_21_청구내용 확인_대리청구',
+    path: '/insu/claim/subrogation/serviceInUse/confirmChargeInfo',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '3_22_다른 보험사 재청구-전송완료',
+    description: '3_22_다른 보험사 재청구-전송완료',
+    path: '/insu/claim/subrogation/serviceInUse/successCharge',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '3_20_대리청구 - 첨부',
+    description: '3_20_대리청구 - 첨부',
+    path: '/insu/claim/subrogation/serviceInUse/attachClaimFiles',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '3_20_대리청구 - 팩스',
+    description: '3_20_대리청구 - 팩스',
+    path: '/insu/claim/subrogation/serviceInUse/InputFax',
+    category: '보험금 대리청구 신청(설계사, 기타대리인)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_08_대리청구 고객목록',
+    description: 'UI_IR_DP_08_대리청구 고객목록',
+    path: '/insu/claim/subrogation/generalPublic/insuredManagement',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_19_대리청구 내역',
+    description: 'UI_IR_DP_19_대리청구 내역',
+    path: '/insu/claim/subrogation/generalPublic/agentHistory',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_20_대리청구 첨부서류 다운로드',
+    description: 'UI_IR_DP_20_대리청구 첨부서류 다운로드',
+    path: '/insu/claim/subrogation/generalPublic/documentDownload',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_29_상세내역 조회',
+    description: 'UI_IR_DP_29_상세내역 조회',
+    path: '/insu/claim/subrogation/generalPublic/claimDetails',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '3_42_(공통)청구서보기',
+    description: '3_42_(공통)청구서보기',
+    path: '/insu/claim/subrogation/generalPublic/attachedDoc',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_22_대리청구_대리인관리-설계사 관리',
+    description: 'UI_IR_DP_22_대리청구_대리인관리-설계사 관리',
+    path: '/insu/claim/subrogation/generalPublic/manageAgent',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_22_대리청구_대리인관리-대리인 관리',
+    description: 'UI_IR_DP_22_대리청구_대리인관리-대리인 관리',
+    path: '/insu/claim/subrogation/generalPublic/manageAgency',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: 'UI_IR_DP_23_대리청구 순위표',
+    description: 'UI_IR_DP_23_대리청구 순위표',
+    path: '/insu/claim/subrogation/generalPublic/rankList',
+    category: '보험금 대리청구 신청(일반고객)',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_01_AI분석 서브메인',
+    description: '6_01_AI분석 서브메인',
+    path: '/insu/claim/subrogation/ai/submain',
+    category: 'AI분석 서브메인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_11_진료내역 가져오기 + 약관동의',
+    description: '6_11_진료내역 가져오기 + 약관동의',
+    path: '/insu/claim/subrogation/ai/serviceGuide',
+    category: 'AI분석 숨은 보상금 찾기 신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_12_AI분석 진료내역 조회_결과',
+    description: '6_12_AI분석 진료내역 조회_결과',
+    path: '/insu/claim/subrogation/ai/searchResult',
+    category: 'AI분석 숨은 보상금 찾기 신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_13_AI분석_숨은보상금찾기 신청',
+    description: '6_13_AI분석_숨은보상금찾기 신청',
+    path: '/insu/claim/subrogation/ai/freeConsultingRequest',
+    category: 'AI분석 숨은 보상금 찾기 신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_15_AI분석_숨은보상금찾기 신청완료',
+    description: '6_15_AI분석_숨은보상금찾기 신청완료',
+    path: '/insu/claim/subrogation/ai/applicationCompleted',
+    category: 'AI분석 숨은 보상금 찾기 신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_21_AI분석_숨은보상금찾기결과',
+    description: '6_21_AI분석_숨은보상금찾기결과',
+    path: '/insu/claim/subrogation/ai/findConpensationResult',
+    category: 'AI분석 숨은 보상금 찾기 결과',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_21_AI분석_숨은보상금찾기결과_신청완료',
+    description: '6_21_AI분석_숨은보상금찾기결과_신청완료',
+    path: '/insu/claim/subrogation/ai/findConpensationApplicationCompleted',
+    category: 'AI분석 숨은 보상금 찾기 결과',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_22_AI분석_숨은보상금 찾기 상세결과',
+    description: '6_22_AI분석_숨은보상금 찾기 상세결과',
+    path: '/insu/claim/subrogation/ai/findConpensationApplicationDetail',
+    category: 'AI분석 숨은 보상금 찾기 결과',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_31_AI 실손 예상 보험금 진료내역 선택',
+    description: '6_31_AI 실손 예상 보험금 진료내역 선택',
+    path: '/insu/claim/subrogation/ai/selectMedicalHistory',
+    category: 'AI 실손 에상 보험금 확인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_32_AI 실손 예상 보험금 결과 확인',
+    description: '6_32_AI 실손 예상 보험금 결과 확인',
+    path: '/insu/claim/subrogation/ai/checkAnalysisResults',
+    category: 'AI 실손 에상 보험금 확인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_41_AI실손보험금_예상결과',
+    description: '6_41_AI실손보험금_예상결과',
+    path: '/insu/claim/subrogation/ai/expectedResult',
+    category: 'AI 실손 예상 보험금 결과',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_42_AI실손보험금_예상결과_확인',
+    description: '6_42_AI실손보험금_예상결과_확인',
+    path: '/insu/claim/subrogation/ai/checkExpectedResult',
+    category: 'AI 실손 예상 보험금 결과',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_51_내 보험 목록',
+    description: '6_51_내 보험 목록',
+    path: '/insu/claim/subrogation/ai/myInsuranceList',
+    category: '내 보험정보',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_52_내 보험 건별 상세',
+    description: '6_52_내 보험 건별 상세',
+    path: '/insu/claim/subrogation/ai/myInsuranceDetail',
+    category: '내 보험정보',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '6_53_내보험 가져오기 안내',
+    description: '6_53_내보험 가져오기 안내',
+    path: '/insu/claim/subrogation/ai/importGuide',
+    category: '내 보험정보',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '자동청구 서브메인',
+    description: '자동청구 서브메인',
+    path: '/insu/claim/auto/submain',
+    category: '자동청구 서브메인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '통원진료 자동청구 가능병원안내',
+    description: '통원진료 자동청구 가능병원안내',
+    path: '/insu/claim/auto/hospitalsOfferAutomaticBilling',
+    category: '자동청구 서브메인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '자동청구 관리',
+    description: '자동청구 관리',
+    path: '/insu/claim/auto/manageAutoClaim',
+    category: '자동청구 관리',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '병원관리',
+    description: '병원관리',
+    path: '/insu/claim/auto/manageHospital',
+    category: '이용안내/공통',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '보험관리',
+    description: '보험관리',
+    path: '/insu/claim/auto/manageInsurance',
+    category: '이용안내/공통',
+    section: 'insu',
+    status: ''
+  },
+
+  // 병원서류 발급
+  {
+    title: '병원서류 발급안내',
+    description: '병원서류 발급안내',
+    path: '/insu/claim/documentIssuance/documentIssuanceInfo',
+    category: '병원서류 발급신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '병원서류 발급신청',
+    description: '병원서류 발급신청',
+    path: '/insu/claim/documentIssuance/applyDocumentIssuance',
+    category: '병원서류 발급신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서류발급 진료내역 선택',
+    description: '서류발급 진료내역 선택',
+    path: '/insu/claim/documentIssuance/selectMedicalHistory',
+    category: '병원서류 발급신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '발급서류 선택',
+    description: '발급서류 선택',
+    path: '/insu/claim/documentIssuance/selectDocument',
+    category: '병원서류 발급신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구완료',
+    description: '청구완료',
+    path: '/insu/claim/documentIssuance/claimCompleted',
+    category: '병원서류 발급신청',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '보관함',
+    description: '보관함',
+    path: '/insu/claim/documentIssuance/storage',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '발급서류 상세내역',
+    description: '발급서류 상세내역',
+    path: '/insu/claim/documentIssuance/documentDetail',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '내보낼 방법 선택',
+    description: '내보낼 방법 선택',
+    path: '/insu/claim/documentIssuance/selectExportMethod',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '내보내기',
+    description: '내보내기',
+    path: '/insu/claim/documentIssuance/export',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '내보내기 상세내역',
+    description: '내보내기 상세내역',
+    path: '/insu/claim/documentIssuance/exportDetail',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '다운로드 서류함',
+    description: '다운로드 서류함',
+    path: '/insu/claim/documentIssuance/downloadStorage',
+    category: '병원서류 보관함',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '병원서류 발급신청',
+    description: '병원서류 발급신청',
+    path: '/insu/claim/documentIssuance/applyDocumentMedicalRecord',
+    category: '의무기록 사본발급',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '병원서류 이용안내',
+    description: '병원서류 이용안내',
+    path: '/insu/claim/documentIssuance/issuanceGuide',
+    category: '서류발급 안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '서류발급 가능병원',
+    description: '서류발급 가능병원',
+    path: '/insu/claim/documentIssuance/ableDocIssuance',
+    category: '서류발급 가능병원',
+    section: 'insu',
+    status: ''
+  },
+  // 처방전 조회/발급
+  {
+    title: '처방전 조회/발급',
+    description: '처방전 조회/발급',
+    path: '/insu/claim/documentIssuance/prescription',
+    category: '처방전 조회/발급',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '처방전 보기',
+    description: '처방전 보기',
+    path: '/insu/claim/documentIssuance/viewPrescription',
+    category: '처방전 조회/발급',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '처방전 보기(발급완료 후)',
+    description: '처방전 보기(발급완료 후)',
+    path: '/insu/claim/documentIssuance/afterViewPrescription',
+    category: '처방전 조회/발급',
+    section: 'insu',
+    status: ''
+  },
+
+  // 자동청구
+  {
+    title: '자동청구 서비스안내',
+    description: '자동청구 서비스안내',
+    path: '/insu/claim/auto/serviceGuide',
+    category: '서비스안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '자동청구 서비스안내 - 자동청구 가능병원 안내',
+    description: '자동청구 서비스안내 - 자동청구 가능병원 안내',
+    path: '/insu/claim/auto/hospitalsOfferAutomaticBilling4Guide',
+    category: '서비스안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '약관동의',
+    description: '약관동의',
+    path: '/insu/claim/auto/agreement',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '본인인증',
+    description: '본인인증',
+    path: '/insu/claim/auto/checkIdNumber',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '본인인증 - 인증번호',
+    description: '본인인증 - 인증번호',
+    path: '/insu/claim/auto/checkIdPhone',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '인증문자 확인안내',
+    description: '인증문자 확인안내',
+    path: '/insu/claim/auto/checkIdMessageInfo',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구가능 병원 조회중',
+    description: '청구가능 병원 조회중',
+    path: '/insu/claim/auto/searchingHospitalClaim',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '자동청구 가능병원 없음',
+    description: '자동청구 가능병원 없음',
+    path: '/insu/claim/auto/searchingHospitalClaimNoResult',
+    category: '자동청구 신청 본인인증',
+    section: 'insu',
+    status: ''
+  },
+
+  // 지급계좌 입력
+  {
+    title: '자동청구 희망 병원 선택',
+    description: '자동청구 희망 병원 선택',
+    path: '/insu/claim/auto/selecthospitalForBilling',
+    category: '지급계좌 입력',
+    section: 'insu',
+    status: ''
+  },
+
+  // 신분증 촬영
+  {
+    title: '신분증 준비',
+    description: '신분증 준비',
+    path: '/insu/claim/auto/infoPictureID',
+    category: '신분증 촬영',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '신분증 촬영',
+    description: '신분증 촬영',
+    path: '/insu/claim/auto/takePictureID',
+    category: '신분증 촬영',
+    section: 'insu',
+    status: ''
+  },
+  // 진료비 선택 및 확인
+  {
+    title: '청구진료비 설정',
+    description: '청구진료비 설정',
+    path: '/insu/claim/auto/selectClaimPrice',
+    category: '진료비 선택 및 확인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '소급기간 선택',
+    description: '소급기간 선택',
+    path: '/insu/claim/auto/selectRetroactivePeriod',
+    category: '진료비 선택 및 확인',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '자동청구 신청내용 확인',
+    description: '자동청구 신청내용 확인',
+    path: '/insu/claim/auto/checkClaimDetail',
+    category: '진료비 선택 및 확인',
+    section: 'insu',
+    status: ''
+  },
+
+  // 청구내역 조회
+  {
+    title: '청구내역 조회 - 서류없이 청구',
+    description: '청구내역 조회 - 서류없이 청구',
+    path: '/insu/claim/billingInfo/checkBillingNoDocuments',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구내역 조회 - 사진찍어 청구',
+    description: '청구내역 조회 - 사진찍어 청구',
+    path: '/insu/claim/billingInfo/checkBillingPicture',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구 상세내역 조회',
+    description: '청구 상세내역 조회',
+    path: '/insu/claim/billingInfo/checkBillingDetail',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '청구서 다운로드',
+    description: '청구서 다운로드',
+    path: '/insu/claim/billingInfo/downloadBilling',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '대리청구 내역',
+    description: '대리청구 내역',
+    path: '/insu/claim/billingInfo/applicationClaim',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '처방전 조회',
+    description: '처방전 조회',
+    path: '/insu/claim/billingInfo/prescription',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '처방전 보기',
+    description: '처방전 보기',
+    path: '/insu/claim/billingInfo/viewPrescription',
+    category: '청구내역 조회',
+    section: 'insu',
+    status: ''
+  },
+
+  // 이용안내
+  {
+    title: '이용안내 - 서류없이 청구',
+    description: '이용안내 - 서류없이 청구',
+    path: '/insu/claim/guide/guideNoDocuments',
+    category: '이용안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '이용안내 - 사진찍어 청구',
+    description: '이용안내 - 사진찍어 청구',
+    path: '/insu/claim/guide/guidePicture',
+    category: '이용안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '이용안내 - 대리 청구',
+    description: '이용안내 - 대리 청구',
+    path: '/insu/claim/guide/guideApplicationClaim',
+    category: '이용안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '제휴병원 안내',
+    description: '제휴병원 안내 - 통원',
+    path: '/insu/claim/guide/guidePartnerHospital',
+    category: '이용안내',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '의료영상공유 발급안내',
+    description: '의료영상공유 발급안내',
+    path: '/insu/medicalVideo/issue',
+    category: '의료영상 발급',
+    section: 'insu',
+    status: ''
+  },
+  {
+    title: '의료영상공유',
+    description: '제휴병원 환자정보 조회',
+    path: '/insu/medicalVideo/issue',
+    category: '의료영상 발급',
+    section: 'insu',
+    status: 'ing'
+  },
   // 걷기왕 섹션
   {
     title: '걷기왕 홈',
@@ -922,7 +1618,7 @@ const pageListData: PageItemData[] = [
   {
     title: '본인인증 ',
     description: '회원가입 본인인증 작성화면',
-    path: '/common/signup/signupAccountInput',
+    path: '/common/signup/selfCertiInfoInput',
     category: '회원가입',
     section: 'signup',
     status: '' // 빈 문자열로 변경 (completed로 표시됨)
@@ -1179,6 +1875,14 @@ const pageListData: PageItemData[] = [
     status: ''
   },
   {
+    title: '설정 - 개인정보처리방침',
+    description: '개인정보처리방침',
+    path: '/common/setting/privacyPolicy',
+    category: '설정',
+    section: 'setting',
+    status: ''
+  },
+  {
     title: '설정 - 회원탈퇴',
     description: '회원탈퇴',
     path: '/common/setting/leaveMember',
@@ -1271,8 +1975,16 @@ const pageListData: PageItemData[] = [
   // 포인트 스토어
   {
     title: '레몬포인트 메인',
-    description: '환전신청내역',
-    path: '/common/point/exchangeRequestList',
+    description: '레몬포인트 메인',
+    path: '/common/point/pointMain',
+    category: '포인트 스토어',
+    section: 'pointStore',
+    status: ''
+  },
+  {
+    title: '건강의신 포인트 정책',
+    description: '건강의신 포인트 정책',
+    path: '/common/point/pointPolicy',
     category: '포인트 스토어',
     section: 'pointStore',
     status: ''
@@ -1338,8 +2050,16 @@ const pageListData: PageItemData[] = [
   // 커뮤니티 섹션
   {
     title: '커뮤니티 홈',
-    description: '커뮤니티 홈',
+    description: '커뮤니티 홈 메인',
     path: '/community/',
+    category: '커뮤니티',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '커뮤니티 ',
+    description: '커뮤니티 둘러보기',
+    path: '/community/explore',
     category: '커뮤니티',
     section: 'community',
     status: ''
@@ -1350,7 +2070,7 @@ const pageListData: PageItemData[] = [
     path: '/community/diary',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '마음일기 전체 목록',
@@ -1358,7 +2078,7 @@ const pageListData: PageItemData[] = [
     path: '/community/diary/list',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '마음일기 생성화면',
@@ -1366,7 +2086,7 @@ const pageListData: PageItemData[] = [
     path: '/community/diary/create',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '마음일기 이모지선택',
@@ -1374,15 +2094,15 @@ const pageListData: PageItemData[] = [
     path: '/community/diary/emojiPicker',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
-    title: '마음일기',
+    title: '마음일기 상세화면',
     description: '마음일기 상세화면 ',
     path: '/community/diary/[diaryId]',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
   {
     title: '마음일기 수정화면',
@@ -1390,16 +2110,103 @@ const pageListData: PageItemData[] = [
     path: '/community/diary/[diaryId]/edit',
     category: '커뮤니티',
     section: 'community',
-    status: 'ing'
+    status: ''
   },
-
   {
-    title: '커뮤니티 둘러보기',
-    description: '커뮤니티 둘러보기',
-    path: '/community/explore',
-    category: '커뮤니티',
+    title: '패밀리케어',
+    description: '패밀리 홈',
+    path: '/community/familycare',
+    category: '패밀리케어',
     section: 'community',
-    status: 'ing'
+    status: ''
+  },
+  {
+    title: '패밀리케어 초대장',
+    description: '패밀리멤버 초대장 앱',
+    path: '/community/familycare/invitation',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 패밀리대화',
+    description: '패밀리 대화',
+    path: '/community/familycare/talk/[familyGroupId]',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 - 그룹관리',
+    description: '패밀리케어 그룹관리',
+    path: '/community/familycare/setting/group',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 - 멤버목록/관리',
+    description: '패밀리케어 멤버리스트 수정',
+    path: '/community/familycare/setting/member',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 숙제',
+    description: '패밀리케어 숙제',
+    path: '/community/familycare/homework',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 패밀리숙제',
+    description: '패밀리숙제 추가',
+    path: '/community/familycare/homework/add',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 내가만든숙제',
+    description: '내가만든숙제 목록',
+    path: '/community/familycare/homework/my',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 패밀리숙제',
+    description: '패밀리숙제 상세',
+    path: '/community/familycare/homework/[homeworkId]',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 일정',
+    description: '패밀리 일정 홈',
+    path: '/community/familycare/schedule',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 일정',
+    description: '패밀리 일정 추가',
+    path: '/community/familycare/schedule/add',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
+  },
+  {
+    title: '패밀리케어 일정',
+    description: '패밀리 일정 상세',
+    path: '/community/familycare/schedule/detail',
+    category: '패밀리케어',
+    section: 'community',
+    status: ''
   },
   {
     title: '커뮤니티 상세',
@@ -1425,22 +2232,39 @@ const pageListData: PageItemData[] = [
     section: 'community',
     status: ''
   },
+  // {
+  //   title: '게시글 목록',
+  //   description: '커뮤니티 공통-게시글 목록',
+  //   path: '/community/[community]/board/[boardID]',
+  //   category: '커뮤니티',
+  //   section: 'community',
+  //   status: ''
+  // },
+  {
+    title: '게시글 작성',
+    description: '커뮤니티 공통-게시글 작성',
+    path: '/community/[community]/board/[boardID]/create',
+    category: '커뮤니티',
+    section: 'community',
+    status: ''
+  },
   {
     title: '게시글 상세',
-    description: '커뮤니티 공통-게시글 상세/글쓰기',
+    description: '커뮤니티 공통-게시글 상세',
     path: '/community/[community]/board/[boardID]/[postId]',
     category: '커뮤니티',
     section: 'community',
     status: ''
   },
   {
-    title: '게시글 글쓰기',
-    description: '커뮤니티 공통-게시글 상세/글쓰기',
-    path: '/community/[community]/board/[boardID]/create',
+    title: '게시글 수정',
+    description: '커뮤니티 공통-게시글 수정',
+    path: '/community/[community]/board/[boardID]/[postId]/edit',
     category: '커뮤니티',
     section: 'community',
     status: ''
   },
+
   // 가이드 페이지
   {
     title: '레이아웃 가이드',
@@ -1561,6 +2385,63 @@ const pageListData: PageItemData[] = [
     path: '/smartRing/smartRingBodyInfo',
     category: '스마트링',
     section: 'smartRing',
+    status: ''
+  },
+  // 건강부채
+  {
+    title: '자세히 보기',
+    description: '레몬건강지수-자세히 보기',
+    path: '/healthDebt/detailDebtView',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: ' 분석이력',
+    description: '레몬건강지수-분석이력',
+    path: '/healthDebt/analysisHistory',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: '다이어리',
+    description: '레몬건강지수-다이어리',
+    path: '/healthDebt/healthDebtDiary',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: ' 분석하기',
+    description: '레몬건강지수-분석하기',
+    path: '/healthDebt/analyzeHealthIndicator',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: '정밀분석하기',
+    description: '레몬건강지수-AI정밀분석-약관동의',
+    path: '/healthDebt/detailAnalysisAgreeTerms',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: '정밀분석하기',
+    description: '레몬건강지수-AI정밀분석',
+    path: '/healthDebt/detailAnalysisByAI',
+    category: '건강부채',
+    section: 'healthDebt',
+    status: ''
+  },
+  {
+    title: '정밀분석하기',
+    description: '레몬건강지수-마이데이터내려받기',
+    path: '/healthDebt/myMedicalDataDownload',
+    category: '건강부채',
+    section: 'healthDebt',
     status: ''
   }
 ]
@@ -1714,11 +2595,6 @@ const getSectionText = (section: string) => {
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
-    transform: translateY(-0.2rem);
-  }
 
   &.status-completed {
     border-left: 0.4rem solid #28a745;

@@ -6,17 +6,34 @@
     :add-text-click-enabled="true"
     :add-text="showCalendar ? '목록보기' : '달력보기'"
   >
-    <section>
-      <!-- 달력 섹션 컴포넌트 -->
+    <StickyTabsContainer class="ml-n20 mr-n20 pl-20 pr-20">
       <DiaryCalendarSection
         :diary-data="diaryData"
         :disabled-dates="disabledDates"
         :show-calendar="showCalendar"
         @diary-click="handleDiaryClick"
         @date-change="handleDateChange"
+        class="mt-20"
+      />
+    </StickyTabsContainer>
+    <section>
+      <!-- 달력 섹션 컴포넌트 -->
+
+      <!-- 달력 모드에서 선택된 날짜의 다이어리만 표시 -->
+      <DiaryList
+        v-if="showCalendar && selectedDateForList"
+        :diary-list="selectedDateDiaryList"
+        :show-calendar="showCalendar"
+        :current-month="currentMonth"
+        :current-year="currentYear"
+        :highlighted-date="highlightedDate"
+        @edit="editDiary"
+        @delete="clickBottomModal"
       />
 
+      <!-- 목록 모드에서는 전체 다이어리 표시 -->
       <DiaryList
+        v-if="!showCalendar"
         :diary-list="diaryList"
         :show-calendar="showCalendar"
         :current-month="currentMonth"
@@ -37,29 +54,25 @@
       @confirm-delete="confirmDelete"
       @cancel-delete="clickCancelConfirm"
     />
-  </BaseBody>
 
-  <!-- 토스트 메시지 -->
-  <BottomToast
-    v-model="showToastMessage"
-    type="success"
-    :duration="3000"
-  >
-    <template #default>
-      <p>{{ toastMessage }}</p>
-    </template>
-  </BottomToast>
+    <!-- 토스트 메시지 -->
+    <BottomToast v-model="showToastMessage" type="success" :duration="3000">
+      <template #default>
+        <p>{{ toastMessage }}</p>
+      </template>
+    </BottomToast>
+  </BaseBody>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed, inject, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BaseBody from '~/components/layout/BaseBody.vue'
+import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import DiaryCalendarSection from '~/components/publishing/community/diary/DiaryCalendarSection.vue'
 import DiaryList from '~/components/publishing/community/diary/DiaryList.vue'
 import DiaryActions from '~/components/publishing/community/diary/DiaryActions.vue'
 import BottomToast from '~/components/common/bottomToast.vue'
-
 // 타입 정의
 interface Diary {
   id: number
@@ -69,12 +82,21 @@ interface Diary {
     label: string
   }
   content: string
+  images?: string[]
   createdAt: string
+  isDailyQuote?: boolean
+  dailyQuoteQuestion?: string
 }
 
 interface DiaryData {
   status: string
   count?: number
+}
+
+// 날짜 형식 통일 (YYYY-MM-DD)
+const normalizeDate = (date: string | Date): string => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  return dateObj.toISOString().split('T')[0]
 }
 
 const router = useRouter()
@@ -89,6 +111,35 @@ const diaryList = ref<Diary[]>([])
 // 현재 선택된 월 (달력에서 선택된 월)
 const currentMonth = ref<number>(new Date().getMonth() + 1)
 const currentYear = ref<number>(new Date().getFullYear())
+
+// 달력 모드에서 선택된 날짜
+const selectedDateForList = ref<string | null>(null)
+
+// 선택된 날짜의 다이어리 목록
+const selectedDateDiaryList = computed((): Diary[] => {
+  if (!selectedDateForList.value) return []
+
+  console.log('🔍 selectedDateForList.value:', selectedDateForList.value)
+  console.log('🔍 diaryList.value:', diaryList.value)
+
+  const filtered = diaryList.value.filter(diary => {
+    // 날짜 형식을 통일하여 비교
+    const selectedDate = normalizeDate(selectedDateForList.value!)
+    const diaryDate = normalizeDate(diary.date)
+
+    console.log('🔍 비교:', diaryDate, '===', selectedDate, '결과:', diaryDate === selectedDate)
+    console.log('🔍 diary 객체:', diary)
+    console.log('🔍 diary.images:', diary.images)
+    return diaryDate === selectedDate
+  })
+
+  console.log('🔍 필터링 결과:', filtered)
+  console.log(
+    '🔍 필터링된 다이어리들의 이미지:',
+    filtered.map(d => ({ id: d.id, images: d.images }))
+  )
+  return filtered
+})
 
 // 다이어리 데이터를 DatePicker용으로 변환
 const diaryData = computed((): Record<string, DiaryData> => {
@@ -113,8 +164,8 @@ const diaryData = computed((): Record<string, DiaryData> => {
     const firstDiary = firstDiaryByDate[date]
     const emojiFileName = firstDiary.emoji.src.split('/').pop()?.replace('.svg', '') || 'happy'
     const count = dateCounts[date]
-    
-    data[date] = { 
+
+    data[date] = {
       status: emojiFileName,
       count: count
     }
@@ -160,10 +211,10 @@ const confirmDelete = (): void => {
     diaryList.value = diaryList.value.filter(diary => diary.id !== selectedDiary.value!.id)
     localStorage.setItem('diaryList', JSON.stringify(diaryList.value))
     console.log('다이어리 삭제:', selectedDiary.value.id)
-    
+
     isShowConfirmModal.value = false
     selectedDiary.value = null
-    
+
     // 토스트 메시지 표시
     showToast('일기가 삭제되었습니다.')
   }
@@ -190,6 +241,17 @@ const loadDiaryData = (): void => {
 
 // 다이어리 클릭 핸들러
 function handleDiaryClick(data: { diaryInfo: any; dateKey: string }): void {
+  const clickedDate = new Date(data.dateKey)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  clickedDate.setHours(0, 0, 0, 0)
+
+  // 미래 날짜 클릭 시 토스트 메시지 표시
+  if (clickedDate > today) {
+    showToast('앗, 미래일기는 기록할 수 없어요.')
+    return
+  }
+
   if (!data.diaryInfo) {
     // no-data 날짜 클릭 시 작성 페이지로 이동
     router.push({
@@ -197,8 +259,9 @@ function handleDiaryClick(data: { diaryInfo: any; dateKey: string }): void {
       query: { date: data.dateKey }
     })
   } else {
-    // 이모지가 있는 날짜 클릭 시 해당 날짜로 스크롤
-    scrollToDate(data.dateKey)
+    // 이모지가 있는 날짜 클릭 시 해당 날짜의 다이어리만 표시
+    selectedDateForList.value = data.dateKey
+    highlightedDate.value = data.dateKey
   }
 }
 
@@ -240,6 +303,11 @@ function editDiary(diary: Diary): void {
 // 페이지 제목 클릭 시 달력 토글
 const toggleCalendar = (): void => {
   showCalendar.value = !showCalendar.value
+  // 달력 모드로 전환 시 선택된 날짜 초기화
+  if (showCalendar.value) {
+    selectedDateForList.value = null
+    highlightedDate.value = null
+  }
 }
 
 // 레이아웃에서 addTextClick 핸들러 등록
@@ -288,5 +356,3 @@ watch(
   }
 )
 </script>
-
-

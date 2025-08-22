@@ -9,7 +9,7 @@
     class="pb-60"
   >
     <client-only>
-      <div class="mt-24">
+      <div class="mt-24 pb-32">
         <h1 class="c-tit">
           <span class="text"> 소속 보험사 또는 GA를<br />선택해 주세요 </span>
         </h1>

@@ -80,6 +80,13 @@ function onChange(e: Event) {
     .c-label {
       width: 100%;
     }
+    &.text-left {
+      .c-label {
+        &::before {
+          text-align: left;
+        }
+      }
+    }
   }
   &.small {
     .c-label {
@@ -158,6 +165,12 @@ function onChange(e: Event) {
   &.button {
     padding: 0;
     background-color: transparent;
+    &:has(.custom-check-icon) {
+      .c-label {
+        height: 6.4rem;
+        border-radius: 1.2rem;
+      }
+    }
     &.small {
       .c-label {
         height: 4.8rem;
@@ -288,7 +301,7 @@ function onChange(e: Event) {
           background-color: #eee;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M13.8397 7.12L8.11205 12.88L6.15967 10.9166' stroke='%23D2D2D2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
           &::before {
-            background-color: var(--white);
+            background-color: rgb(var(--white));
           }
         }
       }
@@ -297,7 +310,5 @@ function onChange(e: Event) {
 }
 .ico-empty {
   background-image: url("data:image/svg+xml,%0A%3Csvg width='18' height='18' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.9268 17.0401L20.4 20.4001M8.39998 11.4001H14.4M19.28 11.4401C19.28 15.77 15.7699 19.2801 11.44 19.2801C7.11006 19.2801 3.59998 15.77 3.59998 11.4401C3.59998 7.11019 7.11006 3.6001 11.44 3.6001C15.7699 3.6001 19.28 7.11019 19.28 11.4401Z' stroke='%232B2B2B' stroke-width='1.5' stroke-linecap='round'/%3E%3Crect x='0.75' y='0.75' width='22.5' height='22.5' rx='1.25' fill='white' stroke='%23E2E2E2' stroke-width='1.5' stroke-dasharray='4 3'/%3E%3C/svg%3E%0A");
-}
-.c-radio {
 }
 </style>

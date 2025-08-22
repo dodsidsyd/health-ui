@@ -8,30 +8,28 @@
     :has-add-text-left="true"
     class="pb-36"
   >
-    <div class="agree-wrap flex flex-col gap-10 pb-48 mt-40">
+    <div class="agree-wrap flex flex-col gap-10 pb-40 mt-24">
       <h1 class="c-tit">
-        <span class="text">
-          MY병원 찾기로<br />총 <strong>3</strong>개의 병원을 찾았어요.
-        </span>
+        <span class="text"> MY병원 찾기로<br />총 <strong>3</strong>개의 병원을 찾았어요. </span>
       </h1>
       <div class="c-tit-sub">아래 병원을 연결하면 서류없이<br />간편하게 보험을 청구할 수 있어요.</div>
     </div>
-    <FlexSection>
+    <FlexSection class="flex-1">
       <div class="wrap-check">
-        <Checkbox 
-          id="checkBox1" 
-          aria-label="전체 선택" 
+        <Checkbox
+          id="checkBox1"
+          aria-label="전체 선택"
           :model-value="isAllSelected"
           @update:model-value="toggleAllSelection"
         />
       </div>
       <div class="wrap-check-icon">
         <label for="check1" class="c-checktype-btn">
-          <input 
-            id="check1" 
-            name="check1" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check1"
+            name="check1"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[0]"
             @change="updateAllSelection"
           />
@@ -39,7 +37,10 @@
             <img src="/assets/images/insu/logo_KUMedicine.svg" alt="고려대학교 안암병원" class="hospital-logo" />
             <div class="wrap-hospital-desc">
               <div class="wrap-desc">
-                <span class="tit">고려대학교 안암병원 고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원</span>
+                <span class="tit"
+                  >고려대학교 안암병원 고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원고려대학교
+                  안암병원고려대학교 안암병원고려대학교 안암병원고려대학교 안암병원</span
+                >
                 <span class="address">서울특별시 성북구 고려대로 73</span>
               </div>
               <div class="wrap-label">
@@ -51,11 +52,11 @@
           </div>
         </label>
         <label for="check2" class="c-checktype-btn">
-          <input 
-            id="check2" 
-            name="check2" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check2"
+            name="check2"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[1]"
             @change="updateAllSelection"
           />
@@ -75,11 +76,11 @@
           </div>
         </label>
         <label for="check3" class="c-checktype-btn">
-          <input 
-            id="check3" 
-            name="check3" 
-            type="checkbox" 
-            class="c-checktype-check" 
+          <input
+            id="check3"
+            name="check3"
+            type="checkbox"
+            class="c-checktype-check"
             v-model="hospitalSelections[2]"
             @change="updateAllSelection"
           />
@@ -102,7 +103,13 @@
     </FlexSection>
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="MY병원 연결" class="lg w-full medium btn-sticky" :disabled="!hasSelectedHospitals" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="MY병원 연결"
+        class="lg w-full medium btn-sticky"
+        :disabled="!hasSelectedHospitals"
+      />
     </ButtonGroup>
   </BaseBody>
 </template>
@@ -156,8 +163,9 @@ const clickRegisterHospitals = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-grow: 1;
   gap: 1.2rem;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   padding: 2rem;
   margin-right: -2rem;
   margin-left: -2rem;
@@ -172,7 +180,7 @@ const clickRegisterHospitals = () => {
     // align-items: center;
     // gap: 1.6rem;
     &:has(.c-checktype-check:checked) {
-      border: 0.2rem solid #4C7FF7;
+      border: 0.2rem solid #4c7ff7;
       box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04);
       .icon {
         border-color: #4c7ff7;
@@ -205,7 +213,7 @@ const clickRegisterHospitals = () => {
             font-size: 1.6rem;
             font-weight: 700;
             line-height: 1.4;
-            color: #2B2B2B;
+            color: #2b2b2b;
             width: 100%;
             @include mixin.ellipsis;
             overflow: hidden;
@@ -232,17 +240,17 @@ const clickRegisterHospitals = () => {
           .h-label {
             padding: 0.3rem 0.6rem;
             border-radius: 0.4rem;
-            background-color: #EEEEEE;
+            background-color: #eeeeee;
             font-size: 1.2rem;
             font-weight: 500;
             line-height: 1.3;
             color: #555555;
             &.no-doc {
-              background-color: #E5EDFF;
-              color: #4C7FF7;
+              background-color: #e5edff;
+              color: #4c7ff7;
             }
             &.myhospital {
-              background-color: #4C7FF7;
+              background-color: #4c7ff7;
               color: #fff;
             }
           }

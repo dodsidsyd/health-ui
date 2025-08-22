@@ -1,12 +1,5 @@
 <template>
-  <BaseBody
-    :show-back-button="false"
-    page-title="실손청구"
-    logo-type="text"
-    :has-notification="true"
-    :has-chat="true"
-    :has-add-text-left="true"
-  >
+  <BaseBody :show-back-button="true" page-title="대리청구" logo-type="text" :has-add-text-left="true">
     <div class="wrap-claim-main">
       <div class="warp-period">
         <div class="tit">김레몬님은<br /><strong>구독 서비스 이용중</strong></div>
@@ -46,7 +39,7 @@
       <div class="wrap-btn-claim">
         <button class="btn-claim no-doc">
           <div class="text">
-            몇번의<br />터치로 간단히<br /><strong>대리청구/<br />피보험자 관리</strong>
+            <span>몇번의<br />터치로 간단히</span><br /><strong>대리청구/<br />피보험자 관리</strong>
           </div>
           <img
             class="img-claim"
@@ -56,7 +49,7 @@
         </button>
         <button class="btn-claim picture">
           <div class="text">
-            청구한<br />내역이 있다면<br /><strong>대리청구<br />내역 조회</strong>
+            <span>청구한<br />내역이 있다면</span><br /><strong>대리청구<br />내역 조회</strong>
           </div>
           <img
             class="img-claim"
@@ -100,22 +93,34 @@
         </button>
       </div>
       <Button
-        class="btn-cancel hasLine"
+        class="btn-cancel"
         btn-type="text"
         element-type="button"
         aria-label="보험금 대리청구 서비스 해지"
-        icon="ico-right"
+        icon="ico-greater-than"
         icon-position="right"
         :icon-size="16"
         icon-color="#959595"
+        @click="serviceCancellation"
       />
     </div>
+
+    <ConfirmModal
+      :title="'대리청구 서비스 해지'"
+      :is-visible="showConfirmModal"
+      :html="ConfirmModalContent"
+      :confirm-button-text="'해지하기'"
+      :cancel-button-text="'취소'"
+      @cancel="closeConfirmModal"
+      @close="closeConfirmModal"
+    />
   </BaseBody>
 </template>
 
 <script setup lang="ts">
 import BaseBody from '~/components/layout/BaseBody.vue'
 import Button from '~/components/publishing/button/Button.vue'
+import ConfirmModal from '~/components/common/modal/ConfirmModal.vue'
 
 // 원형 프로그레스 차트 계산
 const totalDays = 30 // 전체 구독 기간 (예시)
@@ -127,6 +132,22 @@ const radius = 32
 const circumference = 2 * Math.PI * radius
 const strokeDasharray = circumference
 const strokeDashoffset = circumference - (progressPercentage / 100) * circumference
+
+const ConfirmModalContent = ref('')
+const showConfirmModal = ref(false)
+
+const serviceCancellation = async () => {
+  ConfirmModalContent.value = `
+    <div class="fz-16 mb-n24 text-left" style="color: #555">
+      서비스를 해지 하시면 대리청구 내역과 고객목록 등의 정보를 조회할 수 없어요.
+      <br/>
+      단, 대리청구 서비스를 재가입 하시면 이전 정보를 조회할 수 있어요.
+    </div>`
+  showConfirmModal.value = true
+}
+const closeConfirmModal = () => {
+  showConfirmModal.value = false
+}
 </script>
 
 <style scoped lang="scss">
@@ -186,13 +207,15 @@ const strokeDashoffset = circumference - (progressPercentage / 100) * circumfere
     justify-content: center;
     gap: 1rem;
     .btn-claim {
-      padding: 2.4rem 2.4rem 1.6rem;
+      position: relative;
+      padding: 2rem 1.6rem 1.6rem 2rem;
       border-radius: 1.6rem;
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 0.4rem;
+      @include mixin.rippleEffectWhite;
       &.no-doc {
         background-color: #4c7ff7;
       }
@@ -204,23 +227,22 @@ const strokeDashoffset = circumference - (progressPercentage / 100) * circumfere
         font-weight: 500;
         color: #fff;
         text-align: left;
+        span {
+          display: inline-block;
+          opacity: 0.8;
+          line-height: 2.2rem;
+        }
         strong {
+          display: inline-block;
           margin-top: 0.8rem;
           font-size: 2rem;
           font-weight: 700;
-          font-weight: 130%;
-        }
-        .sub-text {
-          text-align: left;
-          margin-top: 0.2rem;
-          font-size: 1.3rem;
-          font-weight: 500;
-          color: #fbc700;
+          line-height: 2.6rem;
         }
       }
       .img-claim {
         align-self: flex-end;
-        width: 6rem;
+        width: 5.6rem;
       }
     }
   }
@@ -263,9 +285,9 @@ h2.tit2 {
     .item-info-text {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 1.2rem;
       .text {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 500;
         color: #2b2b2b;
         strong {

@@ -41,7 +41,14 @@
 
   <!-- 건강꿀팁 -->
   <FlexColDiv class="claim-section ml-n20 mr-n20">
-    <TitleBox class="mb-0 pl-20 pr-20" title="건강꿀팁" :is-show-link="true" aria-label="모든 팁 살펴보기" />
+    <TitleBox
+      class="mb-0 pl-20 pr-20"
+      title="건강꿀팁"
+      element-type="a"
+      link-href="/community/claim/healthTips"
+      :is-show-link="true"
+      aria-label="모든 팁 살펴보기"
+    />
     <CommonSwiper
       :slides="healthTipSlides"
       :slides-per-view="1"
@@ -148,7 +155,7 @@
         <BoxedTabs :tabs="boxTabs" :active-key="activeBoxTab" variant="fill-type" @tab-change="onBoxTabChange" />
       </StickyTabsContainer>
       <!-- 게시글 없음 상태 -->
-      <commNoItem v-if="commList.length === 0" />
+      <CommNoItem v-if="commList.length === 0" />
       <!-- 게시글 있음 상태 -->
       <div v-else class="content-wrapper">
         <ScrollableContents>
@@ -156,7 +163,7 @@
             <CommItem v-for="item in commList" :key="item.id" :item="item" :type="item.type" />
           </FlexSection>
         </ScrollableContents>
-        <commNoPermission v-if="!hasPermission" />
+        <CommNoPermission v-if="!hasPermission" />
       </div>
     </div>
   </FlexColDiv>
@@ -181,8 +188,8 @@ import BoxedTabs, { type BoxTab } from '~/components/tabbar/BoxedTabs.vue'
 import StickyTabsContainer from '~/components/common/StickyTabsContainer.vue'
 import ScrollableContents from '~/components/common/ScrollableContents.vue'
 import CommItem from '~/components/publishing/community/common/CommItem.vue'
-import commNoPermission from '~/components/publishing/community/common/commNoPermission.vue'
-import commNoItem from '~/components/publishing/community/common/commNoItem.vue'
+import CommNoPermission from '~/components/publishing/community/common/CommNoPermission.vue'
+import CommNoItem from '~/components/publishing/community/common/CommNoItem.vue'
 
 const hasPermission = ref(true) // 권한 상태
 const activeBoxTab = ref('all')
@@ -275,7 +282,7 @@ const props = withDefaults(defineProps<Props>(), {
   claimHelpSlides: () => [
     {
       id: 1,
-      href: '#',
+      href: '/community/claim/guide/stepGuide',
       cardLinkClass: 'claim-step-link',
       text: '실손청구<br/> 단계별 따라하기'
     },
@@ -558,6 +565,21 @@ const ariaLabel = numFormat
         }
       }
     }
+  }
+
+  :deep(swiper-container)::part(pagination) {
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    gap: 0.8rem;
+  }
+
+  :deep(swiper-container)::part(bullet) {
+    margin: 0;
+    background: #e2e2e2;
+  }
+  :deep(swiper-container)::part(bullet-active) {
+    background: #4f5561;
   }
 }
 </style>

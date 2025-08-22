@@ -1,6 +1,5 @@
 <template>
-  <BaseBody
-  >
+  <BaseBody>
     <div class="wrap-completed-main">
       <!-- ToDo: 상태에 따라 이미지 변경 -->
       <img src="/assets/images/insu/img-completed-01.png" alt="서류자동생성중" />
@@ -8,9 +7,7 @@
       <img src="/assets/images/insu/img-completed-03.png" alt="전송실패" /> -->
       <h1 class="c-tit">
         <!-- ToDo: 상태에 따라 텍스트 변경 -->
-        <span class="text">
-          청구할 내용을 확인해 주세요
-        </span>
+        <span class="text"> 청구할 내용을 확인해 주세요 </span>
         <!-- <span class="text">
           청구서류를 전송 중이에요
         </span>
@@ -49,7 +46,7 @@
         <div class="medical-info-head">
           <img src="/assets/images/insu/logo_KUMedicine.svg" alt="로고" class="logo" />
           <div class="wrap-hospital">
-            <div class="text">강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 </div>
+            <div class="text">강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원 강동성심병원</div>
             <div class="label price">입원진료비</div>
           </div>
           <div class="count"><strong>12</strong>건</div>
@@ -80,7 +77,7 @@
         </li>
         <li class="item">
           <div class="tit">보험금 수령계좌</div>
-          <div class="desc">국민은행(이레몬)<br/>1324567897897</div>
+          <div class="desc">국민은행(이레몬)<br />1324567897897</div>
         </li>
         <li class="item">
           <div class="tit">청구 보험사</div>
@@ -117,11 +114,17 @@
     <div class="wrap-adv">
       <div class="tit">AI 보상금 미리계산하기</div>
       <div class="tit-sub">내가 받을 수 있는<br />보상금은 얼마일까?</div>
-      <Button btn-type="primary" element-type="button" aria-label="확인하기" class="lg medium" />
+      <Button btn-type="primary" element-type="button" aria-label="확인하기" class="medium" />
     </div>
     <!-- 비대칭 버튼 레이아웃 asymmetric  -->
     <ButtonGroup class="is-fixed">
-      <Button btn-type="primary" element-type="button" aria-label="청구의신 홈으로" class="lg w-full medium btn-sticky" :disabled="hasSelectedHospitals" />
+      <Button
+        btn-type="primary"
+        element-type="button"
+        aria-label="청구의신 홈으로"
+        class="lg w-full medium btn-sticky"
+        :disabled="hasSelectedHospitals"
+      />
     </ButtonGroup>
   </BaseBody>
 </template>
@@ -131,14 +134,13 @@ import BaseBody from '~/components/layout/BaseBody.vue'
 import FlexSection from '~/components/page/FlexSection.vue'
 import Button from '~/components/publishing/button/Button.vue'
 import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
-
 </script>
 
 <style scoped lang="scss">
 .wrap-completed-main {
   display: flex;
   flex-direction: column;
-  align-items: center;;
+  align-items: center;
   .img-status {
     width: 9.6rem;
   }
@@ -162,7 +164,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
     gap: 0.4rem;
     padding: 0.6rem 1.2rem;
     border-radius: 1.4rem;
-    border: 0.1rem solid #E2E2E2;
+    border: 0.1rem solid #e2e2e2;
     .img {
       width: 1.1rem;
     }
@@ -179,9 +181,9 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
     .bar {
       width: calc(100% - 16rem);
       margin: 0 8rem;
-      background-color: #EEEEEE;
+      background-color: #eeeeee;
       .progress {
-        background-color: #4C7FF7;
+        background-color: #4c7ff7;
         height: 1.2rem;
       }
     }
@@ -202,7 +204,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
             background-size: 100%;
           }
           .text {
-            color: #4C7FF7;
+            color: #4c7ff7;
           }
         }
         &.nagative {
@@ -211,7 +213,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
             background-size: 100%;
           }
           .text {
-            color: #F14960;
+            color: #f14960;
           }
         }
         .icon-status-point {
@@ -224,7 +226,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
           font-size: 1.4rem;
           font-weight: 600;
           line-height: 130%;
-          color: #D5D5D5;
+          color: #d5d5d5;
         }
       }
     }
@@ -233,7 +235,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 .wrap-claim-detail {
   margin: 0 -2rem 0;
   .wrap-tit {
-    border-bottom: 0.1rem solid #EEEEEE;
+    border-bottom: 0.1rem solid #eeeeee;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -241,7 +243,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
       padding: 2rem;
       font-weight: 500;
       strong {
-        color: #4C7FF7;
+        color: #4c7ff7;
       }
     }
   }
@@ -258,7 +260,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
       justify-content: space-between;
       align-items: center;
       &:not(:first-child) {
-        border-top: 0.1rem solid #EEEEEE;
+        border-top: 0.1rem solid #eeeeee;
       }
       .tit {
         color: #555555;
@@ -267,7 +269,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
         font-weight: 500;
         text-align: right;
         strong {
-          color: #4C7FF7;
+          color: #4c7ff7;
         }
       }
     }
@@ -293,7 +295,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 }
 .medical-info {
   margin-top: 2.5rem;
-  border: 0.1rem solid #E2E2E2;
+  border: 0.1rem solid #e2e2e2;
   border-radius: 1.2rem;
   padding: 1.2rem 2rem;
   .medical-info-head {
@@ -327,16 +329,16 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
         line-height: 130%;
         // 통원
         &.out {
-          background-color: #FEF4CC;
-          color: #8D7000;
+          background-color: #fef4cc;
+          color: #8d7000;
         }
         // 입원
         &.in {
-          background-color: #FFE7E7;
-          color: #CA2828;
+          background-color: #ffe7e7;
+          color: #ca2828;
         }
         &.price {
-          background-color: #EEEEEE;
+          background-color: #eeeeee;
           color: #555555;
         }
       }
@@ -347,7 +349,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
       font-weight: 600;
       strong {
         margin-right: 0.3rem;
-        color: #4C7FF7;
+        color: #4c7ff7;
       }
     }
   }
@@ -373,13 +375,13 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
 .wrap-adv {
   margin: 3.2rem 0 5rem;
   padding: 2.4rem;
-  background-color: #DDF6F6;
+  background-color: #ddf6f6;
   border-radius: 1.2rem;
-  background: url('/assets/images/insu/img-bg-completed.png') calc(100% - 1rem) calc(100% - 1.5rem) no-repeat #DDF6F6;
+  background: url('/assets/images/insu/img-bg-completed.png') calc(100% - 1rem) calc(100% - 1.5rem) no-repeat #ddf6f6;
   background-size: auto;
   .tit {
     font-weight: 700;
-    color: #279B9B;
+    color: #279b9b;
   }
   .tit-sub {
     margin-top: 0.4rem;
@@ -389,8 +391,7 @@ import ButtonGroup from '~/components/publishing/button/ButtonGroup.vue'
   .c-btn {
     margin-top: 2.4rem;
     width: 10.5rem;
-    background-color: #279B9B;
+    background-color: #279b9b;
   }
 }
-
 </style>

@@ -17,6 +17,7 @@ const props = defineProps({
   line-height: 1.3;
   color: #555555;
   position: relative;
+  text-align: left;
   &.required::after {
     content: '*';
     font-size: 1.2rem;

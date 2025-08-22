@@ -56,5 +56,8 @@ const handleDateChange = (newDate: Date) => {
 
 .calendar-section {
   margin-bottom: 2rem;
+  :deep(.calendar-week) {
+    margin-bottom: 0;
+  }
 }
-</style> 
+</style>
